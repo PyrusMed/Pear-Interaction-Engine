@@ -14,7 +14,7 @@ namespace PearMed.Controllers
 
         protected T Controller { get; private set; }
 
-        void Start()
+        void Awake()
         {
             Controller = GetComponent<T>();
         }
