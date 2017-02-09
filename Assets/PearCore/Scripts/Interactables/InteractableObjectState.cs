@@ -1,10 +1,10 @@
-﻿using PearMed.Controllers;
+﻿using Pear.Core.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Events;
 
-namespace PearMed.Interactables
+namespace Pear.Core.Interactables
 {
     /// <summary>
     /// Tracks the state for interactable objects

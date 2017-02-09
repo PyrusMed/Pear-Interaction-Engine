@@ -1,9 +1,9 @@
-﻿using PearMed.Controllers;
+﻿using Pear.Core.Controllers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PearMed.Controllers
+namespace Pear.Core.Controllers
 {
     /// <summary>
     /// Based class for script that need to use a controller

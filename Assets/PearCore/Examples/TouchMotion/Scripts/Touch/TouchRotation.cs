@@ -1,4 +1,4 @@
-﻿using PearMed.Interactables;
+﻿using Pear.Core.Interactables;
 using UnityEngine;
 using UnityEngine.Events;
 

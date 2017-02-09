@@ -1,8 +1,8 @@
-﻿using PearMed.Utils;
+﻿using Pear.Core.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PearMed.Interactables
+namespace Pear.Core.Interactables
 {
     /// <summary>
     /// Manages every interactable object that's added and removed

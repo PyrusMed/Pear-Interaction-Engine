@@ -1,10 +1,9 @@
-﻿using PearMed.Interactables;
-using PearMed.Utils;
+﻿using Pear.Core.Interactables;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace PearMed.Controllers
+namespace Pear.Core.Controllers
 {
     /// <summary>
     /// Base class for all controllers

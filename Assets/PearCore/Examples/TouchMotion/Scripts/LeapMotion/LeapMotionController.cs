@@ -1,6 +1,6 @@
 ﻿using Leap.Unity;
-using PearMed.Controllers;
-using PearMed.Interactables;
+using Pear.Core.Controllers;
+using Pear.Core.Interactables;
 
 /// <summary>
 /// Defines how the leap motion controller interacts with objects and the environment

@@ -1,7 +1,7 @@
-﻿using PearMed.Utils;
+﻿using Pear.Core.Utils;
 using System.Collections.Generic;
 
-namespace PearMed.Controllers
+namespace Pear.Core.Controllers
 {
     /// <summary>
     /// Singleton responsible for managing controllers

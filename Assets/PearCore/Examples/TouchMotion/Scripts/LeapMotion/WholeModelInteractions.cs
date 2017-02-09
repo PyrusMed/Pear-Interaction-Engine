@@ -3,7 +3,7 @@ using System.Collections;
 using Leap;
 using Leap.Unity;
 using UnityEngine.Events;
-using PearMed.Controllers;
+using Pear.Core.Controllers;
 
 /// <summary>
 /// Controls rotating and zooming the entire model

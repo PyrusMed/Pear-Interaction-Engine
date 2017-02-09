@@ -1,9 +1,9 @@
-﻿using PearMed.Utils;
+﻿using Pear.Core.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace PearMed.Interactables.Behaviors
+namespace Pear.Core.Interactables.Behaviors
 {
     /// <summary>
     /// Manages what happens when object are hovered over

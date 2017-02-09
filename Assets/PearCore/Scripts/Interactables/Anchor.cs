@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace PearMed.Interactables
+namespace Pear.Core.Interactables
 {
     /// <summary>
     /// Parent to Interactable objects that makes interacting with elements, such as rotating and zooming, much easier

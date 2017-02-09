@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace PearMed.Interactables
+namespace Pear.Core.Interactables
 {
     public class InteractableObject : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace PearMed.Utils
+namespace Pear.Core.Utils
 {
     /// <summary>
     /// Be aware this will not prevent a non singleton constructor
