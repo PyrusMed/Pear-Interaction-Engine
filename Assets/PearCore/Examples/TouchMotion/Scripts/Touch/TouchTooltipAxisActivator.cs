@@ -40,7 +40,7 @@ public class TouchTooltipAxisActivator : TouchTooltipActivator
 	/// <returns>True if the user is pressing the button just enough to be between the given bounds. False otherwise.</returns>
 	private bool IsInShowZone()
 	{
-		float val = OVRInput.Get(Axis1DListener, _touchController.Controller);
+		float val = OVRInput.Get(Axis1DListener, _touchController.OVRController);
 		return val > LowerBound && val < UpperBound;
 	}
 }

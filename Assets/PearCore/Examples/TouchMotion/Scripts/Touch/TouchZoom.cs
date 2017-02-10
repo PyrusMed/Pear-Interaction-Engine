@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Pear.Core.Controllers;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,7 +7,7 @@ using UnityEngine.Events;
 /// <summary>
 /// Handles zooming with the Touch controller
 /// </summary>
-public class TouchZoom : MonoBehaviour {
+public class TouchZoom : ControllerBehavior<TouchController> {
 
 	[Tooltip("Percentage per second")]
 	public float ZoomSensitivity = 50;
@@ -16,8 +17,6 @@ public class TouchZoom : MonoBehaviour {
 
 	[Tooltip("Fired when the controller stops zooming")]
 	public TouchEvent OnEnd;
-
-	private TouchController _touchController;
 
 	/// <summary>
 	/// Is the controller zoomiing? Fires events when zooming changes
@@ -37,9 +36,9 @@ public class TouchZoom : MonoBehaviour {
 
 			// Handle events
 			if (wasZooming && !_isZooming)
-				OnEnd.Invoke(_touchController.ActiveObject);
+				OnEnd.Invoke(Controller.ActiveObject);
 			if (!wasZooming && _isZooming)
-				OnStart.Invoke(_touchController.ActiveObject);
+				OnStart.Invoke(Controller.ActiveObject);
         }
 	}
 
@@ -49,28 +48,23 @@ public class TouchZoom : MonoBehaviour {
 		OnEnd = OnEnd ?? new TouchEvent();
     }
 
-	void Start()
-	{
-		_touchController = GetComponent<TouchController>();
-	}
-
 	// Update is called once per frame
 	void Update () {
-		if (_touchController.ActiveObject == null || !_touchController.ActiveObject.gameObject.activeInHierarchy)
+		if (Controller.ActiveObject == null || !Controller.ActiveObject.gameObject.activeInHierarchy)
 			return;
 
-		IsZooming = OVRInput.Get(OVRInput.Touch.One, _touchController.Controller) || OVRInput.Get(OVRInput.Touch.Two, _touchController.Controller);
+		IsZooming = OVRInput.Get(OVRInput.Touch.One, Controller.OVRController) || OVRInput.Get(OVRInput.Touch.Two, Controller.OVRController);
         if (IsZooming)
 		{
 			int direction = 0;
-			if (OVRInput.Get(OVRInput.Button.One, _touchController.Controller))
+			if (OVRInput.Get(OVRInput.Button.One, Controller.OVRController))
 				direction = -1;
-			if (OVRInput.Get(OVRInput.Button.Two, _touchController.Controller))
+			if (OVRInput.Get(OVRInput.Button.Two, Controller.OVRController))
 				direction = 1;
 
 			float percentagePerSecond = (ZoomSensitivity / 100) * Time.deltaTime * direction;
-			float newScale = _touchController.ActiveObject.transform.localScale.x + _touchController.ActiveObject.transform.localScale.x * percentagePerSecond;
-			_touchController.ActiveObject.transform.localScale = new Vector3(newScale, newScale, newScale);
+			float newScale = Controller.ActiveObject.transform.localScale.x + Controller.ActiveObject.transform.localScale.x * percentagePerSecond;
+            Controller.ActiveObject.transform.localScale = new Vector3(newScale, newScale, newScale);
 		}
 	}
 }

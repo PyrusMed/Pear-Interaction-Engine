@@ -23,7 +23,7 @@ public class TouchTooltipTouchActivator : TouchTooltipActivator
 	/// <returns>True if user is touching the button. False otherwise.</returns>
 	protected override bool ShouldStartTimer()
 	{
-		return OVRInput.Get(TouchListener, _touchController.Controller);
+		return OVRInput.Get(TouchListener, _touchController.OVRController);
     }
 
 	/// <summary>
@@ -32,9 +32,9 @@ public class TouchTooltipTouchActivator : TouchTooltipActivator
 	/// <returns>True if user presses a button or moves the joystick. False otherwise.</returns>
 	protected override bool ShouldStopTimer()
 	{
-		Vector2 axis2dVal = OVRInput.Get(Axis2DListener, _touchController.Controller);
-		return !OVRInput.Get(TouchListener, _touchController.Controller) ||
-			OVRInput.Get(ButtonListener, _touchController.Controller) ||
+		Vector2 axis2dVal = OVRInput.Get(Axis2DListener, _touchController.OVRController);
+		return !OVRInput.Get(TouchListener, _touchController.OVRController) ||
+			OVRInput.Get(ButtonListener, _touchController.OVRController) ||
 			axis2dVal.x > 0 || axis2dVal.y > 0;
 	}
 }

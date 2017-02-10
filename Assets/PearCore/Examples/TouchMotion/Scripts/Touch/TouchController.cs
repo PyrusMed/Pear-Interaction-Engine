@@ -14,7 +14,7 @@ public class TouchController : Controller
 	// Hand element that will tell us if the controller is active or not
 	private GameObject _handRenderElement;
 
-	public OVRInput.Controller Controller
+	public OVRInput.Controller OVRController
 	{
 		get;
 		private set;
@@ -23,7 +23,7 @@ public class TouchController : Controller
 	// Hook up events
 	void Start()
 	{
-		Controller = Location == ControllerLocation.LeftHand ? OVRInput.Controller.LTouch : OVRInput.Controller.RTouch;
+		OVRController = Location == ControllerLocation.LeftHand ? OVRInput.Controller.LTouch : OVRInput.Controller.RTouch;
 
 		GetHandRenderElement();
 		AttachRotationAnZoomEvents();
@@ -61,9 +61,9 @@ public class TouchController : Controller
 		if (touchZoom == null)
 			Debug.Log("Holy shitsnacks!");
 
-		// When a object is added hook up events
-		InteractableObjectManager.Instance.OnAdded.AddListener((interactable) =>
-		{
+        // When a object is added hook up events
+        foreach (InteractableObject interactable in InteractableObjectManager.Instance.AllObjects)
+        {
 			// When we start moving an object make sure we can rotate and zoom it
 			interactable.Moving.OnStart.AddListener((e) =>
 			{
@@ -75,7 +75,7 @@ public class TouchController : Controller
 			{
 				ActiveObject = null;
 			});
-		});
+		}
 
 		// Listen for rotation events
 		{

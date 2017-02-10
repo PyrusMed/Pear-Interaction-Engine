@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Pear.Core.Controllers
 {
@@ -11,12 +12,13 @@ namespace Pear.Core.Controllers
     /// <typeparam name="T">Type of controller</typeparam>
     public class ControllerBehavior<T> : MonoBehaviour where T : Controller
     {
-
-        protected T Controller { get; private set; }
-
-        void Awake()
+        private T _controller;
+        protected T Controller
         {
-            Controller = GetComponent<T>();
+            get
+            {
+                return _controller ?? (_controller = GetComponent<T>());
+            }
         }
     }
 }

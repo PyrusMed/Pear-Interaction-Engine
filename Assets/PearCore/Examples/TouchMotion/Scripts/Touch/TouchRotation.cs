@@ -1,11 +1,13 @@
-﻿using Pear.Core.Interactables;
+﻿using Pear.Core.Controllers;
+using Pear.Core.Interactables;
 using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
 /// Handles rotation with the Touch controller
 /// </summary>
-public class TouchRotation : MonoBehaviour {
+public class TouchRotation : ControllerBehavior<TouchController>
+{
 
 	[Tooltip("Degrees per second")]
 	public float RotationSensitivity = 300;
@@ -15,8 +17,6 @@ public class TouchRotation : MonoBehaviour {
 
 	[Tooltip("Fired when the controller stops rotating")]
 	public TouchEvent OnEnd;
-
-	private TouchController _touchController;
 
 	/// <summary>
 	/// Is the controller rotating? Fires events when rotation changes
@@ -36,9 +36,9 @@ public class TouchRotation : MonoBehaviour {
 
 			// Handle events
 			if (wasRotating && !_isRotating)
-				OnEnd.Invoke(_touchController.ActiveObject);
+				OnEnd.Invoke(Controller.ActiveObject);
 			if (!wasRotating && _isRotating)
-				OnStart.Invoke(_touchController.ActiveObject);
+				OnStart.Invoke(Controller.ActiveObject);
         }
 	}
 
@@ -48,22 +48,17 @@ public class TouchRotation : MonoBehaviour {
 		OnEnd = OnEnd ?? new TouchEvent();
 	}
 
-	void Start()
-	{
-		_touchController = GetComponent<TouchController>();
-	}
-
 	// Update is called once per frame
 	void Update () {
-		if (_touchController.ActiveObject == null || !_touchController.ActiveObject.gameObject.activeInHierarchy)
+		if (Controller.ActiveObject == null || !Controller.ActiveObject.gameObject.activeInHierarchy)
 			return;
 
-		IsRotating = OVRInput.Get(OVRInput.Touch.PrimaryThumbstick, _touchController.Controller);
+		IsRotating = OVRInput.Get(OVRInput.Touch.PrimaryThumbstick, Controller.OVRController);
         if (IsRotating)
 		{
             float degreesPerSecond = RotationSensitivity * Time.deltaTime;
-			Vector2 rotationAmount = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, _touchController.Controller);
-			_touchController.ActiveObject.transform.Rotate(new Vector3(rotationAmount.y * degreesPerSecond, -rotationAmount.x * degreesPerSecond, 0), Space.World);
+			Vector2 rotationAmount = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick, Controller.OVRController);
+			Controller.ActiveObject.transform.Rotate(new Vector3(rotationAmount.y * degreesPerSecond, -rotationAmount.x * degreesPerSecond, 0), Space.World);
 		}
 	}
 }
