@@ -23,7 +23,7 @@ public class LeapMotionController : Controller
 	void Awake()
 	{
 		InUse = true;
-	}
+    }
 
 	// Hook up events
 	void Start()
@@ -36,8 +36,8 @@ public class LeapMotionController : Controller
 		// When either controller is disabled deactivate it in the hierarchy
 		OnStopUsing.AddListener((c) => SetActiveFromEnabledDisabled(false));
 
-		AttachLeapRTS();
-		AttachHoverEvents();
+        AttachLeapRTS();
+        AttachHoverEvents();
 	}
 
 	void OnEnable()
@@ -54,7 +54,7 @@ public class LeapMotionController : Controller
 
 	private void AttachLeapRTS()
 	{
-		InteractableObjectManager.Instance.OnAdded.AddListener((interactable) =>
+		foreach(InteractableObject interactable in InteractableObjectManager.Instance.AllObjects)
 		{
 			// Add the LeapRTS component which controls movement
 			LeapRTS rts = interactable.gameObject.AddComponent<LeapRTS>();
@@ -82,7 +82,7 @@ public class LeapMotionController : Controller
 				else
 					interactable.Resizing.Remove(this);
 			});
-		});
+		}
 	}
 
 	/// <summary>

@@ -25,12 +25,14 @@ public class SelectWithKeyboard : ControllerBehavior<Controller> {
             if (selectedState.Contains(Controller))
             {
                 selectedState.Remove(Controller);
+                Controller.ActiveObject = null;
             }
             else
             {
                 selectedState.Add(Controller);
+                Controller.ActiveObject = _hoverOnGaze.HoveredObject;
 
-                if(_lastSelected != _hoverOnGaze.HoveredObject && _lastSelected != null)
+                if (_lastSelected != _hoverOnGaze.HoveredObject && _lastSelected != null)
                     _lastSelected.Selected.Remove(Controller);
 
                 _lastSelected = _hoverOnGaze.HoveredObject;
