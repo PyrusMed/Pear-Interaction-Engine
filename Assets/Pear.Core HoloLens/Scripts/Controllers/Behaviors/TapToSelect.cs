@@ -10,10 +10,11 @@ namespace Pear.Core.Controllers.Behaviors
     public class TapToSelect : ControllerBehavior<HoloLensController>
     {
         // Used to recognize tap
-        GestureRecognizer _recognizer = new GestureRecognizer();
+        GestureRecognizer _recognizer;
 
         private void Start()
         {
+            _recognizer = new GestureRecognizer();
             _recognizer.TappedEvent += (source, tapCount, headRay) =>
             {
                 // If we're gazing at an interactable object, select it
