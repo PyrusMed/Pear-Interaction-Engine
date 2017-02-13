@@ -1,6 +1,4 @@
 ﻿using Pear.Core.Interactables;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractableObjectSounds : MonoBehaviour {

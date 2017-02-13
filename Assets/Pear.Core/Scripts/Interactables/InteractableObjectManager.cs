@@ -1,6 +1,5 @@
 ﻿using Pear.Core.Utils;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Pear.Core.Interactables
 {

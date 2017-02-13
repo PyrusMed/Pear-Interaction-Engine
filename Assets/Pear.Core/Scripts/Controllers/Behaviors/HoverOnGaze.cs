@@ -1,5 +1,4 @@
-﻿using Pear.Core.Controllers;
-using Pear.Core.Interactables;
+﻿using Pear.Core.Interactables;
 using UnityEngine;
 
 namespace Pear.Core.Controllers.Behaviors

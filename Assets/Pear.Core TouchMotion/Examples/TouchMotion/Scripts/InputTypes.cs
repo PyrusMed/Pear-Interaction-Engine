@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Pear.Core.Examples
+﻿namespace Pear.Core.Examples
 {
     public class InputTypes
     {

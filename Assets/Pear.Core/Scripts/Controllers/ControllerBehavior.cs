@@ -1,8 +1,4 @@
-﻿using Pear.Core.Controllers;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Assertions;
+﻿using UnityEngine;
 
 namespace Pear.Core.Controllers
 {

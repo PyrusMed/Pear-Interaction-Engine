@@ -1,6 +1,4 @@
-﻿using Pear.Core.Controllers;
-using UnityEngine;
-using UnityEngine.VR.WSA.Input;
+﻿using UnityEngine;
 
 namespace Pear.Core.Controllers.Behaviors
 {

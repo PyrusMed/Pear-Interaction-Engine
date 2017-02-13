@@ -1,9 +1,6 @@
 ﻿using Pear.Core.Controllers;
 using Pear.Core.Interactables;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Pear.Core.Examples
 {
