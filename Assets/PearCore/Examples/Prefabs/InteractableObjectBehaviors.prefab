@@ -67,12 +67,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 605c12f526dcc674cb7a8066c22b78e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartHovering: {fileID: 0}
-  StopHovering: {fileID: 0}
-  StartMoving: {fileID: 0}
-  StopMoving: {fileID: 0}
-  StartResizing: {fileID: 0}
-  StopResizing: {fileID: 0}
+  StartHovering: {fileID: 8300000, guid: 8a79969e2e867154ba3a837e25b12e17, type: 3}
+  StopHovering: {fileID: 8300000, guid: 0bb898bee85fe8b47a6f0ea57f2b1f8a, type: 3}
+  StartMoving: {fileID: 8300000, guid: 6b5ddb2e4acf1004d851c183a036170e, type: 3}
+  StopMoving: {fileID: 8300000, guid: a9ce64f840b361442bbedae198d8efd1, type: 3}
+  StartResizing: {fileID: 8300000, guid: cd6708a23286c9c44b972a0455a68efd, type: 3}
+  StopResizing: {fileID: 8300000, guid: eed1f1d316962184ea8e772a0163ca59, type: 3}
 --- !u!114 &114588961731045136
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -84,4 +84,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0e5dfbd5587c70438595371a091c186, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Outline: {fileID: 0}
+  Outline: {fileID: 2100000, guid: ea92b35be6f59754ba12bf5c699d8a9c, type: 2}
