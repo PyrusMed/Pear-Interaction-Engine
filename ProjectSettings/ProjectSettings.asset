@@ -397,11 +397,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: Unity-Interaction-Model
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: 
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: Pear Med
+  metroCertificateIssuer: Pear Med
+  metroCertificateNotAfter: 00ddb1cc33a5d301
   metroApplicationDescription: Unity-Interaction-Model
   wsaImages: {}
   metroTileShortName: 
