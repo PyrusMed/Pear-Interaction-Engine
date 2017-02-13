@@ -31,6 +31,8 @@ namespace Pear.Core.Controllers.Behaviors
                     }
                 }
             };
+
+            _recognizer.StartCapturingGestures();
         }
     }
 }
