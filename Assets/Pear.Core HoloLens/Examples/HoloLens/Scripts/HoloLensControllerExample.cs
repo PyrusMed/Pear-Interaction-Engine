@@ -1,7 +1,7 @@
 ﻿using Pear.Core.Controllers;
 using Pear.Core.Controllers.Behaviors;
 
-public class HoloLensControllerExample : Controller {
+public class HoloLensControllerExample : HoloLensController {
 
     public DragToRotate DragToRotate;
     public DragToZoom DragToZoom;
