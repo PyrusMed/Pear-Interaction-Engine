@@ -11,6 +11,7 @@ public class InteractableObjectSounds : MonoBehaviour {
     public AudioClip StopMoving;
     public AudioClip StartResizing;
     public AudioClip StopResizing;
+    public AudioClip Selected;
 
     void Awake()
     {
@@ -20,6 +21,7 @@ public class InteractableObjectSounds : MonoBehaviour {
             AddSoundsToEvent(interactable.Hovering, StartHovering, StopHovering);
             AddSoundsToEvent(interactable.Moving, StartMoving, StopMoving);
             AddSoundsToEvent(interactable.Resizing, StartResizing, StopResizing);
+            AddSoundsToEvent(interactable.Selected, Selected, null);
         });
     }
 
@@ -31,11 +33,17 @@ public class InteractableObjectSounds : MonoBehaviour {
     /// <param name="endSound">Sound to play when state ends</param>
     private void AddSoundsToEvent(InteractableObjectState state, AudioClip startSound, AudioClip endSound)
     {
-        AudioSource startSource = CreateAudioSource(startSound);
-        AudioSource endSource = CreateAudioSource(endSound);
+        if (startSound != null)
+        {
+            AudioSource startSource = CreateAudioSource(startSound);
+            state.OnStart.AddListener(e => startSource.Play());
+        }
 
-        state.OnStart.AddListener(e => startSource.Play());
-        state.OnEnd.AddListener(e => endSource.Play());
+        if (endSound != null)
+        {
+            AudioSource endSource = CreateAudioSource(endSound);
+            state.OnEnd.AddListener(e => endSource.Play());
+        }
     }
 
     /// <summary>

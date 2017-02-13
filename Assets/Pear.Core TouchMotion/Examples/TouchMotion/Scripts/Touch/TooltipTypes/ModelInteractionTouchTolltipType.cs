@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class ModelInteractionTouchTolltipType : TouchTooltipType<InputTypes.ModelInteractions> {}
+﻿namespace Pear.Core.Examples
+{
+    public class ModelInteractionTouchTolltipType : TouchTooltipType<InputTypes.ModelInteractions> { }
+}

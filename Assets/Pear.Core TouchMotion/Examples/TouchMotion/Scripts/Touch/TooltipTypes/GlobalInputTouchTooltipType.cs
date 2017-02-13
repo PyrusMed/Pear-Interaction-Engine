@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GlobalInputTouchTooltipType : TouchTooltipType<InputTypes.Global> { }
+﻿namespace Pear.Core.Examples
+{
+    public class GlobalInputTouchTooltipType : TouchTooltipType<InputTypes.Global> { }
+}

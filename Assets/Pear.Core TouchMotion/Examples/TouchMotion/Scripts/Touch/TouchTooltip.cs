@@ -3,98 +3,103 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class TouchTooltip : MonoBehaviour {
+namespace Pear.Core.Examples
+{
+    public class TouchTooltip : MonoBehaviour
+    {
 
-	[Tooltip("Path to controller element")]
-	public string ControllerElementPath;
+        [Tooltip("Path to controller element")]
+        public string ControllerElementPath;
 
-	[Tooltip("Height of the tooltip above the controller element")]
-	public float HeightAboveControllerElement = 0.005f;
+        [Tooltip("Height of the tooltip above the controller element")]
+        public float HeightAboveControllerElement = 0.005f;
 
-	// Fired when the tooltip resets
-	public UnityEvent OnReset = new UnityEvent();
+        // Fired when the tooltip resets
+        public UnityEvent OnReset = new UnityEvent();
 
-	// Key used to stop the timer before the tooltip is shown
-	private Coroutine _timerKey;
+        // Key used to stop the timer before the tooltip is shown
+        private Coroutine _timerKey;
 
-	// Image renderer
-	private SpriteRenderer _spriteRenderer;
+        // Image renderer
+        private SpriteRenderer _spriteRenderer;
 
-	// Are we forcing the tooltip to be shown or hidden?
-	private bool _force = false;
+        // Are we forcing the tooltip to be shown or hidden?
+        private bool _force = false;
 
-	private TouchController _touchController;
+        private TouchController _touchController;
 
-	// Use this for initialization
-	void Start () {
-		TooltipManager.Instance.Register(this);
+        // Use this for initialization
+        void Start()
+        {
+            TooltipManager.Instance.Register(this);
 
-		_touchController = transform.parent.GetComponent<TouchController>();
+            _touchController = transform.parent.GetComponent<TouchController>();
 
-		OvrAvatar avatar = FindObjectOfType<OvrAvatar>();
-		avatar.AssetsDoneLoading.AddListener(Initialize);
+            OvrAvatar avatar = FindObjectOfType<OvrAvatar>();
+            avatar.AssetsDoneLoading.AddListener(Initialize);
 
-		_spriteRenderer = GetComponent<SpriteRenderer>();
-		_spriteRenderer.flipY = true;
-		_spriteRenderer.enabled = false; // Hide by default
-    }
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _spriteRenderer.flipY = true;
+            _spriteRenderer.enabled = false; // Hide by default
+        }
 
-	void Initialize()
-	{
-		// Get the parent controller
-		TouchController parentController = transform.parent.GetComponent<TouchController>();
+        void Initialize()
+        {
+            // Get the parent controller
+            TouchController parentController = transform.parent.GetComponent<TouchController>();
 
-		// Get the controller element that this will be parented to
-		Transform controllerElement = parentController.transform.FindChild(ControllerElementPath);
+            // Get the controller element that this will be parented to
+            Transform controllerElement = parentController.transform.FindChild(ControllerElementPath);
 
-		// Rotate the button so it lays flat on the controller
-		transform.localEulerAngles = Vector3.zero + new Vector3(-90, 0, 0);
-		transform.Rotate(transform.up, 5);
+            // Rotate the button so it lays flat on the controller
+            transform.localEulerAngles = Vector3.zero + new Vector3(-90, 0, 0);
+            transform.Rotate(transform.up, 5);
 
-		// Set scale
-		transform.localScale = Vector3.one * 0.02f;
+            // Set scale
+            transform.localScale = Vector3.one * 0.02f;
 
-		// Position the label above the button
-		transform.position = controllerElement.position + parentController.transform.up * HeightAboveControllerElement;
+            // Position the label above the button
+            transform.position = controllerElement.position + parentController.transform.up * HeightAboveControllerElement;
 
-		// Make the label a child of the controller element
-		transform.SetParent(controllerElement, true);
-	}
+            // Make the label a child of the controller element
+            transform.SetParent(controllerElement, true);
+        }
 
-	public void Show()
-	{
-		if (_force)
-			return;
+        public void Show()
+        {
+            if (_force)
+                return;
 
-		_spriteRenderer.enabled = true;
-	}
+            _spriteRenderer.enabled = true;
+        }
 
-	public void Hide()
-	{
-		if (_force)
-			return;
+        public void Hide()
+        {
+            if (_force)
+                return;
 
-		_spriteRenderer.enabled = false;
-	}
+            _spriteRenderer.enabled = false;
+        }
 
-	public void ForceShow()
-	{
-		Reset();
-		Show();
-		_force = true;
-    }
+        public void ForceShow()
+        {
+            Reset();
+            Show();
+            _force = true;
+        }
 
-	public void ForceHide()
-	{	
-		Reset();
-		Hide();
-		_force = true;
-	}
+        public void ForceHide()
+        {
+            Reset();
+            Hide();
+            _force = true;
+        }
 
-	public void Reset()
-	{
-		_force = false;
-		Hide();
-		OnReset.Invoke();
+        public void Reset()
+        {
+            _force = false;
+            Hide();
+            OnReset.Invoke();
+        }
     }
 }

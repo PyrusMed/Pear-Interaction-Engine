@@ -73,6 +73,7 @@ MonoBehaviour:
   StopMoving: {fileID: 8300000, guid: a9ce64f840b361442bbedae198d8efd1, type: 3}
   StartResizing: {fileID: 8300000, guid: cd6708a23286c9c44b972a0455a68efd, type: 3}
   StopResizing: {fileID: 8300000, guid: eed1f1d316962184ea8e772a0163ca59, type: 3}
+  Selected: {fileID: 8300000, guid: 25d3a40ad0db63a40a7c8017051bfc6b, type: 3}
 --- !u!114 &114588961731045136
 MonoBehaviour:
   m_ObjectHideFlags: 1

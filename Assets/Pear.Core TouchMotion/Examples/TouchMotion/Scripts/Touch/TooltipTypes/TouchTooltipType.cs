@@ -1,8 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public abstract class TouchTooltipType<T> : MonoBehaviour {
-
-	public T Type;
+namespace Pear.Core.Examples
+{
+    public abstract class TouchTooltipType<T> : MonoBehaviour
+    {
+        public T Type;
+    }
 }
