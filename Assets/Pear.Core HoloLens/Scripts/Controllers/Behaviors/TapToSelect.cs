@@ -12,6 +12,9 @@ namespace Pear.Core.Controllers.Behaviors
         // Used to recognize tap
         GestureRecognizer _recognizer;
 
+        // The last selected obj
+        InteractableObject _lastSelected;
+
         private void Start()
         {
             _recognizer = new GestureRecognizer();
@@ -25,10 +28,20 @@ namespace Pear.Core.Controllers.Behaviors
                     {
                         // If this controller has not selected this object, select it
                         if (!interactable.Selected.Contains(Controller))
+                        {
+                            // Deselect the last selected obj
+                            if (_lastSelected != null)
+                                _lastSelected.Selected.Remove(Controller);
+
                             interactable.Selected.Add(Controller);
+                            _lastSelected = interactable;
+                        }
                         // Otherwise, if we have already selected it, deselect it
                         else
+                        {
                             interactable.Selected.Remove(Controller);
+                            _lastSelected = null;
+                        }
                     }
                 }
             };
