@@ -54,7 +54,10 @@ namespace Pear.Core.Interactables
             AnchorElement.transform.position = transform.position;
             anchor.transform.SetParent(transform.parent, true);
             transform.SetParent(AnchorElement.transform, true);
+        }
 
+        void Start()
+        {
             // Let the manager know we're here so it can let others
             // know we're here
             InteractableObjectManager.Instance.Add(this);
