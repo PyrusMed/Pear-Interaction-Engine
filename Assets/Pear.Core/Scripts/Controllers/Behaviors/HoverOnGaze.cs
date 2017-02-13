@@ -9,10 +9,8 @@ namespace Pear.Core.Controllers.Behaviors
     /// </summary>
     public class HoverOnGaze : ControllerBehavior<Controller>
     {
-
         public InteractableObject HoveredObject { get; private set; }
 
-        // Update is called once per frame
         void Update()
         {
             RaycastHit hitInfo;
@@ -20,14 +18,17 @@ namespace Pear.Core.Controllers.Behaviors
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, 1000))
                 interactable = hitInfo.transform.gameObject.GetComponent<InteractableObject>();
 
+            // If hovering changed...
             if (interactable != HoveredObject)
             {
+                // If there's an old object stop hovering over it
                 if (HoveredObject != null)
                 {
                     HoveredObject.Hovering.Remove(Controller);
                     HoveredObject = null;
                 }
 
+                // If there's a new object hover over it
                 if (interactable != null)
                 {
                     interactable.Hovering.Add(Controller);

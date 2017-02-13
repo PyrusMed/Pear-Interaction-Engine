@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HoloLensController : Controller {
+public class HoloLensControllerExample : Controller {
 
     public DragToRotate DragToRotate;
     public DragToZoom DragToZoom;
