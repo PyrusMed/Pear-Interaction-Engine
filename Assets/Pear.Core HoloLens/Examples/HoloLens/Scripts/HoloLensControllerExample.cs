@@ -1,7 +1,5 @@
 ﻿using Pear.Core.Controllers;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Pear.Core.Controllers.Behaviors;
 
 public class HoloLensControllerExample : Controller {
 
