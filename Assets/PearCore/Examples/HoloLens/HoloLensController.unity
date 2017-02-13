@@ -247,7 +247,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b02e0aa0badaaf4aa1872d9acbb8b06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Location: 0
+  Location: 2
   OnStartUsing:
     m_PersistentCalls:
       m_Calls: []
@@ -984,6 +984,45 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d379ed0a5618c9f479f58bd83a2d0ad3, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1584612030 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000011021619270, guid: d379ed0a5618c9f479f58bd83a2d0ad3,
+    type: 2}
+  m_PrefabInternal: {fileID: 1584612029}
+--- !u!114 &1584612031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1584612030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06209e40b192d9f409b60ca3965eb84e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Location: 3
+  OnStartUsing:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Pear.Core.Controllers.ControllerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnStopUsing:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Pear.Core.Controllers.ControllerEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  ActiveObject: {fileID: 0}
+--- !u!114 &1584612032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1584612030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07839a859439a9345bbe08a8932282a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1651511775
 Prefab:
   m_ObjectHideFlags: 0
