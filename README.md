@@ -13,7 +13,7 @@ Sync and run one of our several branches
 
 OR
 
-Download our latest package from the releases section and import it into your Unity project
+Download our latest package from the [releases](https://github.com/PearMed/Pear-Interaction-Engine/releases) section and import it into your Unity project
   - The "Pear.Core TouchMotion" package requires the Leap Motion and Oculus Touch Unity modules
   - The "Pear.Core HoloLens" package requires the HoloToolkit Unity module
 
