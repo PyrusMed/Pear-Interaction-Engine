@@ -1,5 +1,5 @@
 ﻿using Leap.Unity;
-using Pear.Core.Interactables;
+using Pear.InteractionEngine.Interactables;
 using UnityEngine;
 using UnityEngine.Events;
 

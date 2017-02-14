@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Pear.Core.Examples
+namespace Pear.InteractionEngine.Examples
 {
     /// <summary>
     /// Activates a tooltip based on user interaction with a trigger button

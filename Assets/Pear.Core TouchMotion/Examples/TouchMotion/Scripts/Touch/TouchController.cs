@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using Pear.Core.Controllers;
-using Pear.Core.Interactables;
+using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Interactables;
 
-namespace Pear.Core.Examples
+namespace Pear.InteractionEngine.Examples
 {
     /// <summary>
     /// Defines how the Touch controller interacts with objects and the environment

@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Pear.Core.Examples
+namespace Pear.InteractionEngine.Examples
 {
     /// <summary>
     /// Manages all tooltips

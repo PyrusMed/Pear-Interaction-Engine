@@ -1,7 +1,7 @@
-﻿using Pear.Core.Controllers;
+﻿using Pear.InteractionEngine.Controllers;
 using UnityEngine;
 
-namespace Pear.Core.Examples
+namespace Pear.InteractionEngine.Examples
 {
     /// <summary>
     /// Handles zooming with the Touch controller

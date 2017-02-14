@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
-namespace Pear.Core.Examples
+namespace Pear.InteractionEngine.Examples
 {
     public class TouchTooltip : MonoBehaviour
     {

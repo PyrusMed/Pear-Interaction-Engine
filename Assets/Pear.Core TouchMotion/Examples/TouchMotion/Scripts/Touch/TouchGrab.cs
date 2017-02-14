@@ -1,8 +1,8 @@
-﻿using Pear.Core.Controllers;
-using Pear.Core.Interactables;
+﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Interactables;
 using UnityEngine;
 
-namespace Pear.Core.Examples
+namespace Pear.InteractionEngine.Examples
 {
     /// <summary>
     /// Grab the entire model with the touch controller

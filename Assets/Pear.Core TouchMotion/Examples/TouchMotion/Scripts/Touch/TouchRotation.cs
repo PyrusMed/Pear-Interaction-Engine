@@ -1,9 +1,9 @@
-﻿using Pear.Core.Controllers;
-using Pear.Core.Interactables;
+﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Interactables;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Pear.Core.Examples
+namespace Pear.InteractionEngine.Examples
 {
     /// <summary>
     /// Handles rotation with the Touch controller
