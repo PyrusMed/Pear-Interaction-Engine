@@ -79,6 +79,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+!/dist/*
 
 # Blender
 *.blend1*
