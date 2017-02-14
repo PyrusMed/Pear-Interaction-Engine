@@ -1,7 +1,7 @@
-﻿using Pear.Core.Interactables;
+﻿using Pear.InteractionEngine.Interactables;
 using UnityEngine;
 
-namespace Pear.Core.Controllers.Behaviors
+namespace Pear.InteractionEngine.Controllers.Behaviors
 {
     /// <summary>
     /// Update the interactable object's state when we hover over it

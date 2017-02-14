@@ -1,7 +1,7 @@
-﻿using Pear.Core.Utils;
+﻿using Pear.InteractionEngine.Utils;
 using System.Collections.Generic;
 
-namespace Pear.Core.Interactables
+namespace Pear.InteractionEngine.Interactables
 {
     /// <summary>
     /// Manages every interactable object that's added and removed

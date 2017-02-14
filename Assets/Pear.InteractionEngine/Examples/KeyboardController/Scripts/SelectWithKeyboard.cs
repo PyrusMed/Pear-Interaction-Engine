@@ -1,11 +1,11 @@
-﻿using Pear.Core.Controllers;
-using Pear.Core.Controllers.Behaviors;
-using Pear.Core.Interactables;
+﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Controllers.Behaviors;
+using Pear.InteractionEngine.Interactables;
 using UnityEngine;
 
-namespace Pear.Core.Examples
+namespace Pear.InteractionEngine.Examples
 {
-    public class SelectWithKeyboard : ControllerBehavior<Controller>
+	public class SelectWithKeyboard : ControllerBehavior<Controller>
     {
 
         public KeyCode SelectKey = KeyCode.P;

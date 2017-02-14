@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Pear.Core.Utils
+namespace Pear.InteractionEngine.Utils
 {
     /// <summary>
     /// Be aware this will not prevent a non singleton constructor

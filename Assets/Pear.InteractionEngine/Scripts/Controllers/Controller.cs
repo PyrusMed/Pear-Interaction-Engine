@@ -1,9 +1,9 @@
-﻿using Pear.Core.Interactables;
+﻿using Pear.InteractionEngine.Interactables;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Pear.Core.Controllers
+namespace Pear.InteractionEngine.Controllers
 {
     /// <summary>
     /// Base class for all controllers

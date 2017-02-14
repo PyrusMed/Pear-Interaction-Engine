@@ -1,9 +1,9 @@
-﻿using Pear.Core.Utils;
+﻿using Pear.InteractionEngine.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Pear.Core.Interactables.Behaviors
+namespace Pear.InteractionEngine.Interactables.Behaviors
 {
     /// <summary>
     /// Manages what happens when object are hovered over
