@@ -1,7 +1,7 @@
 # Pear Interaction Engine (PIE)
 
 ## About PIE
-PIE is a set of cross-device Unity components that make interacting with objects easy, regardless of the target platform. PIE currently supports Leap Motion, Oculus Touch, and mixed reality inputs (e.g. HoloLens gestures), with more coming soon. Use PIE if you want to give your users an easy way to interact with virtual objects. We hope you find this useful!
+PIE is a set of cross-device Unity components that make interacting with objects easy, regardless of the target platform. PIE currently supports mouse and keyboard, Leap Motion, Oculus Touch, and mixed reality inputs (e.g. HoloLens gestures), with more coming soon. Use PIE if you want to give your users an easy way to interact with virtual objects. We hope you find this useful!
 
 - images of interactions -
 
@@ -18,7 +18,8 @@ Download our latest package from the [releases](https://github.com/PearMed/Pear-
   - The "Pear.Core HoloLens" package requires the HoloToolkit Unity module
 
 ## Who is using PIE?
-- [Bosc](http://www.pearmedical.com/bosc.html)\
+- [Bosc](http://www.pearmedical.com/bosc.html)
+
 Hopefully this list will continue to grow ;)
 
 ## Questions?
