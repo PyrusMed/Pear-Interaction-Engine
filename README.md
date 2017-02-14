@@ -15,8 +15,6 @@ Interactions are a core component of every user facing software application, yet
 2. Open one of the example scenes in Assets/Pear.Core */Examples/...
 3. Run!
 
-OR
-
 ### Import PIE Into Your Own Project
 Download our latest package from the [releases](https://github.com/PearMed/Pear-Interaction-Engine/releases) section and import it into your Unity project
   - The "Pear.Core" package has no external requirements
