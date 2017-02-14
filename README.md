@@ -29,6 +29,6 @@ Download our latest package from the [releases](https://github.com/PearMed/Pear-
 Hopefully this list will continue to grow ;)
 
 ## Questions?
-If you have any questions please log an issue under this repo or (contact us directly)[http://www.pearmedical.com/contact.html]
+If you have any questions please log an issue under this repo or [contact us directly](http://www.pearmedical.com/contact.html)
 
 # Thanks!
