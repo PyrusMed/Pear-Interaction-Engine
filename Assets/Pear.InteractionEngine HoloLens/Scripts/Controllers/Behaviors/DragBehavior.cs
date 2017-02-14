@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.VR.WSA.Input;
 
-namespacePear.InteractionEngine.Controllers.Behaviors
+namespace Pear.InteractionEngine.Controllers.Behaviors
 {
     /// <summary>
     /// Base class for drag manipulations. This class recognizes a navigation event,
