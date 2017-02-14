@@ -10,12 +10,16 @@ Interactions are a core component of every user facing software application, yet
 
 ## Getting Started with PIE
 Sync and run one of our several branches
+  1) Sync a branch
+  2) Open one of the example scenes
+  3) Run!
 
 OR
 
 Download our latest package from the [releases](https://github.com/PearMed/Pear-Interaction-Engine/releases) section and import it into your Unity project
-  - The "Pear.Core TouchMotion" package requires the Leap Motion and Oculus Touch Unity modules
-  - The "Pear.Core HoloLens" package requires the HoloToolkit Unity module
+  - The "Pear.Core" package has no external requirements
+  - The "Pear.Core TouchMotion" package requires "Pear.Core" and the Leap Motion and Oculus Touch Unity modules
+  - The "Pear.Core HoloLens" package requires "Pear.Core" and the HoloToolkit Unity module
 
 ## Who is using PIE?
 - [Bosc](http://www.pearmedical.com/bosc.html)
