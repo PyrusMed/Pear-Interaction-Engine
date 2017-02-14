@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 
-namespace Pear.Core.Examples
+namespace Pear.InteractionEngine.Examples
 {
-    /// <summary>
-    /// Move the character with the keyboard
-    /// </summary>
-    public class CharacterMovement : MonoBehaviour
+	/// <summary>
+	/// Move the character with the keyboard
+	/// </summary>
+	public class CharacterMovement : MonoBehaviour
     {
 
         public float speed = 6.0F;

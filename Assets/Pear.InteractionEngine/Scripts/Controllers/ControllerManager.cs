@@ -1,7 +1,7 @@
-﻿using Pear.Core.Utils;
+﻿using Pear.InteractionEngine.Utils;
 using System.Collections.Generic;
 
-namespace Pear.Core.Controllers
+namespace Pear.InteractionEngine.Controllers
 {
     /// <summary>
     /// Singleton responsible for managing controllers

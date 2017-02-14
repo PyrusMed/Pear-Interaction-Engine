@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Pear.Core.Controllers
+namespace Pear.InteractionEngine.Controllers
 {
     /// <summary>
     /// Based class for script that need to use a controller
