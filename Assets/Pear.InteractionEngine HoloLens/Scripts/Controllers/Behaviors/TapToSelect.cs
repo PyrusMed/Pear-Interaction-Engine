@@ -1,8 +1,8 @@
 ﻿using HoloToolkit.Unity.InputModule;
-using Pear.Core.Interactables;
+usingPear.InteractionEngine.Interactables;
 using UnityEngine.VR.WSA.Input;
 
-namespace Pear.Core.Controllers.Behaviors
+namespacePear.InteractionEngine.Controllers.Behaviors
 {
     /// <summary>
     /// Selects an interactable object on tap

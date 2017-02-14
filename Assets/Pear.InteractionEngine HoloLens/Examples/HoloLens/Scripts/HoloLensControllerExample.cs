@@ -1,8 +1,8 @@
-﻿using Pear.Core.Controllers;
-using Pear.Core.Controllers.Behaviors;
-using Pear.Core.Interactables;
+﻿usingPear.InteractionEngine.Controllers;
+usingPear.InteractionEngine.Controllers.Behaviors;
+usingPear.InteractionEngine.Interactables;
 
-namespace Pear.Core.Examples
+namespacePear.InteractionEngine.Examples
 {
     public class HoloLensControllerExample : HoloLensController
     {

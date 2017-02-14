@@ -1,5 +1,5 @@
 ﻿
-namespace Pear.Core.Controllers
+namespacePear.InteractionEngine.Controllers
 {
     public class HoloLensController : Controller
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Pear.Core.Controllers.Behaviors
+namespacePear.InteractionEngine.Controllers.Behaviors
 {
     /// <summary>
     /// Drag to rotate the controller's active object
