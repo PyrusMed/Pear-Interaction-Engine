@@ -21,12 +21,51 @@ Download our latest package from the [releases](https://github.com/PearMed/Pear-
   - The "Pear.InteractionEngine TouchMotion" package requires "Pear.InteractionEngine" and the Leap Motion and Oculus Touch Unity modules
   - The "Pear.InteractionEngine HoloLens" package requires "Pear.InteractionEngine" and the HoloToolkit Unity module
 
+## PIE Architecture
+PIE consists of modular components that can be swapped in and out. These components revolve around the `Controller` and `InteractableObject` classes. `Controller`s represent user input devices and `InteractableObject`s represent objects that can be manipulated by user input.
+
+### Controller
+`Controller` represents a user input device. The camera, for example, is a `Controller` because gaze is a form of input that can be used to hover over objects. Each controller has a set of `ControllerBehavior`s that use the `Controller` to update the state of `InteractableObject`s. For instance, `HoverOnGaze` is a `ControllerBehavior` that updates the state of an `InteractableObject` when the camera hover's over it. `HoverOnGaze` looks something like this.
+
+```csharp
+//[...]
+
+// If the camera is hovering over an interactable
+// update the interactable's state
+if (hoverInteractable != null)
+  hoverInteractable.Hovering.Add(Controller);
+
+//[...]
+```
+
+### InteractableObject
+`InteractableObject` represents objects that can be manipulated by user input. Each `InteractableObject` has a set of states (Grabbing, Moving, Resizing, Rotating, Selected) that are updated by `Controller`s and their `ControllerBehavior`s. In the example above, the `ControllerBehavior` `HoverOnGaze` tells the `InteractableObject` it's being hovered over by the camera `Controller`. Once an `InteractableObject`'s state is updated it lets all of it's listeners know. This pattern is powerful because it allows developers and designers to create common interactions across multiple controllers. Let's look at an example...
+
+`FadeOnHover` is a class that listens for the change in hover state of `InteractableObject`s and sets their opacity accordigly. The code looks something like this:
+
+```csharp
+//[...]
+
+// Call the FadeOut function when the interactable is hovered over
+interactable.Hovering.OnStart.AddListener(FadeOut);
+
+// Call the FadeIn function when hovering ends
+interactable.Hovering.OnEnd.AddListener(FadeIn);
+
+//[...]
+```
+
+Now we can hover over the `InteractableObject` with *any* `Controller` and it will FadeIn/FadeOut accordingly. This works great if you want to design and develop common interactions using different forms of input, like mouse and keyboard (desktop), Leap Motion / Oculus Touch (VR), and gestures (MR).
+
+## Contributing
+If you like PIE, want to make it better, or just want to work on something cool, help us out! We think user interactions are extremely important, so we'd love to work with others to improve how we all design, develop and use interactions in VR and MR. Fork this repo to get started!
+
 ## Who is using PIE?
 - [Bosc](http://www.pearmedical.com/bosc.html)
 
 Hopefully this list will continue to grow ;)
 
 ## Questions?
-If you have any questions please log an issue under this repo or [contact us directly](http://www.pearmedical.com/contact.html)
+If you have any questions please log an [issue](https://github.com/PearMed/Pear-Interaction-Engine/issues) or [contact us directly](http://www.pearmedical.com/contact.html)
 
 # Thanks!
