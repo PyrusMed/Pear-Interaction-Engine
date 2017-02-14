@@ -1,9 +1,9 @@
-﻿using Pear.Core.Controllers;
+﻿using Pear.InteractionEngine.Controllers;
 using UnityEngine;
 
-namespace Pear.Core.Examples
+namespace Pear.InteractionEngine.Examples
 {
-    public class ResizeWithKeyboard : ControllerBehavior<Controller>
+	public class ResizeWithKeyboard : ControllerBehavior<Controller>
     {
 
         [Tooltip("Key used to make the object bigger")]

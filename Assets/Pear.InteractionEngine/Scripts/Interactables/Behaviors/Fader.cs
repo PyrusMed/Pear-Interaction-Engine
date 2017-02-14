@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Pear.Core.Interactables.Behaviors
+namespace Pear.InteractionEngine.Interactables.Behaviors
 {
     /// <summary>
     /// Fades an object in and out
