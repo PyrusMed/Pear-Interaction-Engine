@@ -10,9 +10,9 @@ namespace Pear.InteractionEngine.Examples
         public DragToRotate DragToRotate;
         public DragToZoom DragToZoom;
 
-        void Start()
+        void Awake()
         {
-            foreach (InteractableObject interactable in InteractableObjectManager.Instance.AllObjects)
+            InteractableObjectManager.Instance.OnAdded.AddListener(interactable =>
             {
                 // When an object is selected make it the active object
                 interactable.Selected.OnStart.AddListener(e =>
@@ -25,7 +25,7 @@ namespace Pear.InteractionEngine.Examples
                 {
                     ActiveObject = null;
                 });
-            }
+            });
         }
 
         public void EnterRotateMode()
