@@ -39,7 +39,7 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
         {
             // If the controller has an active object perform the action
             if (Controller.ActiveObject != null)
-                PerformAction(relativePosition * MaxSpeed * Time.deltaTime);
+                PerformAction(relativePosition * MaxSpeed);
         }
 
         /// <summary>

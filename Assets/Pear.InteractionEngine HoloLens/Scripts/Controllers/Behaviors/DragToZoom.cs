@@ -14,7 +14,7 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
         /// <param name="actionFactor">relative position * MaxSpeed</param>
         protected override void PerformAction(Vector3 actionFactor)
         {
-            Controller.ActiveObject.transform.localScale += Vector3.one * Vector3.Distance(Vector3.zero, actionFactor / 100);
+            Controller.ActiveObject.AnchorElement.transform.localScale += Vector3.one * Vector3.Distance(Vector3.zero, actionFactor / 100);
         }
     }
 }

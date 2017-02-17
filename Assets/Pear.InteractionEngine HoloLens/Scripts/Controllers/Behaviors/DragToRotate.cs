@@ -14,7 +14,7 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
         /// <param name="actionFactor">relative position * MaxSpeed</param>
         protected override void PerformAction(Vector3 actionFactor)
         {
-            Controller.ActiveObject.transform.Rotate(new Vector3(actionFactor.y, -actionFactor.x, 0), Space.World);
+            Controller.ActiveObject.AnchorElement.transform.Rotate(new Vector3(actionFactor.y, -actionFactor.x, 0), Space.World);
         }
     }
 }
