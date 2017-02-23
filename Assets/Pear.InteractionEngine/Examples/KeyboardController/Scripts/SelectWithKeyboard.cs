@@ -1,18 +1,21 @@
 ﻿using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.Controllers.Behaviors;
 using Pear.InteractionEngine.Interactables;
+using Pear.InteractionEngine.Properties;
 using UnityEngine;
 
 namespace Pear.InteractionEngine.Examples
 {
 	public class SelectWithKeyboard : ControllerBehavior<Controller>
     {
+        [Tooltip("Select property name")]
+        public string SelectPropertyName = "pie.select";
 
         public KeyCode SelectKey = KeyCode.P;
 
         HoverOnGaze _hoverOnGaze;
 
-        InteractableObject _lastSelected;
+        BoolGameObjectProperty _lastSelectedProperty;
 
         // Use this for initialization
         void Start()
@@ -25,21 +28,23 @@ namespace Pear.InteractionEngine.Examples
         {
             if (Input.GetKeyUp(SelectKey) && _hoverOnGaze.HoveredObject != null)
             {
-                InteractableObjectState selectedState = _hoverOnGaze.HoveredObject.Selected;
-                if (selectedState.Contains(Controller))
+				BoolGameObjectProperty selectedProperty = _hoverOnGaze.HoveredObject.gameObject.GetProperty<BoolGameObjectProperty, bool>(SelectPropertyName);
+                if(selectedProperty != null)
                 {
-                    selectedState.Remove(Controller);
-                    Controller.ActiveObject = null;
-                }
-                else
-                {
-                    selectedState.Add(Controller);
-                    Controller.ActiveObject = _hoverOnGaze.HoveredObject;
+                    if (selectedProperty.Value)
+                    {
+                        selectedProperty.Value = false;
+                        _lastSelectedProperty = null;
+                    }
+                    else
+                    {
+                        selectedProperty.Value = true;
+                        Controller.ActiveObject = _hoverOnGaze.HoveredObject;
+                        if (_lastSelectedProperty != null)
+                            _lastSelectedProperty.Value = false;
 
-                    if (_lastSelected != _hoverOnGaze.HoveredObject && _lastSelected != null)
-                        _lastSelected.Selected.Remove(Controller);
-
-                    _lastSelected = _hoverOnGaze.HoveredObject;
+						_lastSelectedProperty = selectedProperty;
+					}
                 }
             }
         }

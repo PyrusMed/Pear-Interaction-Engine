@@ -1,4 +1,5 @@
 ﻿using Pear.InteractionEngine.Interactables;
+using Pear.InteractionEngine.Properties;
 using UnityEngine;
 
 namespace Pear.InteractionEngine.Examples
@@ -8,6 +9,8 @@ namespace Pear.InteractionEngine.Examples
 	/// </summary>
 	public class OutlineOnSelect : MonoBehaviour
 	{
+        [Tooltip("Name of the selected property")]
+        public string SelectedPropertyName = "pie.select";
 
 		[Tooltip("Outline material")]
 		public Material Outline;
@@ -15,26 +18,29 @@ namespace Pear.InteractionEngine.Examples
 		// Use this for initialization
 		void Awake()
 		{
-			InteractableObjectManager.Instance.OnAdded.AddListener((interactable) =>
-			{
-				Renderer renderer = interactable.GetComponent<Renderer>();
-				Material originalMaterial = renderer.material;
+            GameObjectPropertyManager<bool>.Get(SelectedPropertyName).OnAdded += selectedProperty =>
+            {
+                Renderer renderer = selectedProperty.GetComponent<Renderer>();
+                Material originalMaterial = renderer.material;
 
-				Material outlineMaterial = new Material(Outline);
-				outlineMaterial.color = originalMaterial.color;
+                Material outlineMaterial = new Material(Outline);
+                outlineMaterial.color = originalMaterial.color;
 
-			// When an object is selectted apply the outline material
-			interactable.Selected.OnStart.AddListener((e) =>
-				{
-					renderer.materials = new Material[] {
-					originalMaterial,
-					outlineMaterial
-					};
-				});
-
-			// When an object is deselected, use it's original material
-			interactable.Selected.OnEnd.AddListener((e) => interactable.GetComponent<Renderer>().materials = new Material[] { originalMaterial });
-			});
+                selectedProperty.OnChange.AddListener((oldValue, isSelected) =>
+                {
+                    if(isSelected)
+                    {
+                        renderer.materials = new Material[] {
+                            originalMaterial,
+                            outlineMaterial
+                        };
+                    }
+                    else
+                    {
+                        selectedProperty.GetComponent<Renderer>().materials = new Material[] { originalMaterial };
+                    }
+                });
+            };
 		}
 	}
 }

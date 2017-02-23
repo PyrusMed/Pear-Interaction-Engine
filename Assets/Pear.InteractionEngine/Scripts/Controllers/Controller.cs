@@ -31,7 +31,7 @@ namespace Pear.InteractionEngine.Controllers
         /// <summary>
         /// This controllers active object
         /// </summary>
-        public InteractableObject ActiveObject;
+        public GameObject ActiveObject;
 
         /// <summary>
         /// Tracks the in use state of this controller

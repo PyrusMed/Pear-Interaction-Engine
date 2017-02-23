@@ -1,4 +1,5 @@
 ﻿using Pear.InteractionEngine.Interactables;
+using Pear.InteractionEngine.Properties;
 using UnityEngine;
 
 namespace Pear.InteractionEngine.Controllers.Behaviors
@@ -8,30 +9,38 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
     /// </summary>
     public class HoverOnGaze : ControllerBehavior<Controller>
     {
-        public InteractableObject HoveredObject { get; private set; }
+        [Tooltip("Name of the hover property to look for in hoverable objects")]
+        public string HoverPropertyName = "pie.hover";
+
+        public GameObject HoveredObject
+        {
+            get { return _lasthHoverProperty != null ? _lasthHoverProperty.gameObject : null; }
+        }
+
+        private BoolGameObjectProperty _lasthHoverProperty;
 
         void Update()
         {
             RaycastHit hitInfo;
-            InteractableObject interactable = null;
+			BoolGameObjectProperty newHoverProperty = null;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, 1000))
-                interactable = hitInfo.transform.gameObject.GetComponent<InteractableObject>();
+                newHoverProperty = hitInfo.transform.gameObject.GetProperty<BoolGameObjectProperty, bool>(HoverPropertyName);
 
             // If hovering changed...
-            if (interactable != HoveredObject)
+            if (newHoverProperty != _lasthHoverProperty)
             {
                 // If there's an old object stop hovering over it
-                if (HoveredObject != null)
+                if (_lasthHoverProperty != null)
                 {
-                    HoveredObject.Hovering.Remove(Controller);
-                    HoveredObject = null;
+                    _lasthHoverProperty.Value = false;
+                    _lasthHoverProperty = null;
                 }
 
                 // If there's a new object hover over it
-                if (interactable != null)
+                if (newHoverProperty != null)
                 {
-                    interactable.Hovering.Add(Controller);
-                    HoveredObject = interactable;
+                    newHoverProperty.Value = true;
+                    _lasthHoverProperty = newHoverProperty;
                 }
             }
         }

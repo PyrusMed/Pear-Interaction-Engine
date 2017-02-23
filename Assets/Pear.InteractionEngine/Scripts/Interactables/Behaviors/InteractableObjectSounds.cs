@@ -1,11 +1,11 @@
 ﻿using Pear.InteractionEngine.Interactables;
+using Pear.InteractionEngine.Properties;
 using UnityEngine;
 
 namespace Pear.InteractionEngine.Examples
 {
 	public class InteractableObjectSounds : MonoBehaviour
 	{
-
 		public AudioClip StartHovering;
 		public AudioClip StopHovering;
 		public AudioClip StartMoving;
@@ -14,17 +14,19 @@ namespace Pear.InteractionEngine.Examples
 		public AudioClip StopResizing;
 		public AudioClip Selected;
 
+        public string HoverPropertyName = "pie.hover";
+        public string MovePropertyName = "pie.move";
+        public string ResizePropertyName = "pie.resize";
+        public string SelectPropertyName = "pie.select";
+
 		void Awake()
 		{
-			// When a new object is added hook up sounds to it
-			InteractableObjectManager.Instance.OnAdded.AddListener(interactable =>
-			{
-				AddSoundsToEvent(interactable.Hovering, StartHovering, StopHovering);
-				AddSoundsToEvent(interactable.Moving, StartMoving, StopMoving);
-				AddSoundsToEvent(interactable.Resizing, StartResizing, StopResizing);
-				AddSoundsToEvent(interactable.Selected, Selected, null);
-			});
-		}
+			// When a new property is added hook up listeners
+            PlaySoundOnChange(HoverPropertyName, StartHovering, StopHovering);
+            PlaySoundOnChange(MovePropertyName, StartMoving, StopMoving);
+            PlaySoundOnChange(ResizePropertyName, StartResizing, StopResizing);
+            PlaySoundOnChange(SelectPropertyName, Selected, null);
+        }
 
 		/// <summary>
 		/// Play sounds when the specified state object changes
@@ -32,19 +34,29 @@ namespace Pear.InteractionEngine.Examples
 		/// <param name="state">State to link events to</param>
 		/// <param name="startSound">Sound to play when state starts</param>
 		/// <param name="endSound">Sound to play when state ends</param>
-		private void AddSoundsToEvent(InteractableObjectState state, AudioClip startSound, AudioClip endSound)
+		private void PlaySoundOnChange(string propertyName, AudioClip startSound, AudioClip endSound)
 		{
-			if (startSound != null)
-			{
-				AudioSource startSource = CreateAudioSource(startSound);
-				state.OnStart.AddListener(e => startSource.Play());
-			}
+            AudioSource startSource = CreateAudioSource(startSound);
+            AudioSource endSource = CreateAudioSource(endSound);
 
-			if (endSound != null)
-			{
-				AudioSource endSource = CreateAudioSource(endSound);
-				state.OnEnd.AddListener(e => endSource.Play());
-			}
+            GameObjectPropertyCollection<bool> propertyCollection = GameObjectPropertyManager<bool>.Get(propertyName);
+            propertyCollection.OnAdded += (property) =>
+            {
+                property.OnChange.AddListener((oldValue, newValue) =>
+                {
+                    if(newValue)
+                    {
+                        if (startSource)
+                            startSource.Play();
+                    }
+                    else
+                    {
+                        if (endSource)
+                            endSource.Play();
+                    }
+
+                });
+            };
 		}
 
 		/// <summary>
@@ -54,6 +66,9 @@ namespace Pear.InteractionEngine.Examples
 		/// <returns>Audio source</returns>
 		private AudioSource CreateAudioSource(AudioClip clip)
 		{
+            if (clip == null)
+                return null;
+
 			AudioSource source = gameObject.AddComponent<AudioSource>();
 			source.clip = clip;
 			source.playOnAwake = false;

@@ -1,10 +1,15 @@
 ﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Interactables;
+using Pear.InteractionEngine.Properties;
+using Pear.InteractionEngine.Utils;
 using UnityEngine;
 
 namespace Pear.InteractionEngine.Examples
 {
 	public class ResizeWithKeyboard : ControllerBehavior<Controller>
     {
+        [Tooltip("Resize property name")]
+        public string ResizePropertyName = "pie.resize";
 
         [Tooltip("Key used to make the object bigger")]
         public KeyCode MakeSmallerKey = KeyCode.Alpha1;
@@ -15,13 +20,14 @@ namespace Pear.InteractionEngine.Examples
         [Tooltip("The percent per second in which the object changes while scaling")]
         public float ScalePercentage = 0.1f;
 
-        // Tracks whether we resized during the last frame
-        private bool _lastResizedState = false;
-
         // Update is called once per frame
         void Update()
         {
             if (Controller.ActiveObject == null)
+                return;
+
+			BoolGameObjectProperty resizeProperty = Controller.ActiveObject.gameObject.GetProperty<BoolGameObjectProperty, bool>(ResizePropertyName);
+            if (resizeProperty == null)
                 return;
 
             bool resized = true;
@@ -32,16 +38,7 @@ namespace Pear.InteractionEngine.Examples
             else
                 resized = false;
 
-            // If we started or stopped resizing update the object's state
-            if (resized != _lastResizedState)
-            {
-                if (resized)
-                    Controller.ActiveObject.Resizing.Add(Controller);
-                else
-                    Controller.ActiveObject.Resizing.Remove(Controller);
-            }
-
-            _lastResizedState = resized;
+            resizeProperty.Value = resized;
         }
 
         /// <summary>
@@ -52,11 +49,14 @@ namespace Pear.InteractionEngine.Examples
         {
             int direction = increase ? 1 : -1;
             float scaleAmount = ScalePercentage * Time.deltaTime;
-            float currentScale = Controller.ActiveObject.AnchorElement.transform.localScale.x;
+
+            InteractableObject interactable = Controller.ActiveObject.transform.GetOrAddComponent<InteractableObject>();
+            Anchor anchor = interactable.AnchorElement;
+            float currentScale = anchor.transform.localScale.x;
             float newScale = currentScale * (1 + scaleAmount * direction);
 
             // Apply the new scale
-            Controller.ActiveObject.AnchorElement.transform.localScale = Vector3.one * newScale;
+            anchor.transform.localScale = Vector3.one * newScale;
         }
     }
 }
