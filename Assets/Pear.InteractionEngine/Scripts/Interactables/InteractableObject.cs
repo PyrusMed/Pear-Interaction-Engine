@@ -24,5 +24,4 @@ namespace Pear.InteractionEngine.Interactables
             transform.SetParent(AnchorElement.transform, true);
         }
     }
-
 }
