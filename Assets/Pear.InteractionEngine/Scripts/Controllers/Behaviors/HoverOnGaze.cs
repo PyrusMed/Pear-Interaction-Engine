@@ -8,7 +8,6 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
     /// <summary>
     /// Update the interactable object's state when we hover over it
     /// </summary>
-	[PropertyChanger("pie.hover")]
     public class HoverOnGaze : ControllerBehavior<Controller>, IPropertyChanger<bool>
     {
 		public GameObject HoveredObject
@@ -50,6 +49,10 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
 			{
 				property.Value = false;
 			};
+		}
+
+		public void UnregisterProperty(GameObjectProperty<bool> property)
+		{
 		}
 	}
 }

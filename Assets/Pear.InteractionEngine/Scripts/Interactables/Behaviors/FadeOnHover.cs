@@ -3,13 +3,14 @@ using Pear.InteractionEngine.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using System;
 
 namespace Pear.InteractionEngine.Interactables.Behaviors
 {
     /// <summary>
     /// Manages what happens when object are hovered over
     /// </summary>
-    public class FadeOnHover : MonoBehaviour
+    public class FadeOnHover : MonoBehaviour, IPropertyAction<bool>
     {
         [Tooltip("Name of the GameObjectProperty to listen for")]
         public string HoverPropertyName = "pie.hover";
@@ -23,43 +24,31 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
         [Tooltip("Opacity that objects fade to")]
         public float FadeAlpha = 0.3f;
 
-        private GameObjectPropertyCollection<bool> _hoverPropertyCollection;
+		private List<GameObjectProperty<bool>> _properties = new List<GameObjectProperty<bool>>();
 
-        private void Awake()
-        {
-            _hoverPropertyCollection = GameObjectPropertyManager<bool>.Get(HoverPropertyName);
-            _hoverPropertyCollection.OnAdded += SetOpacityOnHover;
-            _hoverPropertyCollection.OnRemoved += StopListeningForHover;
-        }
+		public void RegisterProperty(GameObjectProperty<bool> property)
+		{
+			_properties.Add(property);
 
-        /// <summary>
-        /// Listen for when a controller hovers over the given object and fade when it happens
-        /// </summary>
-        /// <param name="interactable">object to fade on hover</param>
-        public void SetOpacityOnHover(GameObjectProperty<bool> hoverProperty)
-        {
-            hoverProperty.OnChange.AddListener(HandleFade);
+			property.OnChange.AddListener(HandleFade);
 
-            Fader fader = hoverProperty.gameObject.AddComponent<Fader>();
-            fader.fadeDelay = FadeDelay;
-            fader.fadeTime = FadeTime;
-            fader.fadeAplha = FadeAlpha;
-        }
+			Fader fader = property.gameObject.AddComponent<Fader>();
+			fader.fadeDelay = FadeDelay;
+			fader.fadeTime = FadeTime;
+			fader.fadeAplha = FadeAlpha;
+		}
 
-        /// <summary>
-        /// Stop listening for hover events
-        /// </summary>
-        /// <param name="interactable">object to remove events from</param>
-        public void StopListeningForHover(GameObjectProperty<bool> hoverProperty)
-        {
-            hoverProperty.OnChange.RemoveListener(HandleFade);
-        }
+		public void UnregisterProperty(GameObjectProperty<bool> property)
+		{
+			property.OnChange.RemoveListener(HandleFade);
+			_properties.Remove(property);
+		}
 
-        /// <summary>
-        /// Event handler for hover events
-        /// </summary>
-        /// <param name="e"></param>
-        private void HandleFade(bool oldHoverValue, bool newHoverValue)
+		/// <summary>
+		/// Event handler for hover events
+		/// </summary>
+		/// <param name="e"></param>
+		private void HandleFade(bool oldHoverValue, bool newHoverValue)
         {
             FadeAll();
         }
@@ -71,14 +60,12 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
         /// </summary>
         private void FadeAll()
         {
-            GameObjectProperty<bool>[] hoverProperties = _hoverPropertyCollection.All;
-
             // If at least one object is hovered over,
             //	Fade in all hovered objects
             //	Fade out all non-hovered objects
-            if (hoverProperties.Any((prop) => prop.Value))
+            if (_properties.Any((prop) => prop.Value))
             {
-                foreach (GameObjectProperty<bool> property in hoverProperties)
+                foreach (GameObjectProperty<bool> property in _properties)
                 {
                     Fader fader = property.GetComponent<Fader>();
                     if (property.Value)
@@ -90,12 +77,12 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
             // Otherwise, fade in all objects
             else
             {
-                foreach (GameObjectProperty<bool> property in hoverProperties)
+                foreach (GameObjectProperty<bool> property in _properties)
                 {
                     Fader fader = property.GetComponent<Fader>();
                     fader.FadeIn();
                 }
             }
         }
-    }
+	}
 }
