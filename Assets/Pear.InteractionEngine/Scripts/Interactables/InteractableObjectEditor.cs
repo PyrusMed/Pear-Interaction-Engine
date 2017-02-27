@@ -13,29 +13,18 @@ namespace Pear.InteractionEngine.Interactables
 	public class InteractableObjectEditor : Editor
 	{
 		private List<Type> _changers;
-		private Type _selectedChanger;
-		private Type _selectedAction;
 		Dictionary<Type, List<Type>> _dict_actionTemplateArgToImplementations;
 		Dictionary<Type, List<string>> _dict_actionTemplateArgToActionNames;
 
 		private bool _addChanger = false;
+		private Type _selectedChanger;
+		private Type _selectedAction;
 		private int _changerClassNameDropdownIndex = -1;
 		private int _actionClassNameDropdownIndex = -1;
-
-		private int SelectedChangerIndex
-		{
-			get { return _changerClassNameDropdownIndex - 1; }
-		}
-
-		private int SelectedActionIndex
-		{
-			get { return _actionClassNameDropdownIndex - 1; }
-		}
 
 		void OnEnable()
 		{
 			_changers = GetTypesThatImplementInterface(typeof(IPropertyChanger<>));
-			//Dictionary<Type, List<Type>> dict_changerTemplateArgToImplementations = MapTemplateArgumentToImplementations(_changers, typeof(IPropertyChanger<>));
 
 			List<Type> actions = GetTypesThatImplementInterface(typeof(IPropertyAction<>));
 			_dict_actionTemplateArgToImplementations = MapTemplateArgumentToImplementations(actions, typeof(IPropertyAction<>));
@@ -44,7 +33,7 @@ namespace Pear.InteractionEngine.Interactables
 				kvp =>
 				{
 					return kvp.Value
-							.Select(actionType => actionType.FullName)
+							.Select(actionType => GetNameForDropdown(actionType, typeof(IPropertyAction<>)))
 							.ToList();
 				});
 
@@ -71,27 +60,23 @@ namespace Pear.InteractionEngine.Interactables
 				{
 					RenderChangerDropdown();
 
-					if (_changerClassNameDropdownIndex > 0)
-					{
+					if (_selectedChanger != null)
 						RenderSelectedChangerArguments();
-					}
-				}
-				GUILayout.EndVertical();
-				
-				if (_selectedChanger != null)
-				{
-					GUILayout.BeginVertical("box");
+
+					if (_selectedChanger != null)
 					{
 						RenderActionDropdown();
-						
 
 						if (_selectedAction != null)
 						{
 							RenderSelectedActionArguments();
+
+							GUILayout.Space(10);
+							GUILayout.Button("Save Interaction");
 						}
 					}
-					GUILayout.EndVertical();
 				}
+				GUILayout.EndVertical();
 			}
 		}
 
@@ -101,16 +86,16 @@ namespace Pear.InteractionEngine.Interactables
 			{
 				EditorGUILayout.LabelField("Event", GUILayout.Width(50));
 				List<string> changerClassNames = new List<string>() { "Select an event" };
-				changerClassNames.AddRange(_changers.Select(t => t.FullName));
+				changerClassNames.AddRange(_changers.Select(t => GetNameForDropdown(t, typeof(IPropertyChanger<>))));
 				_changerClassNameDropdownIndex = EditorGUILayout.Popup(_changerClassNameDropdownIndex, changerClassNames.ToArray());
+				if(_changerClassNameDropdownIndex > 0)
+					_selectedChanger = _changers[_changerClassNameDropdownIndex - 1];
 			}
 			GUILayout.EndHorizontal();
 		}
 
 		private void RenderSelectedChangerArguments()
 		{
-			_selectedChanger = _changers[_changerClassNameDropdownIndex - 1];
-
 			GUILayout.BeginVertical();
 			{
 				SerializedFieldInfo[] changerFields = ExposeProperties.GetNonUnityProperties(_selectedChanger);
@@ -186,5 +171,11 @@ namespace Pear.InteractionEngine.Interactables
 			return implementation.GetInterface(interfaceType.Name).GetGenericArguments()[0];
 		}
 
+		private string GetNameForDropdown(Type type, Type interfaceType)
+		{
+			return string.Format("{0} ({1})",
+				ObjectNames.NicifyVariableName(type.Name),
+				GetGenericArgumentType(type, interfaceType).Name);
+		}
 	}
 }
