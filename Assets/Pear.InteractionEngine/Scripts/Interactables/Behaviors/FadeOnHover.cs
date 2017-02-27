@@ -7,14 +7,12 @@ using System;
 
 namespace Pear.InteractionEngine.Interactables.Behaviors
 {
-    /// <summary>
-    /// Manages what happens when object are hovered over
-    /// </summary>
-    public class FadeOnHover : MonoBehaviour, IPropertyAction<bool>
+	/// <summary>
+	/// Manages what happens when object are hovered over
+	/// </summary>
+	[Serializable]
+	public class FadeOnHover : MonoBehaviour, IPropertyAction<bool>
     {
-        [Tooltip("Name of the GameObjectProperty to listen for")]
-        public string HoverPropertyName = "pie.hover";
-
         [Tooltip("Seconds between when the controller hovers over the object and when fading starts")]
         public float FadeDelay = 0.0f;
 

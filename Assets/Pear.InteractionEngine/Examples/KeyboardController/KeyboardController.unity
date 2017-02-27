@@ -520,7 +520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07839a859439a9345bbe08a8932282a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HoverPropertyName: pie.hover
 --- !u!114 &841217588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -625,6 +624,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 536aca40cd75956418afdc5603184a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChangerActions:
+    Changer: {fileID: 0}
+    Action: {fileID: 0}
   AnchorElement: {fileID: 0}
 --- !u!23 &1410975474
 MeshRenderer:
@@ -871,6 +873,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 536aca40cd75956418afdc5603184a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChangerActions:
+    Changer: {fileID: 0}
+    Action: {fileID: 0}
   AnchorElement: {fileID: 0}
 --- !u!23 &1743919817
 MeshRenderer:
@@ -1021,6 +1026,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 536aca40cd75956418afdc5603184a46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ChangerActions:
+    Changer: {fileID: 0}
+    Action: {fileID: 0}
   AnchorElement: {fileID: 0}
 --- !u!23 &1929522312
 MeshRenderer:

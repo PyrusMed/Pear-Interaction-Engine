@@ -7,10 +7,12 @@ namespace Pear.InteractionEngine.Interactables
 {
     public class InteractableObject : MonoBehaviour
     {
-        /// <summary>
-        /// Used to move and manipulate this object
-        /// </summary>
-        [HideInInspector]
+		public PropertyChangerToPropertyAction ChangerActions;
+
+		/// <summary>
+		/// Used to move and manipulate this object
+		/// </summary>
+		[HideInInspector]
         public Anchor AnchorElement;
 
         void Awake()
@@ -24,4 +26,11 @@ namespace Pear.InteractionEngine.Interactables
             transform.SetParent(AnchorElement.transform, true);
         }
     }
+
+	[Serializable]
+	public class PropertyChangerToPropertyAction
+	{
+		public MonoBehaviour Changer;
+		public MonoBehaviour Action;
+	}
 }

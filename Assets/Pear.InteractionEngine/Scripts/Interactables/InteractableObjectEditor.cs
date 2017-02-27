@@ -13,12 +13,24 @@ namespace Pear.InteractionEngine.Interactables
 	public class InteractableObjectEditor : Editor
 	{
 		private List<Type> _changers;
+		private Type _selectedChanger;
+		private Type _selectedAction;
 		Dictionary<Type, List<Type>> _dict_actionTemplateArgToImplementations;
 		Dictionary<Type, List<string>> _dict_actionTemplateArgToActionNames;
 
 		private bool _addChanger = false;
 		private int _changerClassNameDropdownIndex = -1;
 		private int _actionClassNameDropdownIndex = -1;
+
+		private int SelectedChangerIndex
+		{
+			get { return _changerClassNameDropdownIndex - 1; }
+		}
+
+		private int SelectedActionIndex
+		{
+			get { return _actionClassNameDropdownIndex - 1; }
+		}
 
 		void OnEnable()
 		{
@@ -41,6 +53,8 @@ namespace Pear.InteractionEngine.Interactables
 
 		void Reset()
 		{
+			_selectedChanger = null;
+			_selectedAction = null;
 			_addChanger = false;
 			_changerClassNameDropdownIndex = 0;
 			_actionClassNameDropdownIndex = 0;
@@ -48,48 +62,95 @@ namespace Pear.InteractionEngine.Interactables
 
 		public override void OnInspectorGUI()
 		{
-			serializedObject.Update();
-
 			if (GUILayout.Button("Add Interaction"))
 				_addChanger = true;
 
 			if (_addChanger)
 			{
-				GUILayout.BeginHorizontal("box");
+				GUILayout.BeginVertical("box");
 				{
-					EditorGUILayout.LabelField("Event", GUILayout.Width(50));
-					List<string> changerClassNames = new List<string>() { "Select an event" };
-					changerClassNames.AddRange(_changers.Select(t => t.FullName));
-					_changerClassNameDropdownIndex = EditorGUILayout.Popup(_changerClassNameDropdownIndex, changerClassNames.ToArray());
+					RenderChangerDropdown();
 
-				}
-				GUILayout.EndHorizontal();
-				
-				if (_changerClassNameDropdownIndex > 0)
-				{
-					GUILayout.BeginHorizontal("box");
+					if (_changerClassNameDropdownIndex > 0)
 					{
-						EditorGUILayout.LabelField("Action", GUILayout.Width(50));
-						Type changer = _changers[_changerClassNameDropdownIndex - 1];
-						Type templateArgument = GetGenericArgumentType(changer, typeof(IPropertyChanger<>));
-						List<string> actionsForChanger;
-						if (_dict_actionTemplateArgToActionNames.TryGetValue(templateArgument, out actionsForChanger))
+						RenderSelectedChangerArguments();
+					}
+				}
+				GUILayout.EndVertical();
+				
+				if (_selectedChanger != null)
+				{
+					GUILayout.BeginVertical("box");
+					{
+						RenderActionDropdown();
+						
+
+						if (_selectedAction != null)
 						{
-							List<string> actionClassNames = new List<string>() { "Select an action to execute when event fires" };
-							actionClassNames.AddRange(actionsForChanger);
-							_actionClassNameDropdownIndex = EditorGUILayout.Popup(_actionClassNameDropdownIndex, actionClassNames.ToArray());
-						}
-						else
-						{
-							string message = "There are no actions that support type " + templateArgument;
-							EditorGUILayout.LabelField(new GUIContent(message, message));
+							RenderSelectedActionArguments();
 						}
 					}
-					GUILayout.EndHorizontal();
+					GUILayout.EndVertical();
 				}
 			}
+		}
 
-			serializedObject.ApplyModifiedProperties();
+		private void RenderChangerDropdown()
+		{
+			GUILayout.BeginHorizontal();
+			{
+				EditorGUILayout.LabelField("Event", GUILayout.Width(50));
+				List<string> changerClassNames = new List<string>() { "Select an event" };
+				changerClassNames.AddRange(_changers.Select(t => t.FullName));
+				_changerClassNameDropdownIndex = EditorGUILayout.Popup(_changerClassNameDropdownIndex, changerClassNames.ToArray());
+			}
+			GUILayout.EndHorizontal();
+		}
+
+		private void RenderSelectedChangerArguments()
+		{
+			_selectedChanger = _changers[_changerClassNameDropdownIndex - 1];
+
+			GUILayout.BeginVertical();
+			{
+				SerializedFieldInfo[] changerFields = ExposeProperties.GetNonUnityProperties(_selectedChanger);
+				ExposeProperties.Expose(changerFields);
+			}
+			GUILayout.EndVertical();
+		}
+
+		private void RenderActionDropdown()
+		{
+			GUILayout.BeginHorizontal();
+			{
+				EditorGUILayout.LabelField("Action", GUILayout.Width(50));
+				Type templateArgument = GetGenericArgumentType(_selectedChanger, typeof(IPropertyChanger<>));
+				List<string> actionsForChanger;
+				if (_dict_actionTemplateArgToActionNames.TryGetValue(templateArgument, out actionsForChanger))
+				{
+					List<string> actionClassNames = new List<string>() { "Select an action to execute when event fires" };
+					actionClassNames.AddRange(actionsForChanger);
+					_actionClassNameDropdownIndex = EditorGUILayout.Popup(_actionClassNameDropdownIndex, actionClassNames.ToArray());
+					if (_actionClassNameDropdownIndex > 0)
+						_selectedAction = _dict_actionTemplateArgToImplementations[templateArgument][_actionClassNameDropdownIndex - 1];
+				}
+				else
+				{
+					string message = "There are no actions that support type " + templateArgument;
+					EditorGUILayout.LabelField(new GUIContent(message, message));
+				}
+			}
+			GUILayout.EndHorizontal();
+		}
+
+		private void RenderSelectedActionArguments()
+		{
+			GUILayout.BeginVertical();
+			{
+				SerializedFieldInfo[] actionFields = ExposeProperties.GetNonUnityProperties(_selectedAction);
+				ExposeProperties.Expose(actionFields);
+			}
+			GUILayout.EndVertical();
 		}
 
 		private List<Type> GetTypesThatImplementInterface(Type interfaceType)
@@ -106,34 +167,14 @@ namespace Pear.InteractionEngine.Interactables
 
 		private Dictionary<Type, List<Type>> MapTemplateArgumentToImplementations(List<Type> implementations, Type interfaceType)
 		{
-			/*return implementations
-						.GroupBy(implementation => implementation.GetGenericArguments()[0])
-						.ToDictionary(val => val.Key, val => val.ToList());*/
-			
-			Dictionary<Type, List<Type>> dict_templateArgToImplementation = new Dictionary<Type, List<Type>>();
-			foreach(Type implementation in implementations)
-			{
-				Type genericArgumentType = GetGenericArgumentType(implementation, interfaceType);
-
-				List<Type> implementationsForType;
-				if (!dict_templateArgToImplementation.TryGetValue(genericArgumentType, out implementationsForType))
-					dict_templateArgToImplementation[genericArgumentType] = implementationsForType = new List<Type>();
-
-				implementationsForType.Add(implementation);
-			}
-
-			return dict_templateArgToImplementation;
+			return implementations
+						.GroupBy(implementation => GetGenericArgumentType(implementation, interfaceType))
+						.ToDictionary(val => val.Key, val => val.ToList());
 		}
 
 		private Type GetInterfaceImplementationType(Type implementation, Type interfaceType)
 		{
-			foreach (Type i in implementation.GetInterfaces())
-			{
-				if (i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType)
-					return i;
-			}
-
-			return null;
+			return implementation.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType);
 		}
 
 		private Type GetGenericArgumentType(Type implementation, Type interfaceType)
@@ -144,5 +185,6 @@ namespace Pear.InteractionEngine.Interactables
 
 			return implementation.GetInterface(interfaceType.Name).GetGenericArguments()[0];
 		}
+
 	}
 }
