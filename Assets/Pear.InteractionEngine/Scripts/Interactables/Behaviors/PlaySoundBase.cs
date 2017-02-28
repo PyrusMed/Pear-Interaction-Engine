@@ -8,17 +8,8 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
 {
 	public abstract class PlaySoundBase<T> : MonoBehaviour, IGameObjectPropertyEventHandler<T>
 	{
-		public AudioClip StartSound;
-		public AudioClip EndSound;
-
-		protected AudioSource _startSource;
-		protected AudioSource _endSource;
-
-		void Start()
-		{
-			_startSource = CreateAudioSource(StartSound);
-			_endSource = CreateAudioSource(EndSound);
-		}
+		public AudioSource StartSound;
+		public AudioSource EndSound;
 
 		public void RegisterProperty(GameObjectProperty<T> property)
 		{
@@ -32,14 +23,14 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
 
 		protected void TryToPlayStartSound()
 		{
-			if (_startSource != null)
-				_startSource.Play();
+			if (StartSound != null)
+				StartSound.Play();
 		}
 
 		protected void TryToPlayEndSound()
 		{
-			if (_endSource != null)
-				_endSource.Play();
+			if (EndSound != null)
+				EndSound.Play();
 		}
 
 		protected abstract void PlaySoundHandler(T oldValue, T newValue);

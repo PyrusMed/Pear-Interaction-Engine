@@ -36,7 +36,8 @@ namespace Pear.InteractionEngine.Interactables {
 
 		void OnDestroy()
 		{
-			_interactionHelper.UnregisterProperty();
+			if(_interactionHelper != null)
+				_interactionHelper.UnregisterProperty();
 		}
 
 		

@@ -19,7 +19,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4826036361128088}
-  - component: {fileID: 114441776596610022}
   - component: {fileID: 114936559157266834}
   m_Layer: 0
   m_Name: Managers
@@ -41,27 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114441776596610022
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1074399249588256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cedf86a5a505c14f8a49d87b1352c48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnAdded:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Pear.Core.Interactables.InteractableObjectEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  OnRemoved:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: Pear.Core.Interactables.InteractableObjectEvent, Assembly-CSharp,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114936559157266834
 MonoBehaviour:
   m_ObjectHideFlags: 1

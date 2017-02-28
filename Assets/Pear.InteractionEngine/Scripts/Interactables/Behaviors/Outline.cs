@@ -11,9 +11,6 @@ namespace Pear.InteractionEngine.Examples
 	/// </summary>
 	public class Outline : MonoBehaviour, IGameObjectPropertyEventHandler<bool>
 	{
-        [Tooltip("Name of the selected property")]
-        public string SelectedPropertyName = "pie.select";
-
 		[Tooltip("Outline material")]
 		public Material OutlineMaterial;
 
