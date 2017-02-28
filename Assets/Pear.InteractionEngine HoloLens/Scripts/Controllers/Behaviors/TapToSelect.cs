@@ -1,19 +1,26 @@
-﻿using HoloToolkit.Unity.InputModule;
-using Pear.InteractionEngine.Interactables;
+﻿using System;
+using HoloToolkit.Unity.InputModule;
+using Pear.InteractionEngine.Properties;
 using UnityEngine.VR.WSA.Input;
+using UnityEngine;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Pear.InteractionEngine.Controllers.Behaviors
 {
     /// <summary>
     /// Selects an interactable object on tap
     /// </summary>
-    public class TapToSelect : ControllerBehavior<HoloLensController>
+    public class TapToSelect : ControllerBehavior<HoloLensController>, IGameObjectPropertyEvent<bool>
     {
+        public delegate void SelectedEventHandler(GameObject gameObject);
+        public event SelectedEventHandler SelectedEvent;
+
         // Used to recognize tap
         GestureRecognizer _recognizer;
 
-        // The last selected obj
-        InteractableObject _lastSelected;
+        GameObject _lastSelectedObj;
+        private List<GameObjectProperty<bool>> _properties = new List<GameObjectProperty<bool>>();
 
         private void Start()
         {
@@ -23,30 +30,48 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
                 // If we're gazing at an interactable object, select it
                 if (GazeManager.Instance.IsGazingAtObject)
                 {
-                    InteractableObject interactable = GazeManager.Instance.HitObject.GetComponent<InteractableObject>();
-                    if (interactable != null)
+                    List<GameObjectProperty<bool>> selectedProperties = _properties
+                        .Where(p => p.Owner == GazeManager.Instance.HitObject)
+                        .ToList();
+                    if (selectedProperties.Count > 0)
                     {
-                        // If this controller has not selected this object, select it
-                        if (!interactable.Selected.Contains(Controller))
+                        GameObjectProperty<bool> representativeProp = selectedProperties.First();
+                        if (representativeProp.Value)
                         {
-                            // Deselect the last selected obj
-                            if (_lastSelected != null)
-                                _lastSelected.Selected.Remove(Controller);
-
-                            interactable.Selected.Add(Controller);
-                            _lastSelected = interactable;
+                            selectedProperties.ForEach(p => p.Value = false);
+                            _lastSelectedObj = null;
                         }
-                        // Otherwise, if we have already selected it, deselect it
                         else
                         {
-                            interactable.Selected.Remove(Controller);
-                            _lastSelected = null;
+                            selectedProperties.ForEach(p => p.Value = true);
+                            if (SelectedEvent != null)
+                                SelectedEvent(representativeProp.Owner);
+
+                            if (_lastSelectedObj != null)
+                                _properties.Where(p => p.Owner == _lastSelectedObj).ToList().ForEach(p => p.Value = false);
+
+                            _lastSelectedObj = representativeProp.Owner;
                         }
                     }
+                }
+                else
+                {
+                    if (SelectedEvent != null)
+                        SelectedEvent(null);
                 }
             };
 
             _recognizer.StartCapturingGestures();
+        }
+
+        public void RegisterProperty(GameObjectProperty<bool> property)
+        {
+            _properties.Add(property);
+        }
+
+        public void UnregisterProperty(GameObjectProperty<bool> property)
+        {
+            _properties.Remove(property);
         }
     }
 }

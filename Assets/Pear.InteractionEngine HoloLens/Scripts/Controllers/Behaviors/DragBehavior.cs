@@ -1,5 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using Pear.InteractionEngine.Interactions;
+using Pear.InteractionEngine.Properties;
+using Pear.InteractionEngine.Utils;
+using UnityEngine;
 using UnityEngine.VR.WSA.Input;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Pear.InteractionEngine.Controllers.Behaviors
 {
@@ -7,45 +13,59 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
     /// Base class for drag manipulations. This class recognizes a navigation event,
     /// and allows derriving classes to perform an action based on a navigation factor (offset * MaxSpeed * delta time)
     /// </summary>
-    public abstract class DragBehavior : ControllerBehavior<HoloLensController>
+    public abstract class DragBehavior : ControllerBehavior<HoloLensController>, IGameObjectPropertyEvent<Vector3>
     {
 
         [Tooltip("Max speed")]
         public float MaxSpeed = 3f;
 
         // Used to listen for navigation gestures
-        private GestureRecognizer _navigationRecognizer;
+        public GestureRecognizer NavigationRecognizer
+        {
+            get;
+            private set;
+        }
+
+        // Properties to change
+        private List<GameObjectProperty<Vector3>> _properties = new List<GameObjectProperty<Vector3>>();
 
         void Start()
         {
             // Start listening for navigation events
-            _navigationRecognizer = new GestureRecognizer();
-            _navigationRecognizer.SetRecognizableGestures(
+            NavigationRecognizer = new GestureRecognizer();
+            NavigationRecognizer.SetRecognizableGestures(
                     GestureSettings.NavigationX |
                     GestureSettings.NavigationY |
                     GestureSettings.NavigationZ
             );
-            _navigationRecognizer.NavigationUpdatedEvent += OnNavigationUpdated;
-            _navigationRecognizer.StartCapturingGestures();
+            NavigationRecognizer.NavigationUpdatedEvent += OnNavigationUpdated;
+            NavigationRecognizer.StartCapturingGestures();
         }
 
         /// <summary>
-        /// Handles navigation event
+        /// Update each property when the navigation event is updated
         /// </summary>
         /// <param name="source">Hand source</param>
         /// <param name="relativePosition">Position relative to when navigation started</param>
         /// <param name="ray"></param>
         private void OnNavigationUpdated(InteractionSourceKind source, Vector3 relativePosition, Ray ray)
         {
-            // If the controller has an active object perform the action
+            // If the controller has an active object update its properties
             if (Controller.ActiveObject != null)
-                PerformAction(relativePosition * MaxSpeed);
+            {
+                Vector3 newValue = relativePosition * MaxSpeed;
+                _properties.Where(p => p.Owner == Controller.ActiveObject).ToList().ForEach(p => p.Value = newValue);
+            }
         }
 
-        /// <summary>
-        /// Perform the action based on the given factor
-        /// </summary>
-        /// <param name="actionFactor">relative position * MaxSpeed</param>
-        protected abstract void PerformAction(Vector3 actionFactor);
+        public void RegisterProperty(GameObjectProperty<Vector3> property)
+        {
+            _properties.Add(property);
+        }
+
+        public void UnregisterProperty(GameObjectProperty<Vector3> property)
+        {
+            _properties.Remove(property);
+        }
     }
 }
