@@ -10,6 +10,9 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
     /// </summary>
     public class DragToZoom : MonoBehaviour, IGameObjectPropertyEventHandler<Vector3>
     {
+        [Tooltip("Zoom speed")]
+        public float ZoomSpeed = 3f;
+
         List<GameObjectProperty<Vector3>> _properties = new List<GameObjectProperty<Vector3>>();
 
         void Update()
@@ -19,7 +22,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
                 p.Owner.transform.GetOrAddComponent<ObjectWithAnchor>()
                     .AnchorElement
                     .transform
-                    .localScale += Vector3.one * Vector3.Distance(Vector3.zero, p.Value / 100);
+                    .localScale += Vector3.one * Vector3.Distance(Vector3.zero, p.Value / 100) * ZoomSpeed * Time.deltaTime;
             });
         }
 

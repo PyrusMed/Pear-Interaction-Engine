@@ -10,6 +10,9 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
     /// </summary>
     public class DragToRotate : MonoBehaviour, IGameObjectPropertyEventHandler<Vector3>
     {
+        [Tooltip("Rotation speed")]
+        public float RotateSpeed = 3f;
+
         List<GameObjectProperty<Vector3>> _properties = new List<GameObjectProperty<Vector3>>();
 
         void Update()
@@ -19,7 +22,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
                 p.Owner.transform.GetOrAddComponent<ObjectWithAnchor>()
                     .AnchorElement
                     .transform
-                    .Rotate(new Vector3(p.Value.y, -p.Value.x, 0), Space.World);
+                    .Rotate(new Vector3(p.Value.y, -p.Value.x, 0) * RotateSpeed * Time.deltaTime, Space.World);
             });
         }
 

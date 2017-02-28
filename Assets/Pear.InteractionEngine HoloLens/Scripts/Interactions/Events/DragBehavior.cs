@@ -11,12 +11,8 @@ namespace Pear.InteractionEngine.Interactions.Events
     /// Base class for drag manipulations. This class recognizes a navigation event,
     /// and allows derriving classes to perform an action based on a navigation factor (offset * MaxSpeed * delta time)
     /// </summary>
-    public abstract class DragBehavior : ControllerBehavior<HoloLensController>, IGameObjectPropertyEvent<Vector3>
+    public class DragBehavior : ControllerBehavior<HoloLensController>, IGameObjectPropertyEvent<Vector3>
     {
-
-        [Tooltip("Max speed")]
-        public float MaxSpeed = 3f;
-
         // Used to listen for navigation gestures
         public GestureRecognizer NavigationRecognizer
         {
@@ -50,10 +46,7 @@ namespace Pear.InteractionEngine.Interactions.Events
         {
             // If the controller has an active object update its properties
             if (Controller.ActiveObject != null)
-            {
-                Vector3 newValue = relativePosition * MaxSpeed;
-                _properties.Where(p => p.Owner == Controller.ActiveObject).ToList().ForEach(p => p.Value = newValue);
-            }
+                _properties.Where(p => p.Owner == Controller.ActiveObject).ToList().ForEach(p => p.Value = relativePosition);
         }
 
         public void RegisterProperty(GameObjectProperty<Vector3> property)
