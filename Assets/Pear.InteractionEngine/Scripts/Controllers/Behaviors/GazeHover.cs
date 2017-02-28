@@ -34,8 +34,11 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
 
 					_lastHovered = newHovered;
 				}
-
-				
+			}
+			else if(_lastHovered != null)
+			{
+				_lastHovered.GetComponent<GazeHoverHelper>().HoverOnGazeEnd();
+				_lastHovered = null;
 			}
         }
 
