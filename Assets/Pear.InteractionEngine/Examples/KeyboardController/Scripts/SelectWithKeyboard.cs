@@ -20,7 +20,7 @@ namespace Pear.InteractionEngine.Examples
 
         private GazeHover _hoverOnGaze;
 
-		GameObjectProperty<bool> _lastSelectedProperty;
+		GameObject _lastSelectedObj;
 		private List<GameObjectProperty<bool>> _properties = new List<GameObjectProperty<bool>>();
 
         // Use this for initialization
@@ -34,28 +34,28 @@ namespace Pear.InteractionEngine.Examples
         {
             if (Input.GetKeyUp(SelectKey) && _hoverOnGaze.HoveredObject != null)
             {
-				GameObjectProperty<bool> selectedProperty = _properties.FirstOrDefault(p => p.Owner == _hoverOnGaze.HoveredObject);
-                if(selectedProperty != null)
-                {
-                    if (selectedProperty.Value)
-                    {
-                        selectedProperty.Value = false;
-                        _lastSelectedProperty = null;
-                    }
-                    else
-                    {
-                        selectedProperty.Value = true;
-
-						if (SelectedEvent != null)
-							SelectedEvent(selectedProperty.Owner);
-
-                        if (_lastSelectedProperty != null)
-                            _lastSelectedProperty.Value = false;
-
-						_lastSelectedProperty = selectedProperty;
+				List<GameObjectProperty<bool>> selectedProperties = _properties.Where(p => p.Owner == _hoverOnGaze.HoveredObject).ToList();
+				if (selectedProperties.Count > 0)
+				{
+					GameObjectProperty<bool> representativeProp = selectedProperties.First();
+					if (representativeProp.Value)
+					{
+						selectedProperties.ForEach(p => p.Value = false);
+						_lastSelectedObj = null;
 					}
-                }
-            }
+					else
+					{
+						selectedProperties.ForEach(p => p.Value = true);
+						if (SelectedEvent != null)
+							SelectedEvent(representativeProp.Owner);
+
+						if(_lastSelectedObj != null)
+							_properties.Where(p => p.Owner == _lastSelectedObj).ToList().ForEach(p => p.Value = false);
+
+						_lastSelectedObj = representativeProp.Owner;
+					}
+				}
+			}
         }
 
 		public void RegisterProperty(GameObjectProperty<bool> property)
