@@ -1,6 +1,7 @@
 ﻿using System;
 using Pear.InteractionEngine.Interactables;
 using Pear.InteractionEngine.Properties;
+using Pear.InteractionEngine.Utils;
 using UnityEngine;
 
 namespace Pear.InteractionEngine.Controllers.Behaviors
@@ -40,7 +41,7 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
 
 		public void RegisterProperty(GameObjectProperty<bool> property)
 		{
-			GazeHoverHelper helper = property.Owner.AddComponent<GazeHoverHelper>();
+			GazeHoverHelper helper = property.Owner.transform.GetOrAddComponent<GazeHoverHelper>();
 			helper.GazeStartEvent += () =>
 			{
 				property.Value = true;
