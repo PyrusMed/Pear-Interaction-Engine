@@ -9,6 +9,6 @@ namespace Pear.InteractionEngine.Interactables
     {
 
         // Interactable child element
-        public InteractableObject Interactable;
+        public ObjectWithAnchor Child;
     }
 }
