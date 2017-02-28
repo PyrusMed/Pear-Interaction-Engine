@@ -17,13 +17,18 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 
         void Update()
         {
-            _properties.ForEach(p =>
+            foreach (GameObjectProperty<Vector3> property in _properties)
             {
-                p.Owner.transform.GetOrAddComponent<ObjectWithAnchor>()
-                    .AnchorElement
-                    .transform
-                    .localScale += Vector3.one * Vector3.Distance(Vector3.zero, p.Value / 100) * ZoomSpeed * Time.deltaTime;
-            });
+                // Better to resize the anchor element than the original object since there could be other
+                // event handlers applying manipulations
+                Anchor anchor = property.Owner.transform.GetOrAddComponent<ObjectWithAnchor>().AnchorElement;
+                float currentScale = anchor.transform.localScale.x;
+                float scaleAmount = property.Value.magnitude * Time.deltaTime;
+                float newScale = currentScale * (1 + scaleAmount);
+
+                // Apply the new scale
+                anchor.transform.localScale = Vector3.one * newScale;
+            }
         }
 
         public void RegisterProperty(GameObjectProperty<Vector3> property)
