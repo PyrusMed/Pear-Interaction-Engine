@@ -8,7 +8,7 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
     /// <summary>
     /// Update the interactable object's state when we hover over it
     /// </summary>
-    public class HoverOnGaze : ControllerBehavior<Controller>, IPropertyChanger<bool>
+    public class HoverOnGaze : ControllerBehavior<Controller>, IGameObjectPropertyChanger<bool>
     {
 		public GameObject HoveredObject
         {
@@ -40,12 +40,13 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
 
 		public void RegisterProperty(GameObjectProperty<bool> property)
 		{
-			property.gameObject.AddComponent<HoverOnGazeHelper>().GazeStartEvent += () =>
+			HoverOnGazeHelper helper = property.Owner.AddComponent<HoverOnGazeHelper>();
+			helper.GazeStartEvent += () =>
 			{
 				property.Value = true;
 			};
 
-			property.gameObject.AddComponent<HoverOnGazeHelper>().GazeEndEvent += () =>
+			helper.GazeEndEvent += () =>
 			{
 				property.Value = false;
 			};
@@ -53,6 +54,7 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
 
 		public void UnregisterProperty(GameObjectProperty<bool> property)
 		{
+			Destroy(property.Owner.GetComponent<HoverOnGazeHelper>());
 		}
 	}
 }

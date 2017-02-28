@@ -11,7 +11,7 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
 	/// Manages what happens when object are hovered over
 	/// </summary>
 	[Serializable]
-	public class FadeOnHover : MonoBehaviour, IPropertyAction<bool>
+	public class FadeOnHover : MonoBehaviour, IGameObjectPropertyAction<bool>
     {
         [Tooltip("Seconds between when the controller hovers over the object and when fading starts")]
         public float FadeDelay = 0.0f;
@@ -28,9 +28,9 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
 		{
 			_properties.Add(property);
 
-			property.OnChange.AddListener(HandleFade);
+			property.OnChange += HandleFade;
 
-			Fader fader = property.gameObject.AddComponent<Fader>();
+			Fader fader = property.Owner.AddComponent<Fader>();
 			fader.fadeDelay = FadeDelay;
 			fader.fadeTime = FadeTime;
 			fader.fadeAplha = FadeAlpha;
@@ -38,7 +38,7 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
 
 		public void UnregisterProperty(GameObjectProperty<bool> property)
 		{
-			property.OnChange.RemoveListener(HandleFade);
+			property.OnChange -= HandleFade;
 			_properties.Remove(property);
 		}
 
@@ -65,7 +65,7 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
             {
                 foreach (GameObjectProperty<bool> property in _properties)
                 {
-                    Fader fader = property.GetComponent<Fader>();
+                    Fader fader = property.Owner.GetComponent<Fader>();
                     if (property.Value)
                         fader.FadeIn();
                     else
@@ -77,7 +77,7 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
             {
                 foreach (GameObjectProperty<bool> property in _properties)
                 {
-                    Fader fader = property.GetComponent<Fader>();
+                    Fader fader = property.Owner.GetComponent<Fader>();
                     fader.FadeIn();
                 }
             }

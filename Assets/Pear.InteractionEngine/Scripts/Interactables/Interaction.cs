@@ -1,4 +1,5 @@
 ﻿using Pear.InteractionEngine.Properties;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,17 +7,70 @@ using UnityEngine;
 namespace Pear.InteractionEngine.Interactables {
 	public class Interaction : MonoBehaviour {
 
-		public MonoBehaviour Event;
-		public MonoBehaviour EventHandler;
+		[SerializeField]
+		private MonoBehaviour Event;
 
-		// Use this for initialization
+		[SerializeField]
+		private MonoBehaviour EventHandler;
+
+		private IInteractionHelper _interactionHelper;
+
 		void Start() {
+			if (Event == null || EventHandler == null)
+				return;
 
+			Type eventPropertyType = ReflectionHelpers.GetGenericArgumentType(Event.GetType(), typeof(IGameObjectPropertyChanger<>))[0];
+			Type eventHandlerPropertyType = ReflectionHelpers.GetGenericArgumentType(EventHandler.GetType(), typeof(IGameObjectPropertyAction<>))[0];
+			if(eventPropertyType != eventHandlerPropertyType)
+			{
+				Debug.LogError("Interaction event and event handler types do not match up");
+				return;
+			}
+
+			Type interactionHelperType = typeof(InteractionHelper<>);
+			Type instantiableInteractionHelperType = interactionHelperType.MakeGenericType(eventPropertyType);
+			_interactionHelper = (IInteractionHelper)Activator.CreateInstance(instantiableInteractionHelperType, Event, EventHandler, gameObject);
+
+			_interactionHelper.RegisterProperty();
 		}
 
-		// Update is called once per frame
-		void Update() {
+		void OnDestroy()
+		{
+			_interactionHelper.UnregisterProperty();
+		}
 
+		
+	}
+
+	public interface IInteractionHelper
+	{
+		void RegisterProperty();
+		void UnregisterProperty();
+	}
+
+	public class InteractionHelper<T> : IInteractionHelper
+	{
+		private IGameObjectPropertyChanger<T> _event;
+		private IGameObjectPropertyAction<T> _eventHandler;
+		private GameObjectProperty<T> _property;
+
+		public InteractionHelper(IGameObjectPropertyChanger<T> ev, IGameObjectPropertyAction<T> evHandler, GameObject go)
+		{
+			_event = ev;
+			_eventHandler = evHandler;
+			_property = new GameObjectProperty<T>(go);
+		}
+
+		public void RegisterProperty()
+		{
+			_eventHandler.RegisterProperty(_property);
+			_event.RegisterProperty(_property);
+		}
+
+		public void UnregisterProperty()
+		{
+			_event.UnregisterProperty(_property);
+			_eventHandler.UnregisterProperty(_property);
 		}
 	}
 }

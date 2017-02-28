@@ -6,9 +6,7 @@ using UnityEngine;
 
 namespace Pear.InteractionEngine.Properties
 {
-	public interface IPropertyChanger<T>
+	public interface IGameObjectPropertyChanger<T> : IGameObjectPropertyHandler<T>
 	{
-		void RegisterProperty(GameObjectProperty<T> property);
-		void UnregisterProperty(GameObjectProperty<T> property);
 	}
 }

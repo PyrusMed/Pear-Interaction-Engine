@@ -11,12 +11,6 @@ namespace Pear.InteractionEngine.Properties
     /// <typeparam name="T"></typeparam>
     public class Property<T>
     {
-        public string Name
-        {
-            get;
-            private set;
-        }
-
         public delegate void OnPropertyChange(T oldValue, T newValue);
         public event OnPropertyChange OnChange;
 
@@ -32,11 +26,6 @@ namespace Pear.InteractionEngine.Properties
                 if (notEqual && OnChange != null)
                     OnChange(oldValue, _value);
             }
-        }
-
-        public Property(string name)
-        {
-            Name = name;
         }
     }
 }

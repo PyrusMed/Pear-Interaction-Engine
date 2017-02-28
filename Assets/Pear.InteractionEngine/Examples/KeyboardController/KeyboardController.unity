@@ -462,10 +462,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 841217585}
-  - component: {fileID: 841217586}
   - component: {fileID: 841217587}
   - component: {fileID: 841217588}
   - component: {fileID: 841217589}
+  - component: {fileID: 841217586}
   m_Layer: 0
   m_Name: KeyboardController
   m_TagString: Untagged
@@ -494,7 +494,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 841217584}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06209e40b192d9f409b60ca3965eb84e, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b7acbedc4a11dd4684707f42d1f4ee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Location: 2
@@ -531,7 +531,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29c40e88b3ca724f892cdf8a216d7c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectPropertyName: pie.select
   SelectKey: 112
 --- !u!114 &841217589
 MonoBehaviour:
@@ -547,7 +546,6 @@ MonoBehaviour:
   ResizePropertyName: pie.resize
   MakeSmallerKey: 49
   MakeBiggerKey: 50
-  ScalePercentage: 0.1
 --- !u!1001 &1198751615
 Prefab:
   m_ObjectHideFlags: 0
@@ -587,9 +585,17 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114563736487707898, guid: 158fcf5d967a68e4daac699f37c522cf, type: 2}
+    - {fileID: 114588961731045136, guid: 158fcf5d967a68e4daac699f37c522cf, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 158fcf5d967a68e4daac699f37c522cf, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1198751616 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114245129905785890, guid: 158fcf5d967a68e4daac699f37c522cf,
+    type: 2}
+  m_PrefabInternal: {fileID: 1198751615}
+  m_Script: {fileID: 11500000, guid: 8476d02a336423a43b95fa731a3e9cee, type: 3}
 --- !u!1 &1410975472
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,10 +608,6 @@ GameObject:
   - component: {fileID: 1410975475}
   - component: {fileID: 1410975474}
   - component: {fileID: 1410975473}
-  - component: {fileID: 1410975478}
-  - component: {fileID: 1410975481}
-  - component: {fileID: 1410975480}
-  - component: {fileID: 1410975479}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -621,13 +623,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1410975472}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 536aca40cd75956418afdc5603184a46, type: 3}
+  m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChangerActions:
-    Changer: {fileID: 0}
-    Action: {fileID: 0}
-  AnchorElement: {fileID: 0}
+  Event: {fileID: 841217587}
+  EventHandler: {fileID: 1198751616}
 --- !u!23 &1410975474
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -677,7 +677,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1410975472}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 0}
 --- !u!4 &1410975477
 Transform:
   m_ObjectHideFlags: 0
@@ -691,58 +691,6 @@ Transform:
   m_Father: {fileID: 110919680}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1410975478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1410975472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.hover
-  DefaultVal: 0
---- !u!114 &1410975479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1410975472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.move
-  DefaultVal: 0
---- !u!114 &1410975480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1410975472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.resize
-  DefaultVal: 0
---- !u!114 &1410975481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1410975472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.select
-  DefaultVal: 0
 --- !u!1 &1712008949
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,10 +786,6 @@ GameObject:
   - component: {fileID: 1743919818}
   - component: {fileID: 1743919817}
   - component: {fileID: 1743919816}
-  - component: {fileID: 1743919820}
-  - component: {fileID: 1743919823}
-  - component: {fileID: 1743919822}
-  - component: {fileID: 1743919821}
   m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -870,13 +814,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1743919814}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 536aca40cd75956418afdc5603184a46, type: 3}
+  m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChangerActions:
-    Changer: {fileID: 0}
-    Action: {fileID: 0}
-  AnchorElement: {fileID: 0}
+  Event: {fileID: 841217587}
+  EventHandler: {fileID: 1198751616}
 --- !u!23 &1743919817
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -927,58 +869,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1743919814}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1743919820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1743919814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.hover
-  DefaultVal: 0
---- !u!114 &1743919821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1743919814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.move
-  DefaultVal: 0
---- !u!114 &1743919822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1743919814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.resize
-  DefaultVal: 0
---- !u!114 &1743919823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1743919814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.select
-  DefaultVal: 0
 --- !u!1 &1929522309
 GameObject:
   m_ObjectHideFlags: 0
@@ -991,10 +881,6 @@ GameObject:
   - component: {fileID: 1929522313}
   - component: {fileID: 1929522312}
   - component: {fileID: 1929522311}
-  - component: {fileID: 1929522315}
-  - component: {fileID: 1929522318}
-  - component: {fileID: 1929522317}
-  - component: {fileID: 1929522316}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -1023,13 +909,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1929522309}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 536aca40cd75956418afdc5603184a46, type: 3}
+  m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChangerActions:
-    Changer: {fileID: 0}
-    Action: {fileID: 0}
-  AnchorElement: {fileID: 0}
+  Event: {fileID: 841217587}
+  EventHandler: {fileID: 1198751616}
 --- !u!23 &1929522312
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1080,58 +964,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1929522309}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1929522315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1929522309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.hover
-  DefaultVal: 0
---- !u!114 &1929522316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1929522309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.move
-  DefaultVal: 0
---- !u!114 &1929522317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1929522309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.resize
-  DefaultVal: 0
---- !u!114 &1929522318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1929522309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 606c782ef8853194e8169940e41a909d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: pie.select
-  DefaultVal: 0
 --- !u!1 &2060791359
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,15 +18,13 @@ namespace Pear.InteractionEngine.Interactables
 		private List<MonoBehaviour> _events;
 		private List<MonoBehaviour> _eventHandlers;
 
-		private string helpMessage;
-
 		void OnEnable()
 		{
 			_event = serializedObject.FindProperty("Event");
 			_eventHandler = serializedObject.FindProperty("EventHandler");
 
-			_events = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IPropertyChanger<>)));
-			_eventHandlers = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IPropertyAction<>)));
+			_events = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyChanger<>)));
+			_eventHandlers = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyAction<>)));
 		}
 
 		public override void OnInspectorGUI()
@@ -49,12 +47,12 @@ namespace Pear.InteractionEngine.Interactables
 			{
 				EditorGUILayout.LabelField("Event:", GUILayout.Width(100));
 
-				string message = (_events.Count > 0) ? "Select an event" : "Please add an event script to the scene";
+				string helpMessage = (_events.Count > 0) ? "Select an event" : "Please add an event script to the scene";
 				List<string> changersInSceneNames = new List<string>() { helpMessage };
 				changersInSceneNames.AddRange(_events.Select(c => GetNameForDropdown(c)));
 
 				int startIndex = 0;
-				if (_event.objectReferenceValue)
+				if (_event.objectReferenceValue != null)
 					startIndex = _events.IndexOf((MonoBehaviour)_event.objectReferenceValue) + 1;
 
 				UnityEngine.Object lastEvent = _event.objectReferenceValue;
@@ -75,9 +73,9 @@ namespace Pear.InteractionEngine.Interactables
 			{
 				EditorGUILayout.LabelField("EventHandler", GUILayout.Width(100));
 
-				Type templateArgument = ReflectionHelpers.GetGenericArgumentType(_event.objectReferenceValue.GetType(), typeof(IPropertyChanger<>))[0];
+				Type templateArgument = ReflectionHelpers.GetGenericArgumentType(_event.objectReferenceValue.GetType(), typeof(IGameObjectPropertyChanger<>))[0];
 				List<MonoBehaviour> actionsInScene = _eventHandlers
-					.Where(eh => ReflectionHelpers.GetGenericArgumentType(eh.GetType(), typeof(IPropertyAction<>))[0] == templateArgument)
+					.Where(eh => ReflectionHelpers.GetGenericArgumentType(eh.GetType(), typeof(IGameObjectPropertyAction<>))[0] == templateArgument)
 					.ToList();
 
 				string helpMessage = (actionsInScene.Count > 0) ? "Select an event handler..." : "Please add an event handler to the scene";
@@ -85,7 +83,7 @@ namespace Pear.InteractionEngine.Interactables
 				actionsInSceneNames.AddRange(actionsInScene.Select(a => GetNameForDropdown(a)));
 
 				int startIndex = 0;
-				if (_eventHandler.objectReferenceValue)
+				if (_eventHandler.objectReferenceValue != null)
 					startIndex = _eventHandlers.IndexOf((MonoBehaviour)_eventHandler.objectReferenceValue) + 1;
 
 				int selectedIndex = EditorGUILayout.Popup(startIndex, actionsInSceneNames.ToArray());

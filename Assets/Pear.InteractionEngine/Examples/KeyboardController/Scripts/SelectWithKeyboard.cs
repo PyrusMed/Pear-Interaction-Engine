@@ -4,19 +4,24 @@ using Pear.InteractionEngine.Controllers.Behaviors;
 using Pear.InteractionEngine.Interactables;
 using Pear.InteractionEngine.Properties;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Pear.InteractionEngine.Examples
 {
-	public class SelectWithKeyboard : ControllerBehavior<Controller>, IPropertyChanger<bool>
+	[RequireComponent (typeof(HoverOnGaze))]
+	public class SelectWithKeyboard : ControllerBehavior<Controller>, IGameObjectPropertyChanger<bool>
     {
-        [Tooltip("Select property name")]
-        public string SelectPropertyName = "pie.select";
-
+		[Tooltip("Selection key")]
         public KeyCode SelectKey = KeyCode.P;
 
-        HoverOnGaze _hoverOnGaze;
+		public delegate void SelectedEventHandler(GameObject gameObject);
+		public event SelectedEventHandler SelectedEvent;
 
-        BoolGameObjectProperty _lastSelectedProperty;
+        private HoverOnGaze _hoverOnGaze;
+
+		GameObjectProperty<bool> _lastSelectedProperty;
+		private List<GameObjectProperty<bool>> _properties = new List<GameObjectProperty<bool>>();
 
         // Use this for initialization
         void Start()
@@ -29,7 +34,7 @@ namespace Pear.InteractionEngine.Examples
         {
             if (Input.GetKeyUp(SelectKey) && _hoverOnGaze.HoveredObject != null)
             {
-				BoolGameObjectProperty selectedProperty = _hoverOnGaze.HoveredObject.gameObject.GetProperty<BoolGameObjectProperty, bool>(SelectPropertyName);
+				GameObjectProperty<bool> selectedProperty = _properties.FirstOrDefault(p => p.Owner == _hoverOnGaze.HoveredObject);
                 if(selectedProperty != null)
                 {
                     if (selectedProperty.Value)
@@ -40,7 +45,10 @@ namespace Pear.InteractionEngine.Examples
                     else
                     {
                         selectedProperty.Value = true;
-                        Controller.ActiveObject = _hoverOnGaze.HoveredObject;
+
+						if (SelectedEvent != null)
+							SelectedEvent(selectedProperty.Owner);
+
                         if (_lastSelectedProperty != null)
                             _lastSelectedProperty.Value = false;
 
@@ -52,12 +60,12 @@ namespace Pear.InteractionEngine.Examples
 
 		public void RegisterProperty(GameObjectProperty<bool> property)
 		{
-			throw new NotImplementedException();
+			_properties.Add(property);
 		}
 
 		public void UnregisterProperty(GameObjectProperty<bool> property)
 		{
-			throw new NotImplementedException();
+			_properties.Remove(property);
 		}
 	}
 }

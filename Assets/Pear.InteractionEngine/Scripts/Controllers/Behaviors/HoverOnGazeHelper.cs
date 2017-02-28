@@ -7,7 +7,6 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
 {
 	public class HoverOnGazeHelper : MonoBehaviour
 	{
-
 		public event Action GazeStartEvent;
 		public event Action GazeEndEvent;
 
@@ -19,6 +18,15 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
 		public void HoverOnGazeEnd()
 		{
 			GazeEndEvent();
+		}
+
+		void OnDestroy()
+		{
+			if (GazeStartEvent != null)
+				GazeStartEvent = null;
+
+			if (GazeEndEvent != null)
+				GazeEndEvent = null;
 		}
 	}
 }

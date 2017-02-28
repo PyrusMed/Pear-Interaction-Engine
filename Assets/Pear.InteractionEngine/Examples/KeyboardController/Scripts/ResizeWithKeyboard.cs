@@ -4,10 +4,12 @@ using Pear.InteractionEngine.Interactables;
 using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Pear.InteractionEngine.Examples
 {
-	public class ResizeWithKeyboard : ControllerBehavior<Controller>, IPropertyChanger<int>
+	public class ResizeWithKeyboard : ControllerBehavior<Controller>, IGameObjectPropertyChanger<int>
     {
         [Tooltip("Resize property name")]
         public string ResizePropertyName = "pie.resize";
@@ -18,8 +20,7 @@ namespace Pear.InteractionEngine.Examples
         [Tooltip("Key used to make the object smaller")]
         public KeyCode MakeBiggerKey = KeyCode.Alpha2;
 
-        [Tooltip("The percent per second in which the object changes while scaling")]
-        public float ScalePercentage = 0.1f;
+		private List<GameObjectProperty<int>> _properties;
 
         // Update is called once per frame
         void Update()
@@ -27,47 +28,27 @@ namespace Pear.InteractionEngine.Examples
             if (Controller.ActiveObject == null)
                 return;
 
-			BoolGameObjectProperty resizeProperty = Controller.ActiveObject.gameObject.GetProperty<BoolGameObjectProperty, bool>(ResizePropertyName);
-            if (resizeProperty == null)
-                return;
+			GameObjectProperty<int> activeObjectProperty = _properties.FirstOrDefault(p => p.Owner == Controller.ActiveObject);
+			if (activeObjectProperty == null)
+				return;
 
-            bool resized = true;
-            if (Input.GetKey(MakeSmallerKey))
-                Resize(increase: false);
-            else if (Input.GetKey(MakeBiggerKey))
-                Resize(increase: true);
-            else
-                resized = false;
+			int resizeVal = 0;
+			if (Input.GetKey(MakeSmallerKey))
+				resizeVal = -1;
+			else if (Input.GetKey(MakeBiggerKey))
+				resizeVal = 1;
 
-            resizeProperty.Value = resized;
-        }
-
-        /// <summary>
-        /// Resize the active object
-        /// </summary>
-        /// <param name="increase"></param>
-        void Resize(bool increase)
-        {
-            int direction = increase ? 1 : -1;
-            float scaleAmount = ScalePercentage * Time.deltaTime;
-
-            InteractableObject interactable = Controller.ActiveObject.transform.GetOrAddComponent<InteractableObject>();
-            Anchor anchor = interactable.AnchorElement;
-            float currentScale = anchor.transform.localScale.x;
-            float newScale = currentScale * (1 + scaleAmount * direction);
-
-            // Apply the new scale
-            anchor.transform.localScale = Vector3.one * newScale;
+			activeObjectProperty.Value = resizeVal;
         }
 
 		public void RegisterProperty(GameObjectProperty<int> property)
 		{
-			throw new NotImplementedException();
+			_properties.Add(property);
 		}
 
 		public void UnregisterProperty(GameObjectProperty<int> property)
 		{
-			throw new NotImplementedException();
+			_properties.Remove(property);
 		}
 	}
 }
