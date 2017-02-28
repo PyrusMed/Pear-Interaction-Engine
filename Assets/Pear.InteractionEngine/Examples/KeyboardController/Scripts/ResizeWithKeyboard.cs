@@ -20,7 +20,7 @@ namespace Pear.InteractionEngine.Examples
         [Tooltip("Key used to make the object smaller")]
         public KeyCode MakeBiggerKey = KeyCode.Alpha2;
 
-		private List<GameObjectProperty<int>> _properties;
+		private List<GameObjectProperty<int>> _properties = new List<GameObjectProperty<int>>();
 
         // Update is called once per frame
         void Update()
