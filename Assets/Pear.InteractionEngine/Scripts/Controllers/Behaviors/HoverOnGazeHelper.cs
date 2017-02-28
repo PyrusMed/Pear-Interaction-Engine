@@ -3,18 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HoverOnGazeHelper : MonoBehaviour {
-
-	public event Action GazeStartEvent;
-	public event Action GazeEndEvent;
-
-	public void HoverOnGazeStart()
+namespace Pear.InteractionEngine.Controllers.Behaviors
+{
+	public class HoverOnGazeHelper : MonoBehaviour
 	{
-		GazeStartEvent();
-	}
 
-	public void HoverOnGazeEnd()
-	{
-		GazeEndEvent();
+		public event Action GazeStartEvent;
+		public event Action GazeEndEvent;
+
+		public void HoverOnGazeStart()
+		{
+			GazeStartEvent();
+		}
+
+		public void HoverOnGazeEnd()
+		{
+			GazeEndEvent();
+		}
 	}
 }

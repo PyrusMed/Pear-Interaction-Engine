@@ -1,4 +1,5 @@
-﻿using Pear.InteractionEngine.Controllers;
+﻿using System;
+using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.Interactables;
 using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace Pear.InteractionEngine.Examples
 {
-	public class ResizeWithKeyboard : ControllerBehavior<Controller>
+	public class ResizeWithKeyboard : ControllerBehavior<Controller>, IPropertyChanger<int>
     {
         [Tooltip("Resize property name")]
         public string ResizePropertyName = "pie.resize";
@@ -58,5 +59,15 @@ namespace Pear.InteractionEngine.Examples
             // Apply the new scale
             anchor.transform.localScale = Vector3.one * newScale;
         }
-    }
+
+		public void RegisterProperty(GameObjectProperty<int> property)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UnregisterProperty(GameObjectProperty<int> property)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

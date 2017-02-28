@@ -1,4 +1,5 @@
-﻿using Pear.InteractionEngine.Controllers;
+﻿using System;
+using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.Controllers.Behaviors;
 using Pear.InteractionEngine.Interactables;
 using Pear.InteractionEngine.Properties;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace Pear.InteractionEngine.Examples
 {
-	public class SelectWithKeyboard : ControllerBehavior<Controller>
+	public class SelectWithKeyboard : ControllerBehavior<Controller>, IPropertyChanger<bool>
     {
         [Tooltip("Select property name")]
         public string SelectPropertyName = "pie.select";
@@ -48,5 +49,15 @@ namespace Pear.InteractionEngine.Examples
                 }
             }
         }
-    }
+
+		public void RegisterProperty(GameObjectProperty<bool> property)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UnregisterProperty(GameObjectProperty<bool> property)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
