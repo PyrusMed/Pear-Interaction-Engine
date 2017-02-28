@@ -23,8 +23,11 @@ namespace Pear.InteractionEngine.Interactions
 		// Serialized event handler
 		private SerializedProperty _eventHandler;
 
-		// All events in the scene
-		private List<MonoBehaviour> _events;
+        // Serialized property type
+        private SerializedProperty _propertyType;
+
+        // All events in the scene
+        private List<MonoBehaviour> _events;
 
 		// All event handlers in the scene
 		private List<MonoBehaviour> _eventHandlers;
@@ -33,10 +36,11 @@ namespace Pear.InteractionEngine.Interactions
 		{
 			_event = serializedObject.FindProperty("Event");
 			_eventHandler = serializedObject.FindProperty("EventHandler");
+            _propertyType = serializedObject.FindProperty("PropertyType");
 
-			// Get all of the events in the scene
-			// Events are scripts that implement IGameObjectPropertyEvent
-			_events = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyEvent<>)));
+            // Get all of the events in the scene
+            // Events are scripts that implement IGameObjectPropertyEvent
+            _events = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyEvent<>)));
 
 			// Get all of the event handlers in the scene
 			// Event handlers are scripts that implement IGameObjectPropertyEventHandler
@@ -89,10 +93,15 @@ namespace Pear.InteractionEngine.Interactions
 				// Show the dropdown and get the event the user selects
 				int selectedIndex = EditorGUILayout.Popup(startIndex, eventsInSceneNames.ToArray());
 
-				// If the user selected an event (any item but the help message)
-				// then save that event on our script
-				if (selectedIndex > 0)
-					_event.objectReferenceValue = _events[selectedIndex - 1];
+                // If the user selected an event (any item but the help message)
+                // then save that event on our script
+                if (selectedIndex > 0)
+                {
+                    _event.objectReferenceValue = _events[selectedIndex - 1];
+
+                    Type propertyType = ReflectionHelpers.GetGenericArgumentTypes(_event.objectReferenceValue.GetType(), typeof(IGameObjectPropertyEvent<>))[0];
+                    _propertyType.stringValue = propertyType.AssemblyQualifiedName;
+                }
 
 				// If the event changed make sure we reset the event handler
 				if (lastEvent != _event.objectReferenceValue)

@@ -22,6 +22,9 @@ namespace Pear.InteractionEngine.Interactions
 		[SerializeField]
 		private MonoBehaviour EventHandler;
 
+        [SerializeField]
+        private string PropertyType;
+
 		// Typed helper that makes the logic in this class easier to understand
 		private IInteractionHelper _interactionHelper;
 
@@ -32,19 +35,18 @@ namespace Pear.InteractionEngine.Interactions
 				return;
 			}
 
-			// Make sure the Event and EventHandler reference the same property type
-			// If one works with, say, a boolean property and one with, say, a string property, we'll have serious issues
-			Type eventPropertyType = ReflectionHelpers.GetGenericArgumentTypes(Event.GetType(), typeof(IGameObjectPropertyEvent<>))[0];
-			Type eventHandlerPropertyType = ReflectionHelpers.GetGenericArgumentTypes(EventHandler.GetType(), typeof(IGameObjectPropertyEventHandler<>))[0];
-			if(eventPropertyType != eventHandlerPropertyType)
-			{
-				Debug.LogError("Interaction Event and EventHandler types do not match up");
-				return;
-			}
+            if (PropertyType == null)
+            {
+                Debug.LogError("Interaction property type not set.");
+                return;
+            }
+            else
+                Debug.Log("Property type: " + PropertyType);
 
-			// Instantiate the properly typed instance of our helper class so we don't have to use reflection to do everything
+            // Instantiate the property typed instance of our helper class so we don't have to use reflection to do everything
+            Type proeprtyType = Type.GetType(PropertyType);
 			Type interactionHelperType = typeof(InteractionHelper<>);
-			Type instantiableInteractionHelperType = interactionHelperType.MakeGenericType(eventPropertyType);
+			Type instantiableInteractionHelperType = interactionHelperType.MakeGenericType(proeprtyType);
 			_interactionHelper = (IInteractionHelper)Activator.CreateInstance(instantiableInteractionHelperType, Event, EventHandler, gameObject);
 
 			// Create a new property and register it with Event and EventHandler
