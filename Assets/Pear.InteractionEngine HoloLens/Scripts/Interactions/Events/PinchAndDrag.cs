@@ -8,10 +8,9 @@ using Pear.InteractionEngine.Controllers;
 namespace Pear.InteractionEngine.Interactions.Events
 {
     /// <summary>
-    /// Base class for drag manipulations. This class recognizes a navigation event,
-    /// and allows derriving classes to perform an action based on a navigation factor (offset * MaxSpeed * delta time)
+    /// Essentially we create and anaolog joystick when the user pinches, and dragging moves the joystick's analog value
     /// </summary>
-    public class DragBehavior : ControllerBehavior<HoloLensController>, IGameObjectPropertyEvent<Vector3>
+    public class PinchAndDrag : ControllerBehavior<HoloLensController>, IGameObjectPropertyEvent<Vector3>
     {
         // Used to listen for navigation gestures
         public GestureRecognizer NavigationRecognizer

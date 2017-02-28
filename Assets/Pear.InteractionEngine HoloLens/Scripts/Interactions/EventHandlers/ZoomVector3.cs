@@ -6,9 +6,9 @@ using UnityEngine;
 namespace Pear.InteractionEngine.Interactions.EventHandlers
 {
     /// <summary>
-    /// Drag to rotate the controller's active object
+    /// Zoom in/out based on the change in property value
     /// </summary>
-    public class DragToZoom : MonoBehaviour, IGameObjectPropertyEventHandler<Vector3>
+    public class ZoomVector3 : MonoBehaviour, IGameObjectPropertyEventHandler<Vector3>
     {
         [Tooltip("Zoom speed")]
         public float ZoomSpeed = 3f;
