@@ -1,12 +1,12 @@
-﻿using System;
-using HoloToolkit.Unity.InputModule;
+﻿using HoloToolkit.Unity.InputModule;
 using Pear.InteractionEngine.Properties;
 using UnityEngine.VR.WSA.Input;
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using Pear.InteractionEngine.Controllers;
 
-namespace Pear.InteractionEngine.Controllers.Behaviors
+namespace Pear.InteractionEngine.Interactions.Events
 {
     /// <summary>
     /// Selects an interactable object on tap

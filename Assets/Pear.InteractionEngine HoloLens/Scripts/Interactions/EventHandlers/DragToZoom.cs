@@ -1,10 +1,9 @@
-﻿using Pear.InteractionEngine.Interactions;
-using Pear.InteractionEngine.Properties;
+﻿using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Pear.InteractionEngine.Controllers.Behaviors
+namespace Pear.InteractionEngine.Interactions.EventHandlers
 {
     /// <summary>
     /// Drag to rotate the controller's active object

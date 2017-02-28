@@ -1,13 +1,11 @@
-﻿using System;
-using Pear.InteractionEngine.Interactions;
-using Pear.InteractionEngine.Properties;
-using Pear.InteractionEngine.Utils;
+﻿using Pear.InteractionEngine.Properties;
 using UnityEngine;
 using UnityEngine.VR.WSA.Input;
 using System.Collections.Generic;
 using System.Linq;
+using Pear.InteractionEngine.Controllers;
 
-namespace Pear.InteractionEngine.Controllers.Behaviors
+namespace Pear.InteractionEngine.Interactions.Events
 {
     /// <summary>
     /// Base class for drag manipulations. This class recognizes a navigation event,
