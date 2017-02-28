@@ -23,8 +23,8 @@ namespace Pear.InteractionEngine.Interactables
 			_event = serializedObject.FindProperty("Event");
 			_eventHandler = serializedObject.FindProperty("EventHandler");
 
-			_events = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyChanger<>)));
-			_eventHandlers = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyAction<>)));
+			_events = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyEvent<>)));
+			_eventHandlers = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyEventHandler<>)));
 		}
 
 		public override void OnInspectorGUI()
@@ -73,9 +73,9 @@ namespace Pear.InteractionEngine.Interactables
 			{
 				EditorGUILayout.LabelField("EventHandler", GUILayout.Width(100));
 
-				Type templateArgument = ReflectionHelpers.GetGenericArgumentType(_event.objectReferenceValue.GetType(), typeof(IGameObjectPropertyChanger<>))[0];
+				Type templateArgument = ReflectionHelpers.GetGenericArgumentType(_event.objectReferenceValue.GetType(), typeof(IGameObjectPropertyEvent<>))[0];
 				List<MonoBehaviour> actionsInScene = _eventHandlers
-					.Where(eh => ReflectionHelpers.GetGenericArgumentType(eh.GetType(), typeof(IGameObjectPropertyAction<>))[0] == templateArgument)
+					.Where(eh => ReflectionHelpers.GetGenericArgumentType(eh.GetType(), typeof(IGameObjectPropertyEventHandler<>))[0] == templateArgument)
 					.ToList();
 
 				string helpMessage = (actionsInScene.Count > 0) ? "Select an event handler..." : "Please add an event handler to the scene";

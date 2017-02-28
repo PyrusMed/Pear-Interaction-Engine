@@ -19,8 +19,8 @@ namespace Pear.InteractionEngine.Interactables {
 			if (Event == null || EventHandler == null)
 				return;
 
-			Type eventPropertyType = ReflectionHelpers.GetGenericArgumentType(Event.GetType(), typeof(IGameObjectPropertyChanger<>))[0];
-			Type eventHandlerPropertyType = ReflectionHelpers.GetGenericArgumentType(EventHandler.GetType(), typeof(IGameObjectPropertyAction<>))[0];
+			Type eventPropertyType = ReflectionHelpers.GetGenericArgumentType(Event.GetType(), typeof(IGameObjectPropertyEvent<>))[0];
+			Type eventHandlerPropertyType = ReflectionHelpers.GetGenericArgumentType(EventHandler.GetType(), typeof(IGameObjectPropertyEventHandler<>))[0];
 			if(eventPropertyType != eventHandlerPropertyType)
 			{
 				Debug.LogError("Interaction event and event handler types do not match up");
@@ -50,11 +50,11 @@ namespace Pear.InteractionEngine.Interactables {
 
 	public class InteractionHelper<T> : IInteractionHelper
 	{
-		private IGameObjectPropertyChanger<T> _event;
-		private IGameObjectPropertyAction<T> _eventHandler;
+		private IGameObjectPropertyEvent<T> _event;
+		private IGameObjectPropertyEventHandler<T> _eventHandler;
 		private GameObjectProperty<T> _property;
 
-		public InteractionHelper(IGameObjectPropertyChanger<T> ev, IGameObjectPropertyAction<T> evHandler, GameObject go)
+		public InteractionHelper(IGameObjectPropertyEvent<T> ev, IGameObjectPropertyEventHandler<T> evHandler, GameObject go)
 		{
 			_event = ev;
 			_eventHandler = evHandler;

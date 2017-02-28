@@ -8,14 +8,14 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
     /// <summary>
     /// Update the interactable object's state when we hover over it
     /// </summary>
-    public class HoverOnGaze : ControllerBehavior<Controller>, IGameObjectPropertyChanger<bool>
+    public class GazeHover : ControllerBehavior<Controller>, IGameObjectPropertyEvent<bool>
     {
 		public GameObject HoveredObject
         {
             get { return _lastHovered != null ? _lastHovered.gameObject : null; }
         }
 
-		private HoverOnGazeHelper _lastHovered;
+		private GazeHoverHelper _lastHovered;
 
         void Update()
         {
@@ -27,7 +27,7 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
 					if (_lastHovered)
 						_lastHovered.HoverOnGazeEnd();
 
-					HoverOnGazeHelper newHovered = hitInfo.transform.gameObject.GetComponent<HoverOnGazeHelper>();
+					GazeHoverHelper newHovered = hitInfo.transform.gameObject.GetComponent<GazeHoverHelper>();
 					if (newHovered)
 						newHovered.HoverOnGazeStart();
 
@@ -40,7 +40,7 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
 
 		public void RegisterProperty(GameObjectProperty<bool> property)
 		{
-			HoverOnGazeHelper helper = property.Owner.AddComponent<HoverOnGazeHelper>();
+			GazeHoverHelper helper = property.Owner.AddComponent<GazeHoverHelper>();
 			helper.GazeStartEvent += () =>
 			{
 				property.Value = true;
@@ -54,7 +54,7 @@ namespace Pear.InteractionEngine.Controllers.Behaviors
 
 		public void UnregisterProperty(GameObjectProperty<bool> property)
 		{
-			Destroy(property.Owner.GetComponent<HoverOnGazeHelper>());
+			Destroy(property.Owner.GetComponent<GazeHoverHelper>());
 		}
 	}
 }

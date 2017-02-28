@@ -7,8 +7,6 @@ namespace Pear.InteractionEngine.Interactables
 {
     public class InteractableObject : MonoBehaviour
     {
-		public PropertyChangerToPropertyAction ChangerActions;
-
 		/// <summary>
 		/// Used to move and manipulate this object
 		/// </summary>

@@ -6,7 +6,7 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
     /// <summary>
     /// Fades an object in and out
     /// </summary>
-    public class Fader : MonoBehaviour
+    public class FadeHelper : MonoBehaviour
     {
         // publically editable speed
         public float fadeDelay = 0.0f;

@@ -11,7 +11,7 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
 	/// Manages what happens when object are hovered over
 	/// </summary>
 	[Serializable]
-	public class FadeOnHover : MonoBehaviour, IGameObjectPropertyAction<bool>
+	public class Fade : MonoBehaviour, IGameObjectPropertyEventHandler<bool>
     {
         [Tooltip("Seconds between when the controller hovers over the object and when fading starts")]
         public float FadeDelay = 0.0f;
@@ -30,7 +30,7 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
 
 			property.OnChange += HandleFade;
 
-			Fader fader = property.Owner.AddComponent<Fader>();
+			FadeHelper fader = property.Owner.AddComponent<FadeHelper>();
 			fader.fadeDelay = FadeDelay;
 			fader.fadeTime = FadeTime;
 			fader.fadeAplha = FadeAlpha;
@@ -65,7 +65,7 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
             {
                 foreach (GameObjectProperty<bool> property in _properties)
                 {
-                    Fader fader = property.Owner.GetComponent<Fader>();
+                    FadeHelper fader = property.Owner.GetComponent<FadeHelper>();
                     if (property.Value)
                         fader.FadeIn();
                     else
@@ -77,7 +77,7 @@ namespace Pear.InteractionEngine.Interactables.Behaviors
             {
                 foreach (GameObjectProperty<bool> property in _properties)
                 {
-                    Fader fader = property.Owner.GetComponent<Fader>();
+                    FadeHelper fader = property.Owner.GetComponent<FadeHelper>();
                     fader.FadeIn();
                 }
             }

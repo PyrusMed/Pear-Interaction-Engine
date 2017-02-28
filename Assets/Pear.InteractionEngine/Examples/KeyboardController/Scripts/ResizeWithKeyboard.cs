@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Pear.InteractionEngine.Examples
 {
-	public class ResizeWithKeyboard : ControllerBehavior<Controller>, IGameObjectPropertyChanger<int>
+	public class ResizeWithKeyboard : ControllerBehavior<Controller>, IGameObjectPropertyEvent<int>
     {
         [Tooltip("Resize property name")]
         public string ResizePropertyName = "pie.resize";

@@ -6,7 +6,7 @@ using System;
 
 namespace Pear.InteractionEngine.Interactables.Behaviors
 {
-	public class SoundPlayer : MonoBehaviour, IGameObjectPropertyAction<bool>
+	public class PlaySound : MonoBehaviour, IGameObjectPropertyEventHandler<bool>
 	{
 		public AudioClip StartSound;
 		public AudioClip EndSound;

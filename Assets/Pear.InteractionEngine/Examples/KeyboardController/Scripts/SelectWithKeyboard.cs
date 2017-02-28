@@ -9,8 +9,8 @@ using System.Linq;
 
 namespace Pear.InteractionEngine.Examples
 {
-	[RequireComponent (typeof(HoverOnGaze))]
-	public class SelectWithKeyboard : ControllerBehavior<Controller>, IGameObjectPropertyChanger<bool>
+	[RequireComponent (typeof(GazeHover))]
+	public class SelectWithKeyboard : ControllerBehavior<Controller>, IGameObjectPropertyEvent<bool>
     {
 		[Tooltip("Selection key")]
         public KeyCode SelectKey = KeyCode.P;
@@ -18,7 +18,7 @@ namespace Pear.InteractionEngine.Examples
 		public delegate void SelectedEventHandler(GameObject gameObject);
 		public event SelectedEventHandler SelectedEvent;
 
-        private HoverOnGaze _hoverOnGaze;
+        private GazeHover _hoverOnGaze;
 
 		GameObjectProperty<bool> _lastSelectedProperty;
 		private List<GameObjectProperty<bool>> _properties = new List<GameObjectProperty<bool>>();
@@ -26,7 +26,7 @@ namespace Pear.InteractionEngine.Examples
         // Use this for initialization
         void Start()
         {
-            _hoverOnGaze = GetComponent<HoverOnGaze>();
+            _hoverOnGaze = GetComponent<GazeHover>();
         }
 
         // Update is called once per frame

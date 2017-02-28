@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Pear.InteractionEngine.Controllers.Behaviors
 {
-	public class HoverOnGazeHelper : MonoBehaviour
+	public class GazeHoverHelper : MonoBehaviour
 	{
 		public event Action GazeStartEvent;
 		public event Action GazeEndEvent;
