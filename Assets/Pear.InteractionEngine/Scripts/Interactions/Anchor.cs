@@ -3,12 +3,12 @@
 namespace Pear.InteractionEngine.Interactions
 {
     /// <summary>
-    /// Parent to Interactable objects that makes interacting with elements, such as rotating and zooming, much easier
+    /// Parent to Object with anchor. This element makes interacting, such as rotating and zooming, much easier
     /// </summary>
     public class Anchor : MonoBehaviour
     {
 
-        // Interactable child element
+        // Child element
         public ObjectWithAnchor Child;
     }
 }

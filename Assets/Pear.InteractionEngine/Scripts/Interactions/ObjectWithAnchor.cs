@@ -2,6 +2,10 @@
 
 namespace Pear.InteractionEngine.Interactions
 {
+	/// <summary>
+	/// Manipulating objects, such as resizing and moving, can be tricky when you have multiple scripts trying the modify the same thing.
+	/// This class creates an anchor element which is used to help these manipulations
+	/// </summary>
 	public class ObjectWithAnchor : MonoBehaviour
     {
 		/// <summary>

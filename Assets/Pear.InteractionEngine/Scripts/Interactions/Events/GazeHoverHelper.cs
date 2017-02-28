@@ -5,26 +5,24 @@ namespace Pear.InteractionEngine.Interactions.Events
 {
 	public class GazeHoverHelper : MonoBehaviour
 	{
-		public event Action GazeStartEvent;
-		public event Action GazeEndEvent;
+		public event Action<bool> GazeChanged;
 
 		public void HoverOnGazeStart()
 		{
-			GazeStartEvent();
+			if(GazeChanged != null)
+				GazeChanged(true);
 		}
 
 		public void HoverOnGazeEnd()
 		{
-			GazeEndEvent();
+			if(GazeChanged != null)
+				GazeChanged(false);
 		}
 
 		void OnDestroy()
 		{
-			if (GazeStartEvent != null)
-				GazeStartEvent = null;
-
-			if (GazeEndEvent != null)
-				GazeEndEvent = null;
+			if (GazeChanged != null)
+				GazeChanged = null;
 		}
 	}
 }

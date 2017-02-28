@@ -27,7 +27,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 		{
 			_properties.Add(property);
 
-			property.OnChange += HandleFade;
+			property.ChangeEvent += HandleFade;
 
 			FadeHelper fader = property.Owner.AddComponent<FadeHelper>();
 			fader.fadeDelay = FadeDelay;
@@ -37,7 +37,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 
 		public void UnregisterProperty(GameObjectProperty<bool> property)
 		{
-			property.OnChange -= HandleFade;
+			property.ChangeEvent -= HandleFade;
 			_properties.Remove(property);
 		}
 

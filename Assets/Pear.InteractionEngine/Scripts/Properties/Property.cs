@@ -3,14 +3,18 @@
 namespace Pear.InteractionEngine.Properties
 {
 	/// <summary>
-	/// Contains a value and tracks when that value changes
+	/// Base class for properties. Contains a value and notifies listeners when that value changes
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	public class Property<T>
     {
-        public delegate void OnPropertyChange(T oldValue, T newValue);
-        public event OnPropertyChange OnChange;
+		// Event that's called when the property changes
+        public delegate void OnPropertyChangeEventHandler(T oldValue, T newValue);
+        public event OnPropertyChangeEventHandler ChangeEvent;
 
+		/// <summary>
+		///  The value of this property
+		/// </summary>
         private T _value = default(T);
         public T Value
         {
@@ -19,9 +23,11 @@ namespace Pear.InteractionEngine.Properties
             {
                 T oldValue = _value;
                 _value = value;
+
+				// When the value changes fire an event
                 bool notEqual = !EqualityComparer<T>.Default.Equals(oldValue, _value);
-                if (notEqual && OnChange != null)
-                    OnChange(oldValue, _value);
+                if (notEqual && ChangeEvent != null)
+                    ChangeEvent(oldValue, _value);
             }
         }
     }
