@@ -10,6 +10,9 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 	/// </summary>
 	public class Resize : MonoBehaviour, IGameObjectPropertyEventHandler<int>
 	{
+        [Tooltip("Resize speed")]
+        public float ResizeSpeed = 1f;
+
 		// Registered properies
 		private List<GameObjectProperty<int>> _properties = new List<GameObjectProperty<int>>();
 
@@ -18,18 +21,13 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 		/// </summary>
 		void Update()
 		{
-			foreach(GameObjectProperty<int> property in _properties)
-			{
-				// Better to resize the anchor element than the original object since there could be other
-				// event handlers applying manipulations
-				Anchor anchor = property.Owner.transform.GetOrAddComponent<ObjectWithAnchor>().AnchorElement;
-				float currentScale = anchor.transform.localScale.x;
-				float scaleAmount = property.Value * Time.deltaTime;
-				float newScale = currentScale * (1 + scaleAmount);
-
-				// Apply the new scale
-				anchor.transform.localScale = Vector3.one * newScale;
-			}
+            _properties.ForEach(p =>
+            {
+                p.Owner.transform.GetOrAddComponent<ObjectWithAnchor>()
+                    .AnchorElement
+                    .transform
+                    .localScale += Vector3.one * p.Value * ResizeSpeed * Time.deltaTime;
+            });
 		}
 
 		/// <summary>

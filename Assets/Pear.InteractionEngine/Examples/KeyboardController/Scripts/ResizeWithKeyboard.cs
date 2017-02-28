@@ -8,9 +8,6 @@ namespace Pear.InteractionEngine.Examples
 {
 	public class ResizeWithKeyboard : ControllerBehavior<Controller>, IGameObjectPropertyEvent<int>
     {
-        [Tooltip("Resize property name")]
-        public string ResizePropertyName = "pie.resize";
-
         [Tooltip("Key used to make the object bigger")]
         public KeyCode MakeSmallerKey = KeyCode.Alpha1;
 
