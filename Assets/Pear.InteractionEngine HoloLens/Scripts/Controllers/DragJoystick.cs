@@ -3,6 +3,9 @@ using UnityEngine.VR.WSA.Input;
 
 namespace Pear.InteractionEngine.Interactions.Events
 {
+    /// <summary>
+    /// UI for PinchAndDrag event
+    /// </summary>
     public class DragJoystick : MonoBehaviour {
 
         [Tooltip("Behavior that's the source of our dragging values")]
