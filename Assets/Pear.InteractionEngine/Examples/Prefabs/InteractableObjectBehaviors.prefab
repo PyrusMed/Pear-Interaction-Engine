@@ -67,7 +67,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4719708578808134}
-  - component: {fileID: 114524069314763066}
+  - component: {fileID: 114388920958111708}
   m_Layer: 0
   m_Name: ResizeSound
   m_TagString: Untagged
@@ -174,6 +174,19 @@ MonoBehaviour:
   FadeDelay: 0
   FadeTime: 0.5
   FadeAlpha: 0.3
+--- !u!114 &114388920958111708
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1619961621207878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ab2866a39bfaa44d9f96b0bed98df9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartSound: {fileID: 8300000, guid: cd6708a23286c9c44b972a0455a68efd, type: 3}
+  EndSound: {fileID: 8300000, guid: eed1f1d316962184ea8e772a0163ca59, type: 3}
 --- !u!114 &114399546852878930
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -187,19 +200,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartSound: {fileID: 8300000, guid: 25d3a40ad0db63a40a7c8017051bfc6b, type: 3}
   EndSound: {fileID: 0}
---- !u!114 &114524069314763066
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1619961621207878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 291ba66e9cfacce438bc811b05d7cb63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StartSound: {fileID: 8300000, guid: cd6708a23286c9c44b972a0455a68efd, type: 3}
-  EndSound: {fileID: 8300000, guid: eed1f1d316962184ea8e772a0163ca59, type: 3}
 --- !u!114 &114695420608828054
 MonoBehaviour:
   m_ObjectHideFlags: 1
