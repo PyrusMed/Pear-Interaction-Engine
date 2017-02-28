@@ -1,23 +1,30 @@
 ﻿using Pear.InteractionEngine.Controllers;
-using Pear.InteractionEngine.Controllers.Behaviors;
-using Pear.InteractionEngine.Interactables;
+using Pear.InteractionEngine.Interactions.Events;
+using Pear.InteractionEngine.Properties;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Pear.InteractionEngine.Examples
 {
-	public class SelectWithKeyboard : ControllerBehavior<Controller>
+	[RequireComponent (typeof(GazeHover))]
+	public class SelectWithKeyboard : ControllerBehavior<Controller>, IGameObjectPropertyEvent<bool>
     {
-
+		[Tooltip("Selection key")]
         public KeyCode SelectKey = KeyCode.P;
 
-        HoverOnGaze _hoverOnGaze;
+		public delegate void SelectedEventHandler(GameObject gameObject);
+		public event SelectedEventHandler SelectedEvent;
 
-        InteractableObject _lastSelected;
+        private GazeHover _hoverOnGaze;
+
+		GameObject _lastSelectedObj;
+		private List<GameObjectProperty<bool>> _properties = new List<GameObjectProperty<bool>>();
 
         // Use this for initialization
         void Start()
         {
-            _hoverOnGaze = GetComponent<HoverOnGaze>();
+            _hoverOnGaze = GetComponent<GazeHover>();
         }
 
         // Update is called once per frame
@@ -25,23 +32,38 @@ namespace Pear.InteractionEngine.Examples
         {
             if (Input.GetKeyUp(SelectKey) && _hoverOnGaze.HoveredObject != null)
             {
-                InteractableObjectState selectedState = _hoverOnGaze.HoveredObject.Selected;
-                if (selectedState.Contains(Controller))
-                {
-                    selectedState.Remove(Controller);
-                    Controller.ActiveObject = null;
-                }
-                else
-                {
-                    selectedState.Add(Controller);
-                    Controller.ActiveObject = _hoverOnGaze.HoveredObject;
+				List<GameObjectProperty<bool>> selectedProperties = _properties.Where(p => p.Owner == _hoverOnGaze.HoveredObject).ToList();
+				if (selectedProperties.Count > 0)
+				{
+					GameObjectProperty<bool> representativeProp = selectedProperties.First();
+					if (representativeProp.Value)
+					{
+						selectedProperties.ForEach(p => p.Value = false);
+						_lastSelectedObj = null;
+					}
+					else
+					{
+						selectedProperties.ForEach(p => p.Value = true);
+						if (SelectedEvent != null)
+							SelectedEvent(representativeProp.Owner);
 
-                    if (_lastSelected != _hoverOnGaze.HoveredObject && _lastSelected != null)
-                        _lastSelected.Selected.Remove(Controller);
+						if(_lastSelectedObj != null)
+							_properties.Where(p => p.Owner == _lastSelectedObj).ToList().ForEach(p => p.Value = false);
 
-                    _lastSelected = _hoverOnGaze.HoveredObject;
-                }
-            }
+						_lastSelectedObj = representativeProp.Owner;
+					}
+				}
+			}
         }
-    }
+
+		public void RegisterProperty(GameObjectProperty<bool> property)
+		{
+			_properties.Add(property);
+		}
+
+		public void UnregisterProperty(GameObjectProperty<bool> property)
+		{
+			_properties.Remove(property);
+		}
+	}
 }

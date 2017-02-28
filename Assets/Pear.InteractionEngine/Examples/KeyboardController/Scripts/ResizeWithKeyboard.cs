@@ -1,10 +1,15 @@
 ﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Properties;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Pear.InteractionEngine.Examples
 {
-	public class ResizeWithKeyboard : ControllerBehavior<Controller>
+	public class ResizeWithKeyboard : ControllerBehavior<Controller>, IGameObjectPropertyEvent<int>
     {
+        [Tooltip("Resize property name")]
+        public string ResizePropertyName = "pie.resize";
 
         [Tooltip("Key used to make the object bigger")]
         public KeyCode MakeSmallerKey = KeyCode.Alpha1;
@@ -12,11 +17,7 @@ namespace Pear.InteractionEngine.Examples
         [Tooltip("Key used to make the object smaller")]
         public KeyCode MakeBiggerKey = KeyCode.Alpha2;
 
-        [Tooltip("The percent per second in which the object changes while scaling")]
-        public float ScalePercentage = 0.1f;
-
-        // Tracks whether we resized during the last frame
-        private bool _lastResizedState = false;
+		private List<GameObjectProperty<int>> _properties = new List<GameObjectProperty<int>>();
 
         // Update is called once per frame
         void Update()
@@ -24,39 +25,23 @@ namespace Pear.InteractionEngine.Examples
             if (Controller.ActiveObject == null)
                 return;
 
-            bool resized = true;
-            if (Input.GetKey(MakeSmallerKey))
-                Resize(increase: false);
-            else if (Input.GetKey(MakeBiggerKey))
-                Resize(increase: true);
-            else
-                resized = false;
+			int resizeVal = 0;
+			if (Input.GetKey(MakeSmallerKey))
+				resizeVal = -1;
+			else if (Input.GetKey(MakeBiggerKey))
+				resizeVal = 1;
 
-            // If we started or stopped resizing update the object's state
-            if (resized != _lastResizedState)
-            {
-                if (resized)
-                    Controller.ActiveObject.Resizing.Add(Controller);
-                else
-                    Controller.ActiveObject.Resizing.Remove(Controller);
-            }
-
-            _lastResizedState = resized;
+			_properties.Where(p => p.Owner == Controller.ActiveObject).ToList().ForEach(p => p.Value = resizeVal);
         }
 
-        /// <summary>
-        /// Resize the active object
-        /// </summary>
-        /// <param name="increase"></param>
-        void Resize(bool increase)
-        {
-            int direction = increase ? 1 : -1;
-            float scaleAmount = ScalePercentage * Time.deltaTime;
-            float currentScale = Controller.ActiveObject.AnchorElement.transform.localScale.x;
-            float newScale = currentScale * (1 + scaleAmount * direction);
+		public void RegisterProperty(GameObjectProperty<int> property)
+		{
+			_properties.Add(property);
+		}
 
-            // Apply the new scale
-            Controller.ActiveObject.AnchorElement.transform.localScale = Vector3.one * newScale;
-        }
-    }
+		public void UnregisterProperty(GameObjectProperty<int> property)
+		{
+			_properties.Remove(property);
+		}
+	}
 }
