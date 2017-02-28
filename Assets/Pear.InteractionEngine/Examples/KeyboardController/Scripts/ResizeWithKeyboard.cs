@@ -28,17 +28,13 @@ namespace Pear.InteractionEngine.Examples
             if (Controller.ActiveObject == null)
                 return;
 
-			GameObjectProperty<int> activeObjectProperty = _properties.FirstOrDefault(p => p.Owner == Controller.ActiveObject);
-			if (activeObjectProperty == null)
-				return;
-
 			int resizeVal = 0;
 			if (Input.GetKey(MakeSmallerKey))
 				resizeVal = -1;
 			else if (Input.GetKey(MakeBiggerKey))
 				resizeVal = 1;
 
-			activeObjectProperty.Value = resizeVal;
+			_properties.Where(p => p.Owner == Controller.ActiveObject).ToList().ForEach(p => p.Value = resizeVal);
         }
 
 		public void RegisterProperty(GameObjectProperty<int> property)
