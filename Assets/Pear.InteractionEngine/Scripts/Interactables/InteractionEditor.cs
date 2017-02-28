@@ -87,7 +87,6 @@ namespace Pear.InteractionEngine.Interactables
 					startIndex = actionsInScene.IndexOf((MonoBehaviour)_eventHandler.objectReferenceValue) + 1;
 
 				int selectedIndex = EditorGUILayout.Popup(startIndex, actionsInSceneNames.ToArray());
-				Debug.Log("Start index: " + startIndex + ". Selected index: " + selectedIndex + ". actionsInScene.Count: " + actionsInScene.Count);
 				if (selectedIndex > 0)
 					_eventHandler.objectReferenceValue = actionsInScene[selectedIndex - 1];
 			}
