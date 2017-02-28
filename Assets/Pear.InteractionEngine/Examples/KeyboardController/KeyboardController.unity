@@ -624,6 +624,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217587}
   EventHandler: {fileID: 1198751616}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!23 &1148183637
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -687,6 +688,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217588}
   EventHandler: {fileID: 1198751618}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1148183641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700,6 +702,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217587}
   EventHandler: {fileID: 1198751617}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1148183642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -713,6 +716,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217589}
   EventHandler: {fileID: 1198751619}
+  PropertyType: System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1148183643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -726,6 +730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217589}
   EventHandler: {fileID: 353448864}
+  PropertyType: System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1148183644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -739,6 +744,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217588}
   EventHandler: {fileID: 353448865}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1148183645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,6 +758,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217590}
   EventHandler: {fileID: 1198751621}
+  PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
 --- !u!1001 &1198751615
 Prefab:
   m_ObjectHideFlags: 0
@@ -963,6 +971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217587}
   EventHandler: {fileID: 1198751616}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!23 &1743919817
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1026,6 +1035,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217588}
   EventHandler: {fileID: 1198751618}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1743919821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1039,6 +1049,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217587}
   EventHandler: {fileID: 1198751617}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1743919822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1052,6 +1063,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217589}
   EventHandler: {fileID: 1198751619}
+  PropertyType: System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1743919823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1065,6 +1077,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217589}
   EventHandler: {fileID: 353448864}
+  PropertyType: System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1743919824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1078,6 +1091,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217588}
   EventHandler: {fileID: 353448865}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1743919825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1091,6 +1105,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217590}
   EventHandler: {fileID: 1198751621}
+  PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
 --- !u!1 &1929522309
 GameObject:
   m_ObjectHideFlags: 0
@@ -1142,6 +1158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217587}
   EventHandler: {fileID: 1198751616}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!23 &1929522312
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1205,6 +1222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217588}
   EventHandler: {fileID: 1198751618}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1929522316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1218,6 +1236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217587}
   EventHandler: {fileID: 1198751617}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1929522317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1231,6 +1250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217589}
   EventHandler: {fileID: 1198751619}
+  PropertyType: System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1929522318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1244,6 +1264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217589}
   EventHandler: {fileID: 353448864}
+  PropertyType: System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1929522319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1257,6 +1278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217588}
   EventHandler: {fileID: 353448865}
+  PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1929522320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1270,6 +1292,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 841217590}
   EventHandler: {fileID: 1198751621}
+  PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
 --- !u!1 &2060791359
 GameObject:
   m_ObjectHideFlags: 0
