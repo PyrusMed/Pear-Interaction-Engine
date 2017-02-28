@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Pear.InteractionEngine.Interactables.Behaviors {
+﻿namespace Pear.InteractionEngine.Interactions.EventHandlers
+{
 	public class PlaySoundAnalog :  PlaySoundBase<int>
 	{
 		protected override void PlaySoundHandler(int oldValue, int newValue)

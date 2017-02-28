@@ -1,10 +1,7 @@
 ﻿using Pear.InteractionEngine.Properties;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-namespace Pear.InteractionEngine.Interactables.Behaviors
+namespace Pear.InteractionEngine.Interactions.EventHandlers
 {
 	public abstract class PlaySoundBase<T> : MonoBehaviour, IGameObjectPropertyEventHandler<T>
 	{

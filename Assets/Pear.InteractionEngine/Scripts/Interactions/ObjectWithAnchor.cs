@@ -1,11 +1,8 @@
-﻿using Pear.InteractionEngine.Properties;
-using System;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
-namespace Pear.InteractionEngine.Interactables
+namespace Pear.InteractionEngine.Interactions
 {
-    public class ObjectWithAnchor : MonoBehaviour
+	public class ObjectWithAnchor : MonoBehaviour
     {
 		/// <summary>
 		/// Used to move and manipulate this object

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Pear.InteractionEngine.Interactables
+namespace Pear.InteractionEngine.Interactions
 {
     /// <summary>
     /// Parent to Interactable objects that makes interacting with elements, such as rotating and zooming, much easier

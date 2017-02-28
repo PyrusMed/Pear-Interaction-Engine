@@ -1,15 +1,14 @@
-﻿using System;
-using Pear.InteractionEngine.Interactables;
+﻿using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
 using UnityEngine;
 
-namespace Pear.InteractionEngine.Controllers.Behaviors
+namespace Pear.InteractionEngine.Interactions.Events
 {
-    /// <summary>
-    /// Update the interactable object's state when we hover over it
-    /// </summary>
-    public class GazeHover : ControllerBehavior<Controller>, IGameObjectPropertyEvent<bool>
+	/// <summary>
+	/// Update the interactable object's state when we hover over it
+	/// </summary>
+	public class GazeHover : ControllerBehavior<Controller>, IGameObjectPropertyEvent<bool>
     {
 		public GameObject HoveredObject
         {

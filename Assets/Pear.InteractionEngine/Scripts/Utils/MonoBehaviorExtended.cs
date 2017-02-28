@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Pear.InteractionEngine.Utils
 {
-    static public class MethodExtensionForMonoBehaviourTransform
+	static public class MethodExtensionForMonoBehaviourTransform
     {
         /// <summary>
         /// Gets or add a component. Usage example:

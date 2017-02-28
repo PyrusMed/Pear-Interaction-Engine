@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 namespace Pear.InteractionEngine.Properties
 {
-    /// <summary>
-    /// Contains a value and tracks when that value changes
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Property<T>
+	/// <summary>
+	/// Contains a value and tracks when that value changes
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public class Property<T>
     {
         public delegate void OnPropertyChange(T oldValue, T newValue);
         public event OnPropertyChange OnChange;

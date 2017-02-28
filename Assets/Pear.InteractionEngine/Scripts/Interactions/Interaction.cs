@@ -1,10 +1,10 @@
 ﻿using Pear.InteractionEngine.Properties;
+using Pear.InteractionEngine.Utils;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Pear.InteractionEngine.Interactables {
+namespace Pear.InteractionEngine.Interactions
+{
 	public class Interaction : MonoBehaviour {
 
 		[SerializeField]

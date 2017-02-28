@@ -1,14 +1,13 @@
-﻿using Pear.InteractionEngine.Interactables;
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace Pear.InteractionEngine.Controllers
 {
-    /// <summary>
-    /// Base class for all controllers
-    /// </summary>
-    public class Controller : MonoBehaviour
+	/// <summary>
+	/// Base class for all controllers
+	/// </summary>
+	public class Controller : MonoBehaviour
     {
 
         /// <summary>

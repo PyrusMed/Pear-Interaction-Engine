@@ -1,7 +1,5 @@
-﻿using System;
-using Pear.InteractionEngine.Controllers;
-using Pear.InteractionEngine.Controllers.Behaviors;
-using Pear.InteractionEngine.Interactables;
+﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Interactions.Events;
 using Pear.InteractionEngine.Properties;
 using UnityEngine;
 using System.Collections.Generic;

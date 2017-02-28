@@ -1,7 +1,4 @@
 ﻿using Pear.InteractionEngine.Controllers;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace Pear.InteractionEngine.Examples
 {

@@ -1,10 +1,8 @@
-﻿using System;
-using Pear.InteractionEngine.Interactables;
-using Pear.InteractionEngine.Properties;
+﻿using Pear.InteractionEngine.Properties;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Pear.InteractionEngine.Examples
+namespace Pear.InteractionEngine.Interactions.EventHandlers
 {
 	/// <summary>
 	/// Outline interactables when they're selected

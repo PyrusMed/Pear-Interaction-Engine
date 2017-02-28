@@ -1,35 +1,37 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-public static class ReflectionHelpers {
-
-	public static List<Type> GetTypesThatImplementInterface(Type interfaceType)
+namespace Pear.InteractionEngine.Utils
+{
+	public static class ReflectionHelpers
 	{
-		Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-		List<Type> implementers = new List<Type>();
-		foreach (Assembly assembly in assemblies)
+		public static List<Type> GetTypesThatImplementInterface(Type interfaceType)
 		{
-			implementers.AddRange(assembly.GetTypes().Where(t => GetInterfaceImplementationType(t, interfaceType) != null));
+			Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+			List<Type> implementers = new List<Type>();
+			foreach (Assembly assembly in assemblies)
+			{
+				implementers.AddRange(assembly.GetTypes().Where(t => GetInterfaceImplementationType(t, interfaceType) != null));
+			}
+
+			return implementers;
 		}
 
-		return implementers;
-	}
+		public static Type GetInterfaceImplementationType(Type implementation, Type interfaceType)
+		{
+			return implementation.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType);
+		}
 
-	public static Type GetInterfaceImplementationType(Type implementation, Type interfaceType)
-	{
-		return implementation.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType);
-	}
+		public static Type[] GetGenericArgumentType(Type implementation, Type interfaceType)
+		{
+			Type interfaceImplementationType = GetInterfaceImplementationType(implementation, interfaceType);
+			if (interfaceImplementationType == null)
+				throw new MissingReferenceException(string.Format("Template type {0} not implemented on generic class {1}", interfaceType, implementation));
 
-	public static Type[] GetGenericArgumentType(Type implementation, Type interfaceType)
-	{
-		Type interfaceImplementationType = GetInterfaceImplementationType(implementation, interfaceType);
-		if (interfaceImplementationType == null)
-			throw new MissingReferenceException(string.Format("Template type {0} not implemented on generic class {1}", interfaceType, implementation));
-
-		return implementation.GetInterface(interfaceType.Name).GetGenericArguments();
+			return implementation.GetInterface(interfaceType.Name).GetGenericArguments();
+		}
 	}
 }

@@ -1,12 +1,12 @@
 ﻿using Pear.InteractionEngine.Properties;
+using Pear.InteractionEngine.Utils;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Pear.InteractionEngine.Interactables
+namespace Pear.InteractionEngine.Interactions
 {
 	[CustomEditor(typeof(Interaction))]
 	[CanEditMultipleObjects]

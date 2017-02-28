@@ -1,11 +1,9 @@
 ﻿using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-namespace Pear.InteractionEngine.Interactables.Behaviors
+namespace Pear.InteractionEngine.Interactions.EventHandlers
 {
 	public class Resize : MonoBehaviour, IGameObjectPropertyEventHandler<int>
 	{

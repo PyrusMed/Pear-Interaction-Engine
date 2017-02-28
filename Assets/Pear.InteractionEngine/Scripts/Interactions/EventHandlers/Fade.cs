@@ -1,11 +1,10 @@
 ﻿using Pear.InteractionEngine.Properties;
-using Pear.InteractionEngine.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System;
 
-namespace Pear.InteractionEngine.Interactables.Behaviors
+namespace Pear.InteractionEngine.Interactions.EventHandlers
 {
 	/// <summary>
 	/// Manages what happens when object are hovered over
