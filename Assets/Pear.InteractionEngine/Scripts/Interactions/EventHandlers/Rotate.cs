@@ -11,7 +11,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 	public class Rotate : MonoBehaviour, IGameObjectPropertyEventHandler<Vector3>
 	{
         [Tooltip("Rotation speed")]
-        public float RotateSpeed = 3f;
+        public float RotateSpeed = 10f;
 
         // Registered properies
         private List<GameObjectProperty<Vector3>> _properties = new List<GameObjectProperty<Vector3>>();

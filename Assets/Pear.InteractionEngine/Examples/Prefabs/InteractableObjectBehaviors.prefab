@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114245129905785890}
   - component: {fileID: 114052422693203252}
   - component: {fileID: 114564798038377608}
+  - component: {fileID: 114626092319826484}
   m_Layer: 0
   m_Name: InteractableObjectBehaviors
   m_TagString: Untagged
@@ -740,6 +741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb09eaed568505d4f887f5d899588080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ResizeSpeed: 1
 --- !u!114 &114245129905785890
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -792,6 +794,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OutlineMaterial: {fileID: 2100000, guid: ea92b35be6f59754ba12bf5c699d8a9c, type: 2}
+--- !u!114 &114626092319826484
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1017350430853768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad183f3183e3b5469832e74f8bbbc27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RotateSpeed: 1
 --- !u!114 &114695420608828054
 MonoBehaviour:
   m_ObjectHideFlags: 1
