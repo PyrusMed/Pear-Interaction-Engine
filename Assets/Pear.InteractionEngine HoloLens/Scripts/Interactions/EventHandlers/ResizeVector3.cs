@@ -22,7 +22,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
                 p.Owner.transform.GetOrAddComponent<ObjectWithAnchor>()
                     .AnchorElement
                     .transform
-                    .localScale += Vector3.one * p.Value.magnitude * ResizeSpeed * Time.deltaTime;
+                    .localScale += Vector3.one * -p.Value.x * ResizeSpeed * Time.deltaTime;
             });
         }
 
@@ -33,7 +33,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 
         public void UnregisterProperty(GameObjectProperty<Vector3> property)
         {
-            _properties.Add(property);
+            _properties.Remove(property);
         }
     }
 }
