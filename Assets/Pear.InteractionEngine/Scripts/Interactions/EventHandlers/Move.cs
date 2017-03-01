@@ -22,13 +22,10 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
         {
             _properties.ForEach(p =>
             {
-				Vector3 moveVector = p.Value;
-				moveVector.y *= -1; // y is reversed because of the object is in front of us
-
                 p.Owner.transform.GetOrAddComponent<ObjectWithAnchor>()
                     .AnchorElement
                     .transform
-                    .position += moveVector * MoveSpeed * Time.deltaTime;
+                    .position += p.Value * MoveSpeed * Time.deltaTime;
             });
         }
 
