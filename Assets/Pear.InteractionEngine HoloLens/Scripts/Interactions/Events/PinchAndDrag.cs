@@ -32,6 +32,9 @@ namespace Pear.InteractionEngine.Interactions.Events
                     GestureSettings.NavigationZ
             );
             NavigationRecognizer.NavigationUpdatedEvent += OnNavigationUpdated;
+            NavigationRecognizer.NavigationCanceledEvent += OnNavigationEnded;
+            NavigationRecognizer.NavigationCompletedEvent += OnNavigationEnded;
+
             NavigationRecognizer.StartCapturingGestures();
         }
 
@@ -46,6 +49,17 @@ namespace Pear.InteractionEngine.Interactions.Events
             // If the controller has an active object update its properties
             if (Controller.ActiveObject != null)
                 _properties.Where(p => p.Owner == Controller.ActiveObject).ToList().ForEach(p => p.Value = relativePosition);
+        }
+
+        /// <summary>
+        /// Set all values to zero when navigation completes
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="relativePosition"></param>
+        /// <param name="ray"></param>
+        private void OnNavigationEnded(InteractionSourceKind source, Vector3 relativePosition, Ray ray)
+        {
+            _properties.ForEach(p => p.Value = Vector3.zero);
         }
 
         public void RegisterProperty(GameObjectProperty<Vector3> property)
