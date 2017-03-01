@@ -12,7 +12,8 @@ namespace Pear.InteractionEngine.Interactions
 	/// Unfortunately, the code is a little hairy because Unity doesn't play nice with generic classes. Nonetheless, we made it happen.
 	/// I'll try and comment verbosely.
 	/// </summary>
-	public class Interaction : MonoBehaviour {
+	public class Interaction : MonoBehaviour
+	{
 
 		// Script that modifies a property
 		[SerializeField]
@@ -22,29 +23,28 @@ namespace Pear.InteractionEngine.Interactions
 		[SerializeField]
 		private MonoBehaviour EventHandler;
 
-        [SerializeField]
-        private string PropertyType;
+		[SerializeField]
+		private string PropertyType;
 
 		// Typed helper that makes the logic in this class easier to understand
 		private IInteractionHelper _interactionHelper;
 
-		void Start() {
+		void Start()
+		{
 			if (Event == null || EventHandler == null)
 			{
 				Debug.LogError("Both the Event and EventHandler need to be set.");
 				return;
 			}
 
-            if (PropertyType == null)
-            {
-                Debug.LogError("Interaction property type not set.");
-                return;
-            }
-            else
-                Debug.Log("Property type: " + PropertyType);
+			if (PropertyType == null)
+			{
+				Debug.LogError("Interaction property type not set.");
+				return;
+			}
 
-            // Instantiate the property typed instance of our helper class so we don't have to use reflection to do everything
-            Type proeprtyType = Type.GetType(PropertyType);
+			// Instantiate the property typed instance of our helper class so we don't have to use reflection to do everything
+			Type proeprtyType = Type.GetType(PropertyType);
 			Type interactionHelperType = typeof(InteractionHelper<>);
 			Type instantiableInteractionHelperType = interactionHelperType.MakeGenericType(proeprtyType);
 			_interactionHelper = (IInteractionHelper)Activator.CreateInstance(instantiableInteractionHelperType, Event, EventHandler, gameObject);
@@ -54,15 +54,33 @@ namespace Pear.InteractionEngine.Interactions
 		}
 
 		/// <summary>
+		/// When the script is enabled make sure the properties are registered
+		/// </summary>
+		private void OnEnable()
+		{
+			if (_interactionHelper != null)
+				_interactionHelper.RegisterProperty();
+		}
+
+		/// <summary>
+		/// When the script is diosabled make sure the properties are unregistered
+		/// </summary>
+		private void OnDisable()
+		{
+			if (_interactionHelper != null)
+				_interactionHelper.UnregisterProperty();
+		}
+
+		/// <summary>
 		/// When this script is destroyed unregister the property with the Event and EventHandler
 		/// </summary>
 		void OnDestroy()
 		{
-			if(_interactionHelper != null)
+			if (_interactionHelper != null)
 				_interactionHelper.UnregisterProperty();
 		}
 
-		
+
 	}
 
 	/// <summary>
@@ -91,6 +109,9 @@ namespace Pear.InteractionEngine.Interactions
 		// The property 
 		private GameObjectProperty<T> _property;
 
+		// Tracks whether the property is registered
+		private bool _registered = false;
+
 		public InteractionHelper(IGameObjectPropertyEvent<T> ev, IGameObjectPropertyEventHandler<T> evHandler, GameObject go)
 		{
 			_event = ev;
@@ -103,8 +124,12 @@ namespace Pear.InteractionEngine.Interactions
 		/// </summary>
 		public void RegisterProperty()
 		{
-			_eventHandler.RegisterProperty(_property);
-			_event.RegisterProperty(_property);
+			if (!_registered)
+			{
+				_eventHandler.RegisterProperty(_property);
+				_event.RegisterProperty(_property);
+				_registered = true;
+			}
 		}
 
 		/// <summary>
@@ -112,8 +137,12 @@ namespace Pear.InteractionEngine.Interactions
 		/// </summary>
 		public void UnregisterProperty()
 		{
-			_event.UnregisterProperty(_property);
-			_eventHandler.UnregisterProperty(_property);
+			if (_registered)
+			{
+				_event.UnregisterProperty(_property);
+				_eventHandler.UnregisterProperty(_property);
+				_registered = false;
+			}
 		}
 	}
 }
