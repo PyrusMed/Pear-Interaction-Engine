@@ -40,8 +40,6 @@ namespace Pear.InteractionEngine.Interactions
                 Debug.LogError("Interaction property type not set.");
                 return;
             }
-            else
-                Debug.Log("Property type: " + PropertyType);
 
             // Instantiate the property typed instance of our helper class so we don't have to use reflection to do everything
             Type proeprtyType = Type.GetType(PropertyType);
