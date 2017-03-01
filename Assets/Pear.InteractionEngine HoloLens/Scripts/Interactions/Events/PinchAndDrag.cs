@@ -22,7 +22,7 @@ namespace Pear.InteractionEngine.Interactions.Events
         // Properties to change
         private List<GameObjectProperty<Vector3>> _properties = new List<GameObjectProperty<Vector3>>();
 
-        void Start()
+        void Awake()
         {
             // Start listening for navigation events
             NavigationRecognizer = new GestureRecognizer();

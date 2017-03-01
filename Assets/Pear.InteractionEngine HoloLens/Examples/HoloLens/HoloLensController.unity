@@ -102,13 +102,14 @@ GameObject:
   - component: {fileID: 110102285}
   - component: {fileID: 110102284}
   - component: {fileID: 110102283}
+  - component: {fileID: 110102286}
   m_Layer: 0
   m_Name: DragJoystick_Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &110102282
 Transform:
   m_ObjectHideFlags: 0
@@ -173,6 +174,19 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 110102281}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &110102286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 110102281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df709b91cddf7e448aefb71773e0d8f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DragSource: {fileID: 365629985}
+  PinchPoint: {fileID: 710260645}
 --- !u!1001 &178050625
 Prefab:
   m_ObjectHideFlags: 0
@@ -545,6 +559,7 @@ GameObject:
   - component: {fileID: 1148183641}
   - component: {fileID: 1148183642}
   - component: {fileID: 1148183643}
+  - component: {fileID: 1148183644}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -686,6 +701,21 @@ MonoBehaviour:
   EventHandler: {fileID: 1198751621}
   PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
+--- !u!114 &1148183644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1148183634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 365629985}
+  EventHandler: {fileID: 1198751622}
+  PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
 --- !u!1001 &1198751615
 Prefab:
   m_ObjectHideFlags: 0
@@ -723,6 +753,26 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4936010788950238, guid: 158fcf5d967a68e4daac699f37c522cf, type: 2}
       propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82459073283747044, guid: 158fcf5d967a68e4daac699f37c522cf,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82466851080074064, guid: 158fcf5d967a68e4daac699f37c522cf,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82286166317430960, guid: 158fcf5d967a68e4daac699f37c522cf,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82583164833253266, guid: 158fcf5d967a68e4daac699f37c522cf,
+        type: 2}
+      propertyPath: spreadCustomCurve.m_RotationOrder
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
@@ -960,6 +1010,7 @@ GameObject:
   - component: {fileID: 1743919821}
   - component: {fileID: 1743919822}
   - component: {fileID: 1743919823}
+  - component: {fileID: 1743919824}
   m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -1101,6 +1152,21 @@ MonoBehaviour:
   EventHandler: {fileID: 1198751621}
   PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
+--- !u!114 &1743919824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1743919814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 365629985}
+  EventHandler: {fileID: 1198751622}
+  PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
 --- !u!1 &1929522309
 GameObject:
   m_ObjectHideFlags: 0
@@ -1117,6 +1183,7 @@ GameObject:
   - component: {fileID: 1929522316}
   - component: {fileID: 1929522317}
   - component: {fileID: 1929522318}
+  - component: {fileID: 1929522319}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -1256,6 +1323,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Event: {fileID: 365629985}
   EventHandler: {fileID: 1198751621}
+  PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
+    PublicKeyToken=null
+--- !u!114 &1929522319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1929522309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 365629985}
+  EventHandler: {fileID: 1198751622}
   PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
 --- !u!1 &1934449602

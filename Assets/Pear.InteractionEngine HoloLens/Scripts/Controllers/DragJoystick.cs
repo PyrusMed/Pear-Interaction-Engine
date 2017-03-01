@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.VR.WSA.Input;
 
 namespace Pear.InteractionEngine.Interactions.Events
@@ -30,14 +32,14 @@ namespace Pear.InteractionEngine.Interactions.Events
             // When navigation ends hide the joystick
             DragSource.NavigationRecognizer.NavigationCanceledEvent += HideJoystick;
             DragSource.NavigationRecognizer.NavigationCompletedEvent += HideJoystick;
-        }
+		}
 
         /// <summary>
         /// Show the joystick
         /// </summary>
         private void ShowJoystick(InteractionSourceKind source, Vector3 relativePosition, Ray ray)
         {
-            transform.position = relativePosition;
+			transform.position = ray.origin;
             SetVisibility(_renderers, true);
         }
 
@@ -57,10 +59,10 @@ namespace Pear.InteractionEngine.Interactions.Events
             PinchPoint.transform.localPosition = relativePosition;
         }
 
-        /// <summary>
-        /// Hide or show the joystick
-        /// </summary>
-        private void SetVisibility(MeshRenderer[] renderers, bool visible)
+		/// <summary>
+		/// Hide or show the joystick
+		/// </summary>
+		private void SetVisibility(MeshRenderer[] renderers, bool visible)
         {
             foreach (Renderer renderer in renderers)
                 renderer.enabled = visible;
