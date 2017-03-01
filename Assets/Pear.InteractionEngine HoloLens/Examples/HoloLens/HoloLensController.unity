@@ -246,6 +246,7 @@ GameObject:
   - component: {fileID: 365629987}
   - component: {fileID: 365629989}
   - component: {fileID: 365629985}
+  - component: {fileID: 365629986}
   m_Layer: 0
   m_Name: HoloLensController
   m_TagString: Untagged
@@ -264,6 +265,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f54eee97527714e47a6341527c7509cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &365629986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 365629984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98f3d9a3f0f20f645b6a8e9850eff418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Commands:
+  - 526f74617465
+  - 5a6f6f6d
+  - 4d6f7665
 --- !u!114 &365629987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,6 +392,22 @@ Light:
   m_BounceIntensity: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &452533120 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1074399249588256, guid: 3884da1c1ad1d084a9cbf4f4f063b100,
+    type: 2}
+  m_PrefabInternal: {fileID: 1651511775}
+--- !u!114 &452533121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 452533120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50c5d298856578d4e981aeef1427e637, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &710260645
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,7 +517,9 @@ TextMesh:
 
     While hovering, air tap to select.
 
-    Once selected, air tap and hold to rotate.'
+    Once selected, air tap and perform Mode action.
+
+    To change modes, say "Rotate",. "Zoom" or "Move".'
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -537,8 +571,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 816998464}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.028655715, y: 0.6, z: 3.05}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalPosition: {x: 0.004, y: 0.101, z: 1.0542}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
@@ -561,6 +595,7 @@ GameObject:
   - component: {fileID: 1148183643}
   - component: {fileID: 1148183644}
   - component: {fileID: 1148183645}
+  - component: {fileID: 1148183646}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -693,7 +728,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1148183634}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
   m_Name: 
@@ -708,7 +743,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1148183634}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
   m_Name: 
@@ -732,6 +767,24 @@ MonoBehaviour:
   EventHandler: {fileID: 1198751623}
   PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
+--- !u!114 &1148183646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1148183634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e22b3a7b6898ad41829761a5eada708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ModeInteractions:
+  - Mode: 0
+    Interaction: {fileID: 1148183643}
+  - Mode: 1
+    Interaction: {fileID: 1148183644}
+  - Mode: 2
+    Interaction: {fileID: 1148183645}
 --- !u!1001 &1198751615
 Prefab:
   m_ObjectHideFlags: 0
@@ -1040,6 +1093,7 @@ GameObject:
   - component: {fileID: 1743919823}
   - component: {fileID: 1743919824}
   - component: {fileID: 1743919825}
+  - component: {fileID: 1743919826}
   m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -1172,7 +1226,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1743919814}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
   m_Name: 
@@ -1187,7 +1241,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1743919814}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
   m_Name: 
@@ -1211,6 +1265,131 @@ MonoBehaviour:
   EventHandler: {fileID: 1198751623}
   PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
+--- !u!114 &1743919826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1743919814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e22b3a7b6898ad41829761a5eada708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ModeInteractions:
+  - Mode: 0
+    Interaction: {fileID: 1148183643}
+  - Mode: 1
+    Interaction: {fileID: 1148183644}
+  - Mode: 2
+    Interaction: {fileID: 1148183645}
+--- !u!1 &1795272175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1795272178}
+  - component: {fileID: 1795272177}
+  - component: {fileID: 1795272176}
+  - component: {fileID: 1795272179}
+  - component: {fileID: 1795272180}
+  m_Layer: 0
+  m_Name: Mode
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!102 &1795272176
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1795272175}
+  m_Text: 'Mode: Rotate'
+  m_OffsetZ: 0
+  m_CharacterSize: 1
+  m_LineSpacing: 1
+  m_Anchor: 0
+  m_Alignment: 0
+  m_TabSize: 4
+  m_FontSize: 30
+  m_FontStyle: 1
+  m_RichText: 1
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
+--- !u!23 &1795272177
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1795272175}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!4 &1795272178
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1795272175}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.207, y: 0.13, z: 1.0542}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1795272179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1795272175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ea0ce67c1f76b9429733d10fad2328f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultMode: 0
+--- !u!114 &1795272180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1795272175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40f0862e3c51fe34782975e2cbd73983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1929522309
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,6 +1408,7 @@ GameObject:
   - component: {fileID: 1929522318}
   - component: {fileID: 1929522319}
   - component: {fileID: 1929522320}
+  - component: {fileID: 1929522321}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -1361,7 +1541,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1929522309}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
   m_Name: 
@@ -1376,7 +1556,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1929522309}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23a6775025bc1574e8ebdbf12f8e9d98, type: 3}
   m_Name: 
@@ -1400,6 +1580,24 @@ MonoBehaviour:
   EventHandler: {fileID: 1198751623}
   PropertyType: UnityEngine.Vector3, UnityEngine, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
+--- !u!114 &1929522321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1929522309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e22b3a7b6898ad41829761a5eada708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ModeInteractions:
+  - Mode: 0
+    Interaction: {fileID: 1148183643}
+  - Mode: 1
+    Interaction: {fileID: 1148183644}
+  - Mode: 2
+    Interaction: {fileID: 1148183645}
 --- !u!1 &1934449602
 GameObject:
   m_ObjectHideFlags: 0
