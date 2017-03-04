@@ -38,13 +38,29 @@ namespace Pear.InteractionEngine.Interactions.Events
             NavigationRecognizer.StartCapturingGestures();
         }
 
-        /// <summary>
-        /// Update each property when the navigation event is updated
-        /// </summary>
-        /// <param name="source">Hand source</param>
-        /// <param name="relativePosition">Position relative to when navigation started</param>
-        /// <param name="ray"></param>
-        private void OnNavigationUpdated(InteractionSourceKind source, Vector3 relativePosition, Ray ray)
+		/// <summary>
+		/// Start listening for input when this control is enabled
+		/// </summary>
+		private void OnEnable()
+		{
+			NavigationRecognizer.StartCapturingGestures();
+		}
+
+		/// <summary>
+		/// Stop listening for input when this control is disabled
+		/// </summary>
+		private void OnDisable()
+		{
+			NavigationRecognizer.StopCapturingGestures();
+		}
+
+		/// <summary>
+		/// Update each property when the navigation event is updated
+		/// </summary>
+		/// <param name="source">Hand source</param>
+		/// <param name="relativePosition">Position relative to when navigation started</param>
+		/// <param name="ray"></param>
+		private void OnNavigationUpdated(InteractionSourceKind source, Vector3 relativePosition, Ray ray)
         {
             // If the controller has an active object update its properties
             if (Controller.ActiveObject != null)
