@@ -533,6 +533,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07839a859439a9345bbe08a8932282a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Controller: {fileID: 841217586}
 --- !u!114 &841217588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -544,6 +545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29c40e88b3ca724f892cdf8a216d7c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Controller: {fileID: 841217586}
   SelectKey: 112
 --- !u!114 &841217589
 MonoBehaviour:
@@ -556,6 +558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59e201531c741b243a9fe4883ce3096a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Controller: {fileID: 841217586}
   MakeSmallerKey: 49
   MakeBiggerKey: 50
 --- !u!114 &841217590
@@ -569,6 +572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3cec59924f86d148832048e50db8145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Controller: {fileID: 841217586}
   RotateLeftKey: 106
   RotateRightKey: 108
   RotateUpKey: 105
