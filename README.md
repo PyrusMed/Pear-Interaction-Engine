@@ -1,7 +1,7 @@
 # Pear Interaction Engine (PIE)
 
 ## About PIE
-PIE is a set of cross-device Unity components that make interacting with objects easy, regardless of the target platform. PIE currently supports mouse and keyboard, Leap Motion, Oculus Touch, and mixed reality inputs (e.g. HoloLens gestures), with more coming soon. Use PIE if you want to give your users an easy way to interact with virtual objects. Contribute to PIE if you want to make virtual (VR) and mixed reality (MR) better for everyone (i.e. developers, designers, end users, ect). We hope you find this useful!
+PIE is a set of cross-device Unity components that make interacting with objects easy, regardless of the target platform. PIE currently supports mouse and keyboard, Leap Motion, Oculus Touch, and HoloLens gestures, with more interaction support coming soon. Use PIE if you want an easy way to give your users intuitive interactions in VR, AR, and on the desktop. Contribute to PIE if you want to make interactions better for everyone developers, designers, and end users. We hope you find this useful!
 
 ![leap hover-small](https://cloud.githubusercontent.com/assets/2764891/22951407/eb0da21c-f2bd-11e6-916c-ff6219d49eb6.gif)
 ![leap grab-small](https://cloud.githubusercontent.com/assets/2764891/22951403/eb081d74-f2bd-11e6-9382-9c9d43570bb3.gif)
@@ -11,7 +11,7 @@ PIE is a set of cross-device Unity components that make interacting with objects
 ![leap zoom-small](https://cloud.githubusercontent.com/assets/2764891/22951405/eb0a088c-f2bd-11e6-9fb0-c5f80b485362.gif)
 
 ## Why PIE?
-Interactions are a core component of every user facing software application, yet there are very few pattern guidelines, best practices and tools that can be used to design and develop interactions in virtual (VR) and mixed reality (MR). Over the last year we've explored interactions using cheap headsets, expensive headsets, hand controllers, full body motion capture suits, and just about everything in between. In the process, we created PIE, a set of tools we've used for both rapid prototyping and production quality products. We're happy to share these tools and welcome all contributions as we look forward to the next generation of human-computer interactions.
+Interactions are a core component of every user facing software application, yet there are very few pattern guidelines, best practices and tools that can be used to design and develop interactions in virtual (VR) and mixed reality (MR). We've explored interactions using cheap headsets, expensive headsets, hand controllers, full body motion capture suits, and just about everything in between. In the process, we created PIE, a set of tools we've used for both rapid prototyping and production quality products. We're happy to share these tools and welcome all contributions as we look forward to the next generation of human-computer interactions.
 
 ## Getting Started with PIE
 
