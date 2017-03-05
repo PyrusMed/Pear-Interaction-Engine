@@ -11,7 +11,7 @@ PIE is a set of cross-device Unity components that make interacting with objects
 ![leap zoom-small](https://cloud.githubusercontent.com/assets/2764891/22951405/eb0a088c-f2bd-11e6-9fb0-c5f80b485362.gif)
 
 ## Why PIE?
-Interactions are a core component of every user facing software application, yet there are very few pattern guidelines, best practices and tools that can be used to design and develop interactions in virtual (VR) and mixed reality (MR). Over the last year we've explored interactions using cheap headsets, expensive headsets, hand controllers, full body motion capture suits, and just about everything in between. In the process, we created PIE, a set of tools we've used for both rapid prototyping and production quality products. We're happy to share these tools and welcome all contributions as we look forward to the next generation of human-computer interactions.
+Interactions are a core component of every user facing software application, yet there are very few pattern guidelines, best practices and tools that can be used to design and develop interactions in virtual (VR) and mixed reality (MR). We've explored interactions using cheap headsets, expensive headsets, hand controllers, full body motion capture suits, and just about everything in between. In the process, we created PIE, a set of tools we've used for both rapid prototyping and production quality products. We're happy to share these tools and welcome all contributions as we look forward to the next generation of human-computer interactions.
 
 ## Getting Started with PIE
 
