@@ -43,6 +43,9 @@ Next, we add a `ControllerBehavior` that lets other objects know when the head i
 Finally, we add an `Interaction` to the object we want to fade that links the "looking" logic to the "fading" logic.
 ![add interaction-optimized](https://cloud.githubusercontent.com/assets/2764891/23585857/7ce7d698-013d-11e7-8f19-2575f453077a.gif)
 
+We can even link a single fade action to multiple `Interaction`s to keep things clean and consistent across multiple objects.
+![link multiple interactions-optimized](https://cloud.githubusercontent.com/assets/2764891/23626811/055c0afa-0263-11e7-868c-b5b19d88ff29.gif)
+
 ### Why was it designed this way?
 `Controller`s, `ControllerBehavior`s and `Interaction`s represent how we interact with objects in the real world. For example, if you were to pick up a mug, you would use your hand (`Controller`) to grab (`ControllerBehavior`) the mug that would react to your grab (`Interaction`). As babys we have hands (`Controller`s), but we don't know how to use them (i.e. we don't have any `ControllerBehavior`s). Overtime we learn to use our hands, body parts and tools to interact with objects, like a mug. Right now PIE is in its infancy, but as we grow our set of `Controller`s, `ControllerBehavior`s and `Interaction`s, we'll be able to quickly add complex interactions to our applications using our collective knowledge.
 
