@@ -1,7 +1,7 @@
 # Pear Interaction Engine (PIE)
 
-## About PIE
-PIE is a set of cross-device Unity components that make interacting with objects easy, regardless of the target platform. PIE currently supports mouse and keyboard, Leap Motion, Oculus Touch, and mixed reality inputs (e.g. HoloLens gestures), with more coming soon. Use PIE if you want to give your users an easy way to interact with virtual objects. Contribute to PIE if you want to make virtual (VR) and mixed reality (MR) better for everyone (i.e. developers, designers, end users, ect). We hope you find this useful!
+## What is PIE?
+PIE was made to give designers and developers an easier way to create, share and modify user interactions. At its core, PIE is a set of cross-device platform independent Unity components that make creating intuitive interactions easier. PIE currently supports mouse and keyboard, Leap Motion, Oculus Touch, and HoloLens gestures, with more interaction support coming soon. Use PIE if you want a quick way to give your users intuitive interactions in VR, AR, on the desktop and on mobile. Contribute to PIE if you want to make interactions better for all developers, designers, and end users. We hope you find this useful!
 
 ![leap hover-small](https://cloud.githubusercontent.com/assets/2764891/22951407/eb0da21c-f2bd-11e6-916c-ff6219d49eb6.gif)
 ![leap grab-small](https://cloud.githubusercontent.com/assets/2764891/22951403/eb081d74-f2bd-11e6-9382-9c9d43570bb3.gif)
@@ -11,7 +11,7 @@ PIE is a set of cross-device Unity components that make interacting with objects
 ![leap zoom-small](https://cloud.githubusercontent.com/assets/2764891/22951405/eb0a088c-f2bd-11e6-9fb0-c5f80b485362.gif)
 
 ## Why PIE?
-Interactions are a core component of every user facing software application, yet there are very few pattern guidelines, best practices and tools that can be used to design and develop interactions in virtual (VR) and mixed reality (MR). Over the last year we've explored interactions using cheap headsets, expensive headsets, hand controllers, full body motion capture suits, and just about everything in between. In the process, we created PIE, a set of tools we've used for both rapid prototyping and production quality products. We're happy to share these tools and welcome all contributions as we look forward to the next generation of human-computer interactions.
+Interactions are a core component of every user facing software application, yet there are very few pattern guidelines, best practices and tools that can be used to design and develop interactions in virtual (VR) and mixed reality (MR). We've explored interactions using cheap headsets, expensive headsets, hand controllers, full body motion capture suits, and just about everything in between. In the process, we created PIE, a set of tools we've used for both rapid prototyping and production quality products. We're happy to share these tools and welcome all contributions as we look forward to the next generation of human-computer interactions.
 
 ## Getting Started with PIE
 
@@ -27,43 +27,34 @@ Download our latest package from the [releases](https://github.com/PearMed/Pear-
   - The "Pear.InteractionEngine HoloLens" package requires "Pear.InteractionEngine" and the HoloToolkit Unity module
 
 ## PIE Architecture
-PIE consists of modular components that can be swapped in and out. These components revolve around the `Controller` and `InteractableObject` classes. `Controller`s represent user input devices and `InteractableObject`s represent objects that can be manipulated by user input.
+PIE consists of modular components that can be swapped in and out. These components revolve around the `Controller`, `ControllerBehavior` and `Interaction` classes.
+- `Controller`s represent user input devices
+- `ControllerBehavior`s represent things a controller can do
+- `Interaction`s define how users interact with the virtual world
 
-### Controller
-`Controller` represents a user input device. The camera, for example, is a `Controller` because gaze is a form of input that can be used to hover over objects. Each controller has a set of `ControllerBehavior`s that use the `Controller` to update the state of `InteractableObject`s. For instance, `HoverOnGaze` is a `ControllerBehavior` that updates the state of an `InteractableObject` when the camera hover's over it. `HoverOnGaze` looks something like this.
+### Example - Fade On Hover (3 steps)
 
-```csharp
-//[...]
+First, we define a `Controller` on the camera, because the user's head is a source of input.
+![add controller-optimized](https://cloud.githubusercontent.com/assets/2764891/23585694/aca8a00a-0139-11e7-991b-356de8a67fc5.gif)
 
-// If the camera is hovering over an interactable
-// update the interactable's state
-if (hoverInteractable != null)
-  hoverInteractable.Hovering.Add(Controller);
+Next, we add a `ControllerBehavior` that lets other objects know when the head is looking (or gazing) at them.
+![add gaze behavior-optimized](https://cloud.githubusercontent.com/assets/2764891/23585729/946d73ca-013a-11e7-8fb2-5b8c818749c1.gif)
 
-//[...]
-```
+Finally, we add an `Interaction` to the object we want to fade that links the "looking" logic to the "fading" logic.
+![add interaction-optimized](https://cloud.githubusercontent.com/assets/2764891/23585857/7ce7d698-013d-11e7-8f19-2575f453077a.gif)
 
-### InteractableObject
-`InteractableObject` represents objects that can be manipulated by user input. Each `InteractableObject` has a set of states (Grabbing, Moving, Resizing, Rotating, Selected) that are updated by `Controller`s and their `ControllerBehavior`s. In the example above, the `ControllerBehavior` `HoverOnGaze` tells the `InteractableObject` it's being hovered over by the camera `Controller`. Once an `InteractableObject`'s state is updated it lets all of it's listeners know. This pattern is powerful because it allows developers and designers to create common interactions across multiple controllers. Let's look at an example...
+We can even link a single fade action to multiple `Interaction`s to keep things clean and consistent across multiple objects.
+![link multiple interactions-optimized](https://cloud.githubusercontent.com/assets/2764891/23626811/055c0afa-0263-11e7-868c-b5b19d88ff29.gif)
 
-`FadeOnHover` is a class that listens for the change in hover state of `InteractableObject`s and sets their opacity accordigly. The code looks something like this:
+### Why was it designed this way?
+`Controller`s, `ControllerBehavior`s and `Interaction`s represent how we interact with objects in the real world. For example, if you were to pick up a mug, you would use your hand (`Controller`) to grab (`ControllerBehavior`) the mug that would react to your grab (`Interaction`). As babys we have hands (`Controller`s), but we don't know how to use them (i.e. we don't have any `ControllerBehavior`s). Overtime we learn to use our hands, body parts and tools to interact with objects, like a mug. Right now PIE is in its infancy, but as we grow our set of `Controller`s, `ControllerBehavior`s and `Interaction`s, we'll be able to quickly add complex interactions to our applications using our collective knowledge.
 
-```csharp
-//[...]
+Oh, one more really cool thing. `ControllerBehavior`s and `Interaction`s can be mixed and matched. Using our baby analogy, once a child learns how to grab a mug it will quickly apply its grab logic to other objects, like things it shouldn't put in its mouth :/. PIE was designed similarly, but much more safe. Once we develop a `ControllerBehavior` we can use it to create countless interactions. For example, We've created a `ControllerBehavior` for grabbing with the Leap Motion hand, so that `ControllerBehavior` can be used to pick up any object, whether it's a cube, a mug, or anything else. It can also be used to open a door, or flip on a light switch...the possibilities are endless since we can link the grab logic to any `Intraction`.
 
-// Call the FadeOut function when the interactable is hovered over
-interactable.Hovering.OnStart.AddListener(FadeOut);
-
-// Call the FadeIn function when hovering ends
-interactable.Hovering.OnEnd.AddListener(FadeIn);
-
-//[...]
-```
-
-Now we can hover over the `InteractableObject` with *any* `Controller` and it will FadeIn/FadeOut accordingly. This works great if you want to design and develop common interactions using different forms of input, like mouse and keyboard (desktop), Leap Motion / Oculus Touch (VR), and gestures (MR).
+If you couldn't tell, we're pretty excited about this :).
 
 ## Contributing
-If you like PIE, want to make it better, or just want to work on something cool, help us out! We think user interactions are extremely important, so we'd love to work with others to improve how we all design, develop and use interactions in VR and MR. Fork this repo to get started!
+If you like PIE, want to make it better, or just want to work on something cool, help us out! We think user interactions are extremely important, so we'd love to work with others to improve how we all design, develop and use interactions in VR, MR and everywhere else. Fork this repo to get started!
 
 ## Who is using PIE?
 - [Bosc](http://www.pearmedical.com/bosc.html)
