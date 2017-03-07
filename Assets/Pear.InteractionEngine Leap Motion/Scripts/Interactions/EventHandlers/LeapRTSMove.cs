@@ -11,18 +11,18 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 	public class LeapRTSMove : MonoBehaviour, IGameObjectPropertyEventHandler<HandModel>
 	{
 		[Tooltip("Method used to rotate with one hand")]
-		public LeapRTS.RotationMethod OneHandedRotationMethod;
+		public LeapRTSMoveHelper.RotationMethod OneHandedRotationMethod;
 
 		[Tooltip("Method used to rotate with two hands")]
-		public LeapRTS.RotationMethod TwoHandedRotationMethod;
+		public LeapRTSMoveHelper.RotationMethod TwoHandedRotationMethod;
 
 		// LeapRTS is what actually moves the object. We need to update it to make
 		// sure it's in the correct state
-		private LeapRTS _rts;
+		private LeapRTSMoveHelper _rts;
 
 		void Start()
 		{
-			_rts = transform.GetOrAddComponent<LeapRTS>();
+			_rts = transform.GetOrAddComponent<LeapRTSMoveHelper>();
 			_rts.OneHandedRotationMethod = OneHandedRotationMethod;
 			_rts.TwoHandedRotationMethod = TwoHandedRotationMethod;
 		}

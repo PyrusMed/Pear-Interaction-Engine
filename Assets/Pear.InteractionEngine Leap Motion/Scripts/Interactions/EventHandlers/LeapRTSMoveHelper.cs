@@ -46,11 +46,9 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 			}
 		}
 
-		[SerializeField]
-		private RotationMethod _oneHandedRotationMethod;
+		public RotationMethod OneHandedRotationMethod;
 
-		[SerializeField]
-		private RotationMethod _twoHandedRotationMethod;
+		public RotationMethod TwoHandedRotationMethod;
 
 		[SerializeField]
 		private bool _allowScale = true;
@@ -114,9 +112,9 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 			if (_showGUI)
 			{
 				GUILayout.Label("One Handed Settings");
-				doRotationMethodGUI(ref _oneHandedRotationMethod);
+				doRotationMethodGUI(ref OneHandedRotationMethod);
 				GUILayout.Label("Two Handed Settings");
-				doRotationMethodGUI(ref _twoHandedRotationMethod);
+				doRotationMethodGUI(ref TwoHandedRotationMethod);
 				_allowScale = GUILayout.Toggle(_allowScale, "Allow Two Handed Scale");
 			}
 		}
@@ -152,7 +150,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 		{
 			_anchor.position = (_pinchDetectorA.Position + _pinchDetectorB.Position) / 2.0f;
 
-			switch (_twoHandedRotationMethod)
+			switch (TwoHandedRotationMethod)
 			{
 				case RotationMethod.None:
 					break;
@@ -178,7 +176,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 		{
 			_anchor.position = singlePinch.Position;
 
-			switch (_oneHandedRotationMethod)
+			switch (OneHandedRotationMethod)
 			{
 				case RotationMethod.None:
 					break;
