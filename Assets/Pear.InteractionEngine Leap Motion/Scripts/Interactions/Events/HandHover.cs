@@ -14,15 +14,13 @@ namespace Pear.InteractionEngine.Interactions.Events
 		// Registered proeprties
 		private List<GameObjectProperty<bool>> _properties = new List<GameObjectProperty<bool>>();
 
-		void Start()
+		void Awake()
 		{
-			Debug.Log("Listening for hover");
-
-			ProximityDetector proximityDetector = Controller.Hand.gameObject.GetComponentInChildren<ProximityDetector>();
+			ProximityDetector proximityDetector = Controller.gameObject.GetComponentInChildren<ProximityDetector>();
 
 			// When the hand starts hovering over the object
 			// let the object know
-			proximityDetector.OnProximity.AddListener(hoverObj => { Debug.Log("Hover obj: " + hoverObj.name); _properties.ForEach(p => p.Value = p.Owner == hoverObj); });
+			proximityDetector.OnProximity.AddListener(hoverObj => _properties.ForEach(p => p.Value = p.Owner == hoverObj));
 
 			// When the hand stops hovering over the object
 			// let the object know

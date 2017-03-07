@@ -324,7 +324,7 @@ Transform:
   - {fileID: 2098797247}
   - {fileID: 1414870783}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &193323431
 MonoBehaviour:
@@ -484,7 +484,7 @@ MonoBehaviour:
   UseLayersNotList: 1
   Layer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   OnDistance: 0.01
   OffDistance: 0.015
   ShowGizmos: 1
@@ -553,7 +553,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &499387276 stripped
 GameObject:
@@ -680,7 +680,7 @@ MonoBehaviour:
   UseLayersNotList: 1
   Layer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   OnDistance: 0.01
   OffDistance: 0.015
   ShowGizmos: 1
@@ -739,93 +739,6 @@ MonoBehaviour:
   unlockHold: 0
   moreRewind: 276
   lessRewind: 275
---- !u!1 &665884436
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 665884441}
-  - component: {fileID: 665884440}
-  - component: {fileID: 665884439}
-  - component: {fileID: 665884438}
-  - component: {fileID: 665884437}
-  m_Layer: 0
-  m_Name: Main Camera
-  m_TagString: MainCamera
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!81 &665884437
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 665884436}
-  m_Enabled: 1
---- !u!124 &665884438
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 665884436}
-  m_Enabled: 1
---- !u!92 &665884439
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 665884436}
-  m_Enabled: 1
---- !u!20 &665884440
-Camera:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 665884436}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: -1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
-  m_StereoMirrorMode: 0
---- !u!4 &665884441
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 665884436}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1095659623 stripped
 Transform:
   m_PrefabParentObject: {fileID: 464466, guid: 869d20cdda15af24aab9e72b5f2eec78, type: 2}
@@ -849,7 +762,7 @@ GameObject:
   - component: {fileID: 1148183641}
   - component: {fileID: 1148183640}
   - component: {fileID: 1148183636}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2393,7 +2306,7 @@ GameObject:
   - component: {fileID: 1743919821}
   - component: {fileID: 1743919820}
   - component: {fileID: 1743919816}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2758,7 +2671,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e590dba34b84174cb3635705ce294f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 1759863754}
+  Controller: {fileID: 1781939145}
 --- !u!114 &1781939144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2770,7 +2683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 610a93ebd42328648afc239f0feccb9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 1759863754}
+  Controller: {fileID: 1781939145}
 --- !u!114 &1781939145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3858,7 +3771,7 @@ GameObject:
   - component: {fileID: 1929522316}
   - component: {fileID: 1929522315}
   - component: {fileID: 1929522311}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
