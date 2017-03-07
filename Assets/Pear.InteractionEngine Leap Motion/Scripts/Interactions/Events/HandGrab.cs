@@ -27,10 +27,10 @@ namespace Pear.InteractionEngine.Interactions.Events
 		// Use this for initialization
 		void Start()
 		{
-			_pinchDetector = Controller.Hand.gameObject.GetComponentInChildren<PinchDetector>();
+			_pinchDetector = Controller.gameObject.GetComponentInChildren<PinchDetector>();
 
 			// Detects when objects are in close proximity
-			ProximityDetector proximityDetector = Controller.Hand.gameObject.GetComponentInChildren<ProximityDetector>();
+			ProximityDetector proximityDetector = Controller.gameObject.GetComponentInChildren<ProximityDetector>();
 
 			// Save the last RTS we hovered over
 			proximityDetector.OnProximity.AddListener(hovered => _lastHovered = hovered);

@@ -18,6 +18,8 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 			Full
 		}
 
+		private bool _changedSinceLastFrame = false;
+
 		[SerializeField]
 		private PinchDetector _pinchDetectorA;
 		public PinchDetector PinchDetectorA
@@ -29,6 +31,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 			set
 			{
 				_pinchDetectorA = value;
+				_changedSinceLastFrame = true;
 			}
 		}
 
@@ -43,6 +46,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 			set
 			{
 				_pinchDetectorB = value;
+				_changedSinceLastFrame = true;
 			}
 		}
 
@@ -76,11 +80,13 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 				_showGUI = !_showGUI;
 			}
 
-			bool didUpdate = false;
+			bool didUpdate = _changedSinceLastFrame;
 			if (_pinchDetectorA != null)
 				didUpdate |= _pinchDetectorA.DidChangeFromLastFrame;
 			if (_pinchDetectorB != null)
 				didUpdate |= _pinchDetectorB.DidChangeFromLastFrame;
+
+			_changedSinceLastFrame = false;
 
 			if (didUpdate)
 			{

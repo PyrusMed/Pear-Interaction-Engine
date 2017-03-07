@@ -16,45 +16,39 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 		[Tooltip("Method used to rotate with two hands")]
 		public LeapRTSMoveHelper.RotationMethod TwoHandedRotationMethod;
 
-		// LeapRTS is what actually moves the object. We need to update it to make
-		// sure it's in the correct state
-		private LeapRTSMoveHelper _rts;
-
-		void Start()
-		{
-			_rts = transform.GetOrAddComponent<LeapRTSMoveHelper>();
-			_rts.OneHandedRotationMethod = OneHandedRotationMethod;
-			_rts.TwoHandedRotationMethod = TwoHandedRotationMethod;
-		}
+		// Change handlers map. Allows us to keep properties in context of thier change handlers
+		private Dictionary<GameObjectProperty<IHandModel>, Property<IHandModel>.OnPropertyChangeEventHandler> _changeHandlers =
+			new Dictionary<GameObjectProperty<IHandModel>, Property<IHandModel>.OnPropertyChangeEventHandler>();
 
 		public void RegisterProperty(GameObjectProperty<IHandModel> property)
 		{
-			property.ChangeEvent += GrabChanged;
+			// LeapRTSMoveHelper is what actually moves the object. We need to update it to make
+			// sure it's in the correct state
+			LeapRTSMoveHelper rtsHelper = property.Owner.transform.GetOrAddComponent<LeapRTSMoveHelper>();
+			rtsHelper.OneHandedRotationMethod = OneHandedRotationMethod;
+			rtsHelper.TwoHandedRotationMethod = TwoHandedRotationMethod;
+
+			Property<IHandModel>.OnPropertyChangeEventHandler onChanged = (oldHandValue, newHandValue) =>
+			{
+				// LeapRTS uses the PinchDetector to track movement
+				PinchDetector detector = null;
+				if (newHandValue != null)
+					detector = newHandValue.gameObject.GetComponentInChildren<PinchDetector>();
+
+				bool isLeftHand = (newHandValue ?? oldHandValue).GetLeapHand().IsLeft;
+				if (isLeftHand)
+					rtsHelper.PinchDetectorA = detector;
+				else
+					rtsHelper.PinchDetectorB = detector;
+			};
+
+			_changeHandlers[property] = onChanged;
+			property.ChangeEvent += onChanged;
 		}
 
 		public void UnregisterProperty(GameObjectProperty<IHandModel> property)
 		{
-			property.ChangeEvent -= GrabChanged;
-		}
-
-		/// <summary>
-		/// Called when the hand starts or ends grabbing.
-		/// Updates the LeapRTS object, which implements movement
-		/// </summary>
-		/// <param name="oldHandValue">old value</param>
-		/// <param name="newHandValue">new value</param>
-		private void GrabChanged(IHandModel oldHandValue, IHandModel newHandValue)
-		{
-			// LeapRTS uses the PinchDetector to track movement
-			PinchDetector detector = null;
-			if(newHandValue != null)
-				detector = newHandValue.gameObject.GetComponentInChildren<PinchDetector>();
-
-			bool isLeftHand = (newHandValue ?? oldHandValue).GetLeapHand().IsLeft;
-			if (isLeftHand)
-				_rts.PinchDetectorA = detector;
-			else
-				_rts.PinchDetectorB = detector;
+			property.ChangeEvent -= _changeHandlers[property];
 		}
 	}
 }
