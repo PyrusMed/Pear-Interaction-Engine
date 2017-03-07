@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Pear.InteractionEngine.Controllers
 {
+	[RequireComponent(typeof(IHandModel))]
 	public class LeapMotionController : Controller
 	{
 		[Tooltip("The hand that effects physics in the world")]
@@ -16,22 +17,18 @@ namespace Pear.InteractionEngine.Controllers
 		/// NOTE:
 		///		Each hand will have its own leap motion controller object
 		/// </summary>
-		public HandModel Hand
+		private IHandModel _hand;
+		public IHandModel Hand
 		{
-			get;
-			private set;
-		}
-
-		void Awake()
-		{
-			InUse = true;
+			get
+			{
+				return _hand ?? (_hand = GetComponent<IHandModel>());
+			}
 		}
 
 		// Hook up events
 		void Start()
 		{
-			Hand = GetComponent<HandModel>();
-
 			// When either controller is enabled activate it in the hierarchy
 			OnStartUsing.AddListener((c) => SetActiveFromEnabledDisabled(true));
 

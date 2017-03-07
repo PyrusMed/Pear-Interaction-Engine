@@ -13,7 +13,7 @@ namespace Pear.InteractionEngine.Interactions.Events
 	/// <summary>
 	/// Detects when the leap hand starts grabbing an object and lets the object know
 	/// </summary>
-	public class HandGrab : ControllerBehavior<LeapMotionController>, IGameObjectPropertyEvent<HandModel>
+	public class HandGrab : ControllerBehavior<LeapMotionController>, IGameObjectPropertyEvent<IHandModel>
 	{
 		// Detects whether the hand is pinching
 		private PinchDetector _pinchDetector;
@@ -22,7 +22,7 @@ namespace Pear.InteractionEngine.Interactions.Events
 		private GameObject _lastHovered;
 
 		// Registered proeprties
-		private List<GameObjectProperty<HandModel>> _properties;
+		private List<GameObjectProperty<IHandModel>> _properties = new List<GameObjectProperty<IHandModel>>();
 
 		// Use this for initialization
 		void Start()
@@ -55,12 +55,12 @@ namespace Pear.InteractionEngine.Interactions.Events
 			}
 		}
 
-		public void RegisterProperty(GameObjectProperty<HandModel> property)
+		public void RegisterProperty(GameObjectProperty<IHandModel> property)
 		{
 			_properties.Add(property);
 		}
 
-		public void UnregisterProperty(GameObjectProperty<HandModel> property)
+		public void UnregisterProperty(GameObjectProperty<IHandModel> property)
 		{
 			_properties.Remove(property);
 		}

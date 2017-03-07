@@ -8,7 +8,7 @@ using Pear.InteractionEngine.Utils;
 
 namespace Pear.InteractionEngine.Interactions.EventHandlers
 {
-	public class LeapRTSMove : MonoBehaviour, IGameObjectPropertyEventHandler<HandModel>
+	public class LeapRTSMove : MonoBehaviour, IGameObjectPropertyEventHandler<IHandModel>
 	{
 		[Tooltip("Method used to rotate with one hand")]
 		public LeapRTSMoveHelper.RotationMethod OneHandedRotationMethod;
@@ -27,12 +27,12 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 			_rts.TwoHandedRotationMethod = TwoHandedRotationMethod;
 		}
 
-		public void RegisterProperty(GameObjectProperty<HandModel> property)
+		public void RegisterProperty(GameObjectProperty<IHandModel> property)
 		{
 			property.ChangeEvent += GrabChanged;
 		}
 
-		public void UnregisterProperty(GameObjectProperty<HandModel> property)
+		public void UnregisterProperty(GameObjectProperty<IHandModel> property)
 		{
 			property.ChangeEvent -= GrabChanged;
 		}
@@ -43,7 +43,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 		/// </summary>
 		/// <param name="oldHandValue">old value</param>
 		/// <param name="newHandValue">new value</param>
-		private void GrabChanged(HandModel oldHandValue, HandModel newHandValue)
+		private void GrabChanged(IHandModel oldHandValue, IHandModel newHandValue)
 		{
 			// LeapRTS uses the PinchDetector to track movement
 			PinchDetector detector = null;
