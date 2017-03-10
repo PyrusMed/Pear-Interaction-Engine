@@ -231,7 +231,9 @@ TextMesh:
   m_GameObject: {fileID: 175579832}
   m_Text: 'Put your hand close to an object to hover over it.
 
-    Grab an object to pick it up.'
+    Grab an object to pick it up.
+
+    Grab with both hands to resize.'
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
