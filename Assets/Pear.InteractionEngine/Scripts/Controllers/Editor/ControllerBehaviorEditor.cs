@@ -13,7 +13,7 @@ namespace Pear.InteractionEngine.Controllers {
 
 		void OnEnable()
 		{
-			_controller = serializedObject.FindProperty("Controller");
+			_controller = serializedObject.FindProperty("_controller");
 		}
 
 		/// <summary>
@@ -29,11 +29,16 @@ namespace Pear.InteractionEngine.Controllers {
 			{
 				// Get the type of controller by examing the templated argument
 				// pased to the controller behavior
-				Type typeOfController = target.GetType().BaseType.GetGenericArguments()[0];
+				Type typeOfController = ReflectionHelpers.GetGenericArgumentTypes(target.GetType(), typeof(IControllerBehavior<>))[0];
 
-				// Check to see if this component is on the same gameobject as the Controller component.
-				// If so, set this property by default.
-				_controller.objectReferenceValue = ((Component)target).GetComponent(typeOfController);
+				// Check to see if this component has a parent controller.
+				Transform parent = ((Component)target).transform.parent;
+				while(_controller.objectReferenceValue == null && parent != null)
+				{
+					_controller.objectReferenceValue = parent.GetComponent(typeOfController);
+					if (_controller.objectReferenceValue == null)
+						parent = parent.parent;
+				}
 			}
 
 			serializedObject.ApplyModifiedProperties();
