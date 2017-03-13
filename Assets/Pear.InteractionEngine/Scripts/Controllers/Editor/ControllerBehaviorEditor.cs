@@ -31,13 +31,13 @@ namespace Pear.InteractionEngine.Controllers {
 				// pased to the controller behavior
 				Type typeOfController = ReflectionHelpers.GetGenericArgumentTypes(target.GetType(), typeof(IControllerBehavior<>))[0];
 
-				// Check to see if this component has a parent controller.
-				Transform parent = ((Component)target).transform.parent;
-				while(_controller.objectReferenceValue == null && parent != null)
+				// Check to see if this component has a controller on the same gameobject or one of its parents.
+				Transform objTpCheck = ((Component)target).transform;
+				while(_controller.objectReferenceValue == null && objTpCheck != null)
 				{
-					_controller.objectReferenceValue = parent.GetComponent(typeOfController);
+					_controller.objectReferenceValue = objTpCheck.GetComponent(typeOfController);
 					if (_controller.objectReferenceValue == null)
-						parent = parent.parent;
+						objTpCheck = objTpCheck.parent;
 				}
 			}
 
