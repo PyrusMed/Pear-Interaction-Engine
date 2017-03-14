@@ -1,4 +1,5 @@
-﻿using Pear.InteractionEngine.Properties;
+﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
 using System;
 using UnityEngine;
@@ -18,6 +19,10 @@ namespace Pear.InteractionEngine.Interactions
 		// Script that modifies a property
 		[SerializeField]
 		private MonoBehaviour Event;
+
+		// Script that modifies a property
+		[SerializeField]
+		private Controller EventController;
 
 		// Reacts to the event's modifications
 		[SerializeField]
@@ -47,7 +52,7 @@ namespace Pear.InteractionEngine.Interactions
 			Type proeprtyType = Type.GetType(PropertyType);
 			Type interactionHelperType = typeof(InteractionHelper<>);
 			Type instantiableInteractionHelperType = interactionHelperType.MakeGenericType(proeprtyType);
-			_interactionHelper = (IInteractionHelper)Activator.CreateInstance(instantiableInteractionHelperType, Event, EventHandler, gameObject);
+			_interactionHelper = (IInteractionHelper)Activator.CreateInstance(instantiableInteractionHelperType, Event, EventHandler, gameObject, EventController);
 
 			// Create a new property and register it with Event and EventHandler
 			_interactionHelper.RegisterProperty();
@@ -112,11 +117,11 @@ namespace Pear.InteractionEngine.Interactions
 		// Tracks whether the property is registered
 		private bool _registered = false;
 
-		public InteractionHelper(IGameObjectPropertyEvent<T> ev, IGameObjectPropertyEventHandler<T> evHandler, GameObject go)
+		public InteractionHelper(IGameObjectPropertyEvent<T> ev, IGameObjectPropertyEventHandler<T> evHandler, GameObject go, Controller eventController)
 		{
 			_event = ev;
 			_eventHandler = evHandler;
-			_property = new GameObjectProperty<T>(go);
+			_property = new GameObjectProperty<T>(go, eventController);
 		}
 
 		/// <summary>
