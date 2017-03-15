@@ -8,6 +8,9 @@ namespace Pear.InteractionEngine.Controllers
     /// </summary>
     public class ControllerManager : Singleton<ControllerManager>
     {
+		// Event for when a controller is added
+		public delegate void ControllerAddedHandler(Controller controller);
+		public event ControllerAddedHandler ControllerAddedEvent;
 
         // List of all loaded controllers
         private List<Controller> _controllers = new List<Controller>();
@@ -27,6 +30,10 @@ namespace Pear.InteractionEngine.Controllers
         public void RegisterController(Controller controller)
         {
             _controllers.Add(controller);
-        }
+
+			// Let listeners know
+			if (ControllerAddedEvent != null)
+				ControllerAddedEvent(controller);
+		}
     }
 }
