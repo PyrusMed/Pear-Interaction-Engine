@@ -74,7 +74,7 @@ Download our latest package from the [releases](https://github.com/PearMed/Pear-
 If you like PIE, want to make it better, or just want to work on something cool, help us out! We think user interactions are extremely important, so we'd love to work with others to improve how we all design, develop and use interactions in VR, MR and everywhere else. Fork this repo to get started!
 
 ## Who is using PIE?
-- [Bosc](http://www.pearmedical.com/bosc.html)
+- [Pear Med](http://www.pearmedical.com)
 
 Hopefully this list will continue to grow ;)
 
