@@ -145,6 +145,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1216614183040140
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4527618271450562}
+  - component: {fileID: 114784267879661266}
+  m_Layer: 0
+  m_Name: ProximityDetector_L
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1227799843534124
 GameObject:
   m_ObjectHideFlags: 1
@@ -912,6 +928,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1977622671468626
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4044560556210906}
+  - component: {fileID: 114686634221507214}
+  m_Layer: 0
+  m_Name: ProximityDetector_R
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1988533605636218
 GameObject:
   m_ObjectHideFlags: 0
@@ -956,6 +988,19 @@ Transform:
   m_Father: {fileID: 4946883987844640}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -8.5307, y: -7.0464997, z: 168.4281}
+--- !u!4 &4044560556210906
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1977622671468626}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4603427285556330}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4130739386224850
 Transform:
   m_ObjectHideFlags: 1
@@ -1110,6 +1155,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4452113970900190}
+  - {fileID: 4527618271450562}
   m_Father: {fileID: 4884070625848820}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -89.980194, y: 180, z: 0}
@@ -1261,6 +1307,19 @@ Transform:
   m_Father: {fileID: 4946883987844640}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -8.5307, y: -7.0464997, z: 168.4281}
+--- !u!4 &4527618271450562
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1216614183040140}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4381899680868414}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4543121764235604
 Transform:
   m_ObjectHideFlags: 1
@@ -1317,6 +1376,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4778661188204150}
+  - {fileID: 4044560556210906}
   m_Father: {fileID: 4884070625848820}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -89.980194, y: 180, z: 0}
@@ -2378,7 +2438,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 610a93ebd42328648afc239f0feccb9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 114620076099478012}
+  _controller: {fileID: 114620076099478012}
 --- !u!114 &114118736670964924
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2551,7 +2611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e590dba34b84174cb3635705ce294f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 114256592199612022}
+  _controller: {fileID: 114256592199612022}
 --- !u!114 &114407176111790274
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2563,7 +2623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e590dba34b84174cb3635705ce294f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 114620076099478012}
+  _controller: {fileID: 114620076099478012}
 --- !u!114 &114447812081978162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2784,6 +2844,42 @@ MonoBehaviour:
   ShowGizmos: 1
   ActivateDistance: 0.03
   DeactivateDistance: 0.04
+--- !u!114 &114686634221507214
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1977622671468626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 251ea3343c15b4000a02573c7aad5a0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnProximity:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Leap.Unity.ProximityEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  Period: 0.1
+  TargetObjects: []
+  TagName: 
+  UseLayersNotList: 1
+  Layer:
+    serializedVersion: 2
+    m_Bits: 256
+  OnDistance: 0.01
+  OffDistance: 0.015
+  ShowGizmos: 1
 --- !u!114 &114726788494233420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2911,6 +3007,42 @@ MonoBehaviour:
   _eyeType:
     _orderType: 3
   _overrideEyePosition: 0
+--- !u!114 &114784267879661266
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1216614183040140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 251ea3343c15b4000a02573c7aad5a0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  OnProximity:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: Leap.Unity.ProximityEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  Period: 0.1
+  TargetObjects: []
+  TagName: 
+  UseLayersNotList: 1
+  Layer:
+    serializedVersion: 2
+    m_Bits: 256
+  OnDistance: 0.01
+  OffDistance: 0.015
+  ShowGizmos: 1
 --- !u!114 &114841249047779184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2922,7 +3054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 610a93ebd42328648afc239f0feccb9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Controller: {fileID: 114256592199612022}
+  _controller: {fileID: 114256592199612022}
 --- !u!114 &114860982512488062
 MonoBehaviour:
   m_ObjectHideFlags: 1
