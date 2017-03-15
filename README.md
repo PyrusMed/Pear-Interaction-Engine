@@ -13,19 +13,6 @@ PIE was made to give designers and developers an easier way to create, share and
 ## Why PIE?
 Interactions are a core component of every user facing software application, yet there are very few pattern guidelines, best practices and tools that can be used to design and develop interactions in virtual (VR) and mixed reality (MR). We've explored interactions using cheap headsets, expensive headsets, hand controllers, full body motion capture suits, and just about everything in between. In the process, we created PIE, a set of tools we've used for both rapid prototyping and production quality products. We're happy to share these tools and welcome all contributions as we look forward to the next generation of human-computer interactions.
 
-## Getting Started with PIE
-
-### Clone and Run A Branch
-1. Clone one of our several branches
-2. Open one of the example scenes in Assets/Pear.InteractionEngine */Examples/...
-3. Run!
-
-### Import PIE Into Your Own Project
-Download our latest package from the [releases](https://github.com/PearMed/Pear-Interaction-Engine/releases) section and import it into your Unity project
-  - The "Pear.InteractionEngine" package has no external requirements
-  - The "Pear.InteractionEngine TouchMotion" package requires "Pear.InteractionEngine" and the Leap Motion and Oculus Touch Unity modules
-  - The "Pear.InteractionEngine HoloLens" package requires "Pear.InteractionEngine" and the HoloToolkit Unity module
-
 ## PIE Architecture
 PIE consists of modular components that can be swapped in and out. These components revolve around the `Controller`, `ControllerBehavior` and `Interaction` classes.
 - `Controller`s represent user input devices
@@ -52,6 +39,19 @@ We can even link a single fade action to multiple `Interaction`s to keep things 
 Oh, one more really cool thing. `ControllerBehavior`s and `Interaction`s can be mixed and matched. Using our baby analogy, once a child learns how to grab a mug it will quickly apply its grab logic to other objects, like things it shouldn't put in its mouth :/. PIE was designed similarly, but much more safe. Once we develop a `ControllerBehavior` we can use it to create countless interactions. For example, We've created a `ControllerBehavior` for grabbing with the Leap Motion hand, so that `ControllerBehavior` can be used to pick up any object, whether it's a cube, a mug, or anything else. It can also be used to open a door, or flip on a light switch...the possibilities are endless since we can link the grab logic to any `Intraction`.
 
 If you couldn't tell, we're pretty excited about this :).
+
+## Getting Started with PIE
+
+### Clone and Run A Branch
+1. Clone one of our several branches
+2. Open one of the example scenes in Assets/Pear.InteractionEngine */Examples/...
+3. Run!
+
+### Import PIE Into Your Own Project
+Download our latest package from the [releases](https://github.com/PearMed/Pear-Interaction-Engine/releases) section and import it into your Unity project
+  - The "Pear.InteractionEngine" package has no external requirements
+  - The "Pear.InteractionEngine TouchMotion" package requires "Pear.InteractionEngine" and the Leap Motion and Oculus Touch Unity modules
+  - The "Pear.InteractionEngine HoloLens" package requires "Pear.InteractionEngine" and the HoloToolkit Unity module
 
 ## Contributing
 If you like PIE, want to make it better, or just want to work on something cool, help us out! We think user interactions are extremely important, so we'd love to work with others to improve how we all design, develop and use interactions in VR, MR and everywhere else. Fork this repo to get started!
