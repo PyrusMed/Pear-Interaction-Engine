@@ -49,9 +49,26 @@ If you couldn't tell, we're pretty excited about this :).
 
 ### Import PIE Into Your Own Project
 Download our latest package from the [releases](https://github.com/PearMed/Pear-Interaction-Engine/releases) section and import it into your Unity project
-  - The "Pear.InteractionEngine" package has no external requirements
-  - The "Pear.InteractionEngine TouchMotion" package requires "Pear.InteractionEngine" and the Leap Motion and Oculus Touch Unity modules
-  - The "Pear.InteractionEngine HoloLens" package requires "Pear.InteractionEngine" and the HoloToolkit Unity module
+* The "Pear.InteractionEngine" package has no external requirements
+* The "Pear.InteractionEngine HoloLens" package requires
+  * [Pear.InteractionEngine](https://github.com/PearMed/Pear-Interaction-Engine/releases)
+  * [HoloToolkit](https://github.com/Microsoft/HoloToolkit-Unity/blob/master/GettingStarted.md)
+* The "Pear.InteractionEngine Leap Motion" package requires
+  * [Pear.InteractionEngine](https://github.com/PearMed/Pear-Interaction-Engine/releases)
+  * [Leap Motion Core Assets](https://developer.leapmotion.com/unity#100)
+  * [Leap Motion Detection Module](https://developer.leapmotion.com/unity#100)
+* The "Pear.InteractionEngine OculusTouch" package requires
+  * [Pear.InteractionEngine](https://github.com/PearMed/Pear-Interaction-Engine/releases)
+  * [Oculus Utilities for Unity 5](https://developer.oculus.com/downloads/unity/)
+  * [Oculus Avatar SDK](https://developer.oculus.com/downloads/unity/)
+* The "Pear.InteractionEngine TouchMotion" package requires
+  * [Pear.InteractionEngine](https://github.com/PearMed/Pear-Interaction-Engine/releases)
+  * [Pear.InteractionEngine LeapMotion](https://github.com/PearMed/Pear-Interaction-Engine/releases)
+  * [Pear.InteractionEngine OculusTouch](https://github.com/PearMed/Pear-Interaction-Engine/releases)
+  * [Leap Motion Core Assets](https://developer.leapmotion.com/unity#100)
+  * [Leap Motion Detection Module](https://developer.leapmotion.com/unity#100)
+  * [Oculus Utilities for Unity 5](https://developer.oculus.com/downloads/unity/)
+  * [Oculus Avatar SDK](https://developer.oculus.com/downloads/unity/)
 
 ## Contributing
 If you like PIE, want to make it better, or just want to work on something cool, help us out! We think user interactions are extremely important, so we'd love to work with others to improve how we all design, develop and use interactions in VR, MR and everywhere else. Fork this repo to get started!
