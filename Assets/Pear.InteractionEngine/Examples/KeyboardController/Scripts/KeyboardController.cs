@@ -4,7 +4,7 @@ namespace Pear.InteractionEngine.Examples
 {
 	public class KeyboardController : Controller
 	{
-		void Start()
+		public override void Start()
 		{
 			SelectWithKeyboard keyboardSelection = GetComponent<SelectWithKeyboard>();
 			keyboardSelection.SelectedEvent += selectedObject => ActiveObject = selectedObject;

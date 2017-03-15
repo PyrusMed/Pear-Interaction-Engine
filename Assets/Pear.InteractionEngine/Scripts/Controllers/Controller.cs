@@ -15,22 +15,36 @@ namespace Pear.InteractionEngine.Controllers
         /// </summary>
         public ControllerLocation Location;
 
-        /// <summary>
-        /// Event fired when this controller is in use
-        /// </summary>
-        [HideInInspector]
-        public ControllerEvent OnStartUsing = new ControllerEvent();
+		/// <summary>
+		/// Event handling for when the controller's InUse state changes
+		/// </summary>
+		public delegate void InUseChangedHandler(bool inUse);
+		public event InUseChangedHandler InUseChangedEvent;
 
-        /// <summary>
-        /// Event fired when this controller is not in use
-        /// </summary>
-        [HideInInspector]
-        public ControllerEvent OnStopUsing = new ControllerEvent();
+		// Event handling for when the active object changes
+		public delegate void ActiveObjectChangedHandler(GameObject oldActiveObject, GameObject newActiveObject);
+		public event ActiveObjectChangedHandler ActiveObjectChangedEvent;
 
-        /// <summary>
-        /// This controllers active object
-        /// </summary>
-        public GameObject ActiveObject;
+		/// <summary>
+		/// This controllers active object
+		/// </summary>
+		[SerializeField]
+		private GameObject _activeObject;
+		public GameObject ActiveObject
+		{
+			get { return _activeObject; }
+			set
+			{
+				// If the active object changes, update it and fire the event handler
+				if(_activeObject != value)
+				{
+					GameObject oldActiveObject = _activeObject;
+					_activeObject = value;
+					if (ActiveObjectChangedEvent != null)
+						ActiveObjectChangedEvent(oldActiveObject, _activeObject);
+				}
+			}
+		}
 
         /// <summary>
         /// Tracks the in use state of this controller
@@ -41,20 +55,22 @@ namespace Pear.InteractionEngine.Controllers
             get { return _inUse; }
             set
             {
-                bool wasInUse = _inUse;
-                _inUse = value;
+				if (_inUse != value) {
+					_inUse = value;
 
-                if (!wasInUse && _inUse)
-                    OnStartUsing.Invoke(this);
-                else if (wasInUse && !_inUse)
-                    OnStopUsing.Invoke(this);
+					// Fire the change event
+					if (InUseChangedEvent != null)
+						InUseChangedEvent(_inUse);
+				}
             }
         }
 
         /// <summary>
-        /// Registers this controller when the component awakes
+        /// Registers this controller when the component starts
+		/// Note:
+		///		We do this on start so handlers can setup in their Awake functions
         /// </summary>
-        void Awake()
+        public virtual void Start()
         {
             ControllerManager.Instance.RegisterController(this);
         }
