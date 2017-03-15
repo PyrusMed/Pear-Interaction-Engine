@@ -472,6 +472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863755}
+  EventController: {fileID: 1153924391}
   EventHandler: {fileID: 1485151895}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!23 &1148183637
@@ -536,6 +537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863755}
+  EventController: {fileID: 1153924391}
   EventHandler: {fileID: 499387280}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1148183641
@@ -550,6 +552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939143}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 1485151895}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1148183642
@@ -564,6 +567,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939143}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 499387280}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1148183643
@@ -578,6 +582,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863756}
+  EventController: {fileID: 1153924391}
   EventHandler: {fileID: 1475026292}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -593,6 +598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863756}
+  EventController: {fileID: 1153924391}
   EventHandler: {fileID: 499387277}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -608,6 +614,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939144}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 1475026292}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -623,9 +630,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939144}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 499387277}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
+--- !u!114 &1153924391 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114620076099478012, guid: 7d28c4df0b61bc1409db1feb97b37d3e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1924262872}
+  m_Script: {fileID: 11500000, guid: 589bc8b1f5f837d4b941f5f469195f24, type: 3}
 --- !u!1001 &1198751615
 Prefab:
   m_ObjectHideFlags: 0
@@ -845,6 +859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863755}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 1485151895}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!23 &1743919817
@@ -909,6 +924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863755}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 499387280}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1743919821
@@ -923,6 +939,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939143}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 1485151895}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1743919822
@@ -937,6 +954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939143}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 499387280}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1743919823
@@ -951,6 +969,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863756}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 1475026292}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -966,6 +985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863756}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 499387277}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -981,6 +1001,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939144}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 1475026292}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -996,6 +1017,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939144}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 499387277}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -1636,6 +1658,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863755}
+  EventController: {fileID: 1153924391}
   EventHandler: {fileID: 1485151895}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!23 &1929522312
@@ -1700,6 +1723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863755}
+  EventController: {fileID: 1153924391}
   EventHandler: {fileID: 499387280}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1929522316
@@ -1714,6 +1738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939143}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 1485151895}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1929522317
@@ -1728,6 +1753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939143}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 499387280}
   PropertyType: System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
 --- !u!114 &1929522318
@@ -1742,6 +1768,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863756}
+  EventController: {fileID: 1153924391}
   EventHandler: {fileID: 1475026292}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -1757,6 +1784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1759863756}
+  EventController: {fileID: 1153924391}
   EventHandler: {fileID: 499387277}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -1772,6 +1800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939144}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 1475026292}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
@@ -1787,6 +1816,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Event: {fileID: 1781939144}
+  EventController: {fileID: 0}
   EventHandler: {fileID: 499387277}
   PropertyType: Leap.Unity.IHandModel, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
     PublicKeyToken=null
