@@ -1,4 +1,5 @@
-﻿using Pear.InteractionEngine.Properties;
+﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,9 @@ namespace Pear.InteractionEngine.Interactions
 		// Serialized event
 		private SerializedProperty _event;
 
+		// Serialized event controller
+		private SerializedProperty _eventController;
+
 		// Serialized event handler
 		private SerializedProperty _eventHandler;
 
@@ -35,12 +39,29 @@ namespace Pear.InteractionEngine.Interactions
 		void OnEnable()
 		{
 			_event = serializedObject.FindProperty("Event");
+			_eventController = serializedObject.FindProperty("EventController");
 			_eventHandler = serializedObject.FindProperty("EventHandler");
             _propertyType = serializedObject.FindProperty("PropertyType");
 
-            // Get all of the events in the scene
-            // Events are scripts that implement IGameObjectPropertyEvent
-            _events = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyEvent<>)));
+			// Get all of the events in the scene
+			// Events are scripts that implement IGameObjectPropertyEvent
+			// and have a Controller (implement IControllerBehavior)
+			{
+				List<Type> eventTypes = ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyEvent<>));
+
+				// Filter out types that do  not implement IControllerBehavior<T>
+				// and warn the user when a type does not implement that interface
+				Type iControllerBehavior = typeof(IControllerBehavior<>);
+				IEnumerable<Type> eventsThatImplementIControllerBehavior = eventTypes.Where(eventType => {
+					bool implementsIControllerBehavior = ReflectionHelpers.GetInterfaceImplementationType(eventType, iControllerBehavior) != null;
+					if (!implementsIControllerBehavior)
+						Debug.LogError(string.Format("{0} does not implement {1}. Consider inheriting from ControllerBehavior<T>", eventType, iControllerBehavior));
+					return implementsIControllerBehavior;
+				});
+
+				_events = GetTypesInScene(eventsThatImplementIControllerBehavior);
+			}
+            
 
 			// Get all of the event handlers in the scene
 			// Event handlers are scripts that implement IGameObjectPropertyEventHandler
@@ -99,9 +120,13 @@ namespace Pear.InteractionEngine.Interactions
                 {
                     _event.objectReferenceValue = _events[selectedIndex - 1];
 
+					// Save the property's type
                     Type propertyType = ReflectionHelpers.GetGenericArgumentTypes(_event.objectReferenceValue.GetType(), typeof(IGameObjectPropertyEvent<>))[0];
                     _propertyType.stringValue = propertyType.AssemblyQualifiedName;
-                }
+
+					// Save a reference to the event's controller
+					_eventController.objectReferenceValue = (Controller)_event.objectReferenceValue.GetType().GetProperty("Controller").GetValue(_event.objectReferenceValue, null);
+				}
 
 				// If the event changed make sure we reset the event handler
 				if (lastEvent != _event.objectReferenceValue)
@@ -153,7 +178,7 @@ namespace Pear.InteractionEngine.Interactions
 		/// </summary>
 		/// <param name="types">types to search for</param>
 		/// <returns>List of scripts that are of the given types</returns>
-		private List<MonoBehaviour> GetTypesInScene(List<Type> types)
+		private List<MonoBehaviour> GetTypesInScene(IEnumerable<Type> types)
 		{
 			// Make sure the scripts are not abstract base classes, and make sure they implement MonoBehavior,
 			// or in other words, make sure they are scripts that can be in the scene so we don't crash Unity
@@ -189,7 +214,15 @@ namespace Pear.InteractionEngine.Interactions
 		/// <returns></returns>
 		private string GetNameForDropdown(MonoBehaviour mono)
 		{
-			return string.Format("{0} ({1})", ObjectNames.NicifyVariableName(mono.GetType().Name), mono.name);
+			string hierarchy = mono.name;
+			Transform parent = mono.transform.parent;
+			while(parent != null)
+			{
+				hierarchy += " -> " + parent.name;
+				parent = parent.parent;
+			}
+
+			return string.Format("{0} | {1}", ObjectNames.NicifyVariableName(mono.GetType().Name), hierarchy);
 		}
 	}
 }
