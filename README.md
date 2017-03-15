@@ -1,4 +1,4 @@
-# Pear Interaction Engine (PIE)
+![pear interaction engine](https://cloud.githubusercontent.com/assets/2764891/23945931/a249de04-0935-11e7-9390-f0ea3d58846c.png)
 
 ## What is PIE?
 PIE was made to give designers and developers an easier way to create, share and modify user interactions. At its core, PIE is a set of cross-device platform independent Unity components that make creating intuitive interactions easier. PIE currently supports mouse and keyboard, Leap Motion, Oculus Touch, and HoloLens gestures, with more interaction support coming soon. Use PIE if you want a quick way to give your users intuitive interactions in VR, AR, on the desktop and on mobile. Contribute to PIE if you want to make interactions better for all developers, designers, and end users. We hope you find this useful!
