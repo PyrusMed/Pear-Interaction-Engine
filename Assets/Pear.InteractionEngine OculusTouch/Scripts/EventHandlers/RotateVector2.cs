@@ -23,10 +23,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 		{
 			_properties.ForEach(p =>
 			{
-				p.Owner.transform.GetOrAddComponent<ObjectWithAnchor>()
-					.AnchorElement
-					.transform
-					.Rotate(new Vector3(p.Value.y, -p.Value.x, 0) * RotateSpeed * Time.deltaTime, Space.World);
+				p.Owner.transform.Rotate(new Vector3(p.Value.y, -p.Value.x, 0) * RotateSpeed * Time.deltaTime, Space.World);
 			});
 		}
 

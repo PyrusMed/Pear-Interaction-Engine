@@ -22,8 +22,10 @@ namespace Pear.InteractionEngine.Controllers
 		/// Specify the controller and get the hand render element
 		/// which we use to tell if the controller is in use or not
 		/// </summary>
-		void Start()
+		public override void Start()
 		{
+			base.Start();
+
 			OVRController = Location == ControllerLocation.LeftHand ? OVRInput.Controller.LTouch : OVRInput.Controller.RTouch;
 
 			GetHandRenderElement();
