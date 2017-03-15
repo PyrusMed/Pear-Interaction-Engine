@@ -27,13 +27,12 @@ namespace Pear.InteractionEngine.Controllers
 		}
 
 		// Hook up events
-		void Start()
+		public override void Start()
 		{
-			// When either controller is enabled activate it in the hierarchy
-			OnStartUsing.AddListener((c) => SetActiveFromEnabledDisabled(true));
+			base.Start();
 
-			// When either controller is disabled deactivate it in the hierarchy
-			OnStopUsing.AddListener((c) => SetActiveFromEnabledDisabled(false));
+			// Enable or disable this controller based on its InUse state
+			InUseChangedEvent += inUse => SetActiveFromEnabledDisabled(inUse);
 		}
 
 		void OnEnable()
