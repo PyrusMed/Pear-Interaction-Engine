@@ -1,276 +1,175 @@
-﻿using Leap.Unity;
-using Pear.InteractionEngine.Interactables;
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 
-namespace Leap.Unity
-{
+namespace Leap.Unity {
 
-	/// <summary>
-	/// Use this component on a Game Object to allow it to be manipulated by a pinch gesture.  The component
-	/// allows rotation, translation, and scale of the object (RTS).
-	/// </summary>
-	public class LeapRTS : MonoBehaviour
-	{
-		public LeapRTSGrabEvent OnGrabChanged;
-		public LeapRTSGrabEvent OnZoomChanged;
+  /// <summary>
+  /// Use this component on a Game Object to allow it to be manipulated by a pinch gesture.  The component
+  /// allows rotation, translation, and scale of the object (RTS).
+  /// </summary>
+  public class LeapRTS : MonoBehaviour {
 
-		private bool _pinchDetectorAddedLastFrame = false;
+    public enum RotationMethod {
+      None,
+      Single,
+      Full
+    }
 
-		public enum RotationMethod
-		{
-			None,
-			Single,
-			Full
-		}
+    [SerializeField]
+    private PinchDetector _pinchDetectorA;
+    public PinchDetector PinchDetectorA {
+      get {
+        return _pinchDetectorA;
+      }
+      set {
+        _pinchDetectorA = value;
+      }
+    }
 
-		private PinchDetector _pinchDetectorA;
-		public PinchDetector PinchDetectorA
-		{
-			get
-			{
-				return _pinchDetectorA;
-			}
-			set
-			{
-				_pinchDetectorA = value;
-				_pinchDetectorAddedLastFrame = true;
-            }
-		}
+    [SerializeField]
+    private PinchDetector _pinchDetectorB;
+    public PinchDetector PinchDetectorB {
+      get {
+        return _pinchDetectorB;
+      }
+      set {
+        _pinchDetectorB = value;
+      }
+    }
 
-		private PinchDetector _pinchDetectorB;
-		public PinchDetector PinchDetectorB
-		{
-			get
-			{
-				return _pinchDetectorB;
-			}
-			set
-			{
-				_pinchDetectorB = value;
-				_pinchDetectorAddedLastFrame = true;
-            }
-		}
+    [SerializeField]
+    private RotationMethod _oneHandedRotationMethod;
 
-		private bool _grabbing = false;
-		public bool Grabbing
-		{
-			get
-			{
-				return _grabbing;
-			}
+    [SerializeField]
+    private RotationMethod _twoHandedRotationMethod;
 
-			set
-			{
-				bool oldGrab = _grabbing;
-				_grabbing = value;
+    [SerializeField]
+    private bool _allowScale = true;
 
-				if(oldGrab != _grabbing)
-					OnGrabChanged.Invoke(this);
-			}
-		}
+    [Header("GUI Options")]
+    [SerializeField]
+    private KeyCode _toggleGuiState = KeyCode.None;
 
-		private bool _zooming = false;
-		public bool Zooming
-		{
-			get
-			{
-				return _zooming;
-			}
+    [SerializeField]
+    private bool _showGUI = true;
 
-			set
-			{
-				bool oldZoom = _zooming;
-				_zooming = value;
+    private Transform _anchor;
 
-				if (oldZoom != _zooming)
-					OnZoomChanged.Invoke(this);
-			}
-		}
+    private float _defaultNearClip;
 
-		[SerializeField]
-		public RotationMethod OneHandedRotationMethod;
+    void Start() {
+//      if (_pinchDetectorA == null || _pinchDetectorB == null) {
+//        Debug.LogWarning("Both Pinch Detectors of the LeapRTS component must be assigned. This component has been disabled.");
+//        enabled = false;
+//      }
 
-		[SerializeField]
-		public RotationMethod TwoHandedRotationMethod;
+      GameObject pinchControl = new GameObject("RTS Anchor");
+      _anchor = pinchControl.transform;
+      _anchor.transform.parent = transform.parent;
+      transform.parent = _anchor;
+    }
 
-		[SerializeField]
-		private bool _allowScale = true;
+    void Update() {
+      if (Input.GetKeyDown(_toggleGuiState)) {
+        _showGUI = !_showGUI;
+      }
 
-		[Header("GUI Options")]
-		[SerializeField]
-		private KeyCode _toggleGuiState = KeyCode.None;
+      bool didUpdate = false;
+      if(_pinchDetectorA != null)
+        didUpdate |= _pinchDetectorA.DidChangeFromLastFrame;
+      if(_pinchDetectorB != null)
+        didUpdate |= _pinchDetectorB.DidChangeFromLastFrame;
 
-		[SerializeField]
-		private bool _showGUI = false;
+      if (didUpdate) {
+        transform.SetParent(null, true);
+      }
 
-		private Transform _anchor;
+      if (_pinchDetectorA != null && _pinchDetectorA.IsActive && 
+          _pinchDetectorB != null &&_pinchDetectorB.IsActive) {
+        transformDoubleAnchor();
+      } else if (_pinchDetectorA != null && _pinchDetectorA.IsActive) {
+        transformSingleAnchor(_pinchDetectorA);
+      } else if (_pinchDetectorB != null && _pinchDetectorB.IsActive) {
+        transformSingleAnchor(_pinchDetectorB);
+      }
 
-		private float _defaultNearClip;
+      if (didUpdate) {
+        transform.SetParent(_anchor, true);
+      }
+    }
 
-		void Awake ()
-		{
-			OnGrabChanged = OnGrabChanged ?? new LeapRTSGrabEvent();
-			OnZoomChanged = OnZoomChanged ?? new LeapRTSGrabEvent();
-		}
+    void OnGUI() {
+      if (_showGUI) {
+        GUILayout.Label("One Handed Settings");
+        doRotationMethodGUI(ref _oneHandedRotationMethod);
+        GUILayout.Label("Two Handed Settings");
+        doRotationMethodGUI(ref _twoHandedRotationMethod);
+        _allowScale = GUILayout.Toggle(_allowScale, "Allow Two Handed Scale");
+      }
+    }
 
-		void Start()
-		{
-			//      if (_pinchDetectorA == null || _pinchDetectorB == null) {
-			//        Debug.LogWarning("Both Pinch Detectors of the LeapRTS component must be assigned. This component has been disabled.");
-			//        enabled = false;
-			//      }
+    private void doRotationMethodGUI(ref RotationMethod rotationMethod) {
+      GUILayout.BeginHorizontal();
 
-			// There should be an anchor with all controllers, not just with LeapRTS
-			_anchor = GetComponent<InteractableObject>().AnchorElement.transform;
-		}
+      GUI.color = rotationMethod == RotationMethod.None ? Color.green : Color.white;
+      if (GUILayout.Button("No Rotation")) {
+        rotationMethod = RotationMethod.None;
+      }
 
-		void Update()
-		{
-			if (Input.GetKeyDown(_toggleGuiState))
-			{
-				_showGUI = !_showGUI;
-			}
+      GUI.color = rotationMethod == RotationMethod.Single ? Color.green : Color.white;
+      if (GUILayout.Button("Single Axis")) {
+        rotationMethod = RotationMethod.Single;
+      }
 
+      GUI.color = rotationMethod == RotationMethod.Full ? Color.green : Color.white;
+      if (GUILayout.Button("Full Rotation")) {
+        rotationMethod = RotationMethod.Full;
+      }
 
-			bool didUpdate = _pinchDetectorAddedLastFrame;
-			if (_pinchDetectorA != null)
-				didUpdate |= _pinchDetectorA.DidChangeFromLastFrame;
-			if (_pinchDetectorB != null)
-				didUpdate |= _pinchDetectorB.DidChangeFromLastFrame;
+      GUI.color = Color.white;
 
-			if (didUpdate)
-			{
-				transform.SetParent(null, true);
-			}
+      GUILayout.EndHorizontal();
+    }
 
-			if (_pinchDetectorA != null && _pinchDetectorA.IsActive &&
-			_pinchDetectorB != null && _pinchDetectorB.IsActive)
-			{
-				transformDoubleAnchor();
-			}
-			else if (_pinchDetectorA != null && _pinchDetectorA.IsActive)
-			{
-				transformSingleAnchor(_pinchDetectorA);
-			}
-			else if (_pinchDetectorB != null && _pinchDetectorB.IsActive)
-			{
-				transformSingleAnchor(_pinchDetectorB);
-			}
+    private void transformDoubleAnchor() {
+      _anchor.position = (_pinchDetectorA.Position + _pinchDetectorB.Position) / 2.0f;
 
-			// Save whether or not one of the hands is grabbing
-			Grabbing = _pinchDetectorA != null && _pinchDetectorA.IsActive ||
-				_pinchDetectorB != null && _pinchDetectorB.IsActive;
+      switch (_twoHandedRotationMethod) {
+        case RotationMethod.None:
+          break;
+        case RotationMethod.Single:
+          Vector3 p = _pinchDetectorA.Position;
+          p.y = _anchor.position.y;
+          _anchor.LookAt(p);
+          break;
+        case RotationMethod.Full:
+          Quaternion pp = Quaternion.Lerp(_pinchDetectorA.Rotation, _pinchDetectorB.Rotation, 0.5f);
+          Vector3 u = pp * Vector3.up;
+          _anchor.LookAt(_pinchDetectorA.Position, u);
+          break;
+      }
 
-			// Save whether or not the hands are zooming
-			Zooming = _pinchDetectorA != null && _pinchDetectorA.IsActive &&
-				_pinchDetectorB != null && _pinchDetectorB.IsActive;
+      if (_allowScale) {
+        _anchor.localScale = Vector3.one * Vector3.Distance(_pinchDetectorA.Position, _pinchDetectorB.Position);
+      }
+    }
 
+    private void transformSingleAnchor(PinchDetector singlePinch) {
+      _anchor.position = singlePinch.Position;
 
-			if (didUpdate)
-			{
-				transform.SetParent(_anchor, true);
-			}
+      switch (_oneHandedRotationMethod) {
+        case RotationMethod.None:
+          break;
+        case RotationMethod.Single:
+          Vector3 p = singlePinch.Rotation * Vector3.right;
+          p.y = _anchor.position.y;
+          _anchor.LookAt(p);
+          break;
+        case RotationMethod.Full:
+          _anchor.rotation = singlePinch.Rotation;
+          break;
+      }
 
-			_pinchDetectorAddedLastFrame = false;
-        }
-
-		void OnGUI()
-		{
-			if (_showGUI)
-			{
-				GUILayout.Label("One Handed Settings");
-				doRotationMethodGUI(ref OneHandedRotationMethod);
-				GUILayout.Label("Two Handed Settings");
-				doRotationMethodGUI(ref TwoHandedRotationMethod);
-				_allowScale = GUILayout.Toggle(_allowScale, "Allow Two Handed Scale");
-			}
-		}
-
-		private void doRotationMethodGUI(ref RotationMethod rotationMethod)
-		{
-			GUILayout.BeginHorizontal();
-
-			GUI.color = rotationMethod == RotationMethod.None ? Color.green : Color.white;
-			if (GUILayout.Button("No Rotation"))
-			{
-				rotationMethod = RotationMethod.None;
-			}
-
-			GUI.color = rotationMethod == RotationMethod.Single ? Color.green : Color.white;
-			if (GUILayout.Button("Single Axis"))
-			{
-				rotationMethod = RotationMethod.Single;
-			}
-
-			GUI.color = rotationMethod == RotationMethod.Full ? Color.green : Color.white;
-			if (GUILayout.Button("Full Rotation"))
-			{
-				rotationMethod = RotationMethod.Full;
-			}
-
-			GUI.color = Color.white;
-
-			GUILayout.EndHorizontal();
-		}
-
-		private void transformDoubleAnchor()
-		{
-			_anchor.position = (_pinchDetectorA.Position + _pinchDetectorB.Position) / 2.0f;
-
-			switch (TwoHandedRotationMethod)
-			{
-				case RotationMethod.None:
-					break;
-				case RotationMethod.Single:
-					Vector3 p = _pinchDetectorA.Position;
-					p.y = _anchor.position.y;
-					_anchor.LookAt(p);
-					break;
-				case RotationMethod.Full:
-					Quaternion pp = Quaternion.Lerp(_pinchDetectorA.Rotation, _pinchDetectorB.Rotation, 0.5f);
-					Vector3 u = pp * Vector3.up;
-					_anchor.LookAt(_pinchDetectorA.Position, u);
-					break;
-			}
-
-			if (_allowScale)
-			{
-				_anchor.localScale = Vector3.one * Vector3.Distance(_pinchDetectorA.Position, _pinchDetectorB.Position);
-			}
-		}
-
-		private void transformSingleAnchor(PinchDetector singlePinch)
-		{
-			_anchor.position = singlePinch.Position;
-
-			switch (OneHandedRotationMethod)
-			{
-				case RotationMethod.None:
-					break;
-				case RotationMethod.Single:
-					Vector3 p = singlePinch.Rotation * Vector3.right;
-					p.y = _anchor.position.y;
-					_anchor.LookAt(p);
-					break;
-				case RotationMethod.Full:
-					_anchor.rotation = singlePinch.Rotation;
-					break;
-			}
-
-			_anchor.localScale = Vector3.one;
-		}
-	}
+      _anchor.localScale = Vector3.one;
+    }
+  }
 }
-
-/**
-   * Called when grab changes
-   */
-[System.Serializable]
-public class LeapRTSGrabEvent : UnityEvent<LeapRTS> { }
-
-/**
-   * Called when zoom changes
-   */
-[System.Serializable]
-public class LeapRTSZoomEvent : UnityEvent<LeapRTS> { }
