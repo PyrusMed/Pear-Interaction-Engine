@@ -20,7 +20,12 @@ namespace Pear.InteractionEngine.Interactions.Events
 
 			// When the hand starts hovering over the object
 			// let the object know
-			proximityDetector.OnProximity.AddListener(hoverObj => _properties.ForEach(p => p.Value = p.Owner == hoverObj));
+			proximityDetector.OnProximity.AddListener(hoverObj => {
+				// Set the controller's active object
+				Controller.ActiveObject = hoverObj;
+
+				_properties.ForEach(p => p.Value = p.Owner == hoverObj);
+			});
 
 			// When the hand stops hovering over the object
 			// let the object know
