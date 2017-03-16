@@ -15,9 +15,9 @@ Interactions are a core component of every user facing software application, yet
 
 ## PIE Architecture
 PIE consists of modular components that can be swapped in and out. These components revolve around the `Controller`, `ControllerBehavior` and `Interaction` classes.
-- `Controller`s represent user input devices
-- `ControllerBehavior`s represent things a controller can do
-- `Interaction`s represent how user input affects objects
+- `Controller` represents a user input device, such as the user's eyes
+- `ControllerBehavior` represents something a controller can do, like gazing at an object
+- `Interaction` represents how input affects objects, such as highlighting an object when its looked at 
 
 ### Example - Fade On Hover (3 steps)
 
