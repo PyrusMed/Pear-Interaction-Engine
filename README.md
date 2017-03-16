@@ -47,7 +47,7 @@ If you couldn't tell, we're pretty excited about this :).
 2. Open one of the example scenes in Assets/Pear.InteractionEngine */Examples/...
 3. Run!
 
-### Import PIE Into Your Own Project
+### Import PIE Into Your Mouth! (I mean...into your Own Project)
 Download our latest package from the [releases](https://github.com/PearMed/Pear-Interaction-Engine/releases) section and import it into your Unity project
 * The "Pear.InteractionEngine" package has no external requirements
 * The "Pear.InteractionEngine HoloLens" package requires
