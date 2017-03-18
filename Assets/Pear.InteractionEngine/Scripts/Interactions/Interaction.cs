@@ -36,17 +36,8 @@ namespace Pear.InteractionEngine.Interactions
 
 		void Start()
 		{
-			if (Event == null || EventHandler == null)
-			{
-				Debug.LogError("Both the Event and EventHandler need to be set.");
+			if (!IsValid())
 				return;
-			}
-
-            if (PropertyType == null)
-            {
-                Debug.LogError("Interaction property type not set.");
-                return;
-            }
 
 			// Instantiate the property typed instance of our helper class so we don't have to use reflection to do everything
 			Type proeprtyType = Type.GetType(PropertyType);
@@ -56,6 +47,44 @@ namespace Pear.InteractionEngine.Interactions
 
 			// Create a new property and register it with Event and EventHandler
 			_interactionHelper.RegisterProperty();
+		}
+
+		/// <summary>
+		/// Copy interaction properties from the given Interaction
+		/// </summary>
+		/// <param name="interactionToUpdate">Interaction to copy properties from</param>
+		public void CopyFrom(Interaction copyFrom)
+		{
+			if (copyFrom == null || !copyFrom.IsValid())
+			{
+				Debug.LogError("Invalid interaction to copy from.");
+				return;
+			}
+
+			Event = copyFrom.Event;
+			EventHandler = copyFrom.EventHandler;
+			PropertyType = copyFrom.PropertyType;
+		}
+
+		/// <summary>
+		/// Tells whether this interaction is valid
+		/// </summary>
+		/// <returns>True if interaction is valid. False otherwise.</returns>
+		private bool IsValid()
+		{
+			if (Event == null || EventHandler == null)
+			{
+				Debug.LogError("Both the Event and EventHandler need to be set.");
+				return false;
+			}
+
+			if (PropertyType == null)
+			{
+				Debug.LogError("Interaction property type not set.");
+				return false;
+			}
+
+			return true;
 		}
 
 		/// <summary>
@@ -84,8 +113,6 @@ namespace Pear.InteractionEngine.Interactions
 			if (_interactionHelper != null)
 				_interactionHelper.UnregisterProperty();
 		}
-
-
 	}
 
 	/// <summary>
