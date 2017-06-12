@@ -50,6 +50,21 @@ namespace Pear.InteractionEngine.Interactions
 		}
 
 		/// <summary>
+		/// Copies all game objects from one object to another
+		/// </summary>
+		/// <param name="copyFrom">Obj to copy from</param>
+		/// <param name="copyTo">Obj to copy to</param>
+		public static void CopyAll(GameObject copyFrom, GameObject copyTo)
+		{
+			// Copy interactions from our placeholder
+			foreach (Interaction interaction in copyFrom.GetComponents<Interaction>())
+			{
+				Interaction newInteraction = copyTo.AddComponent<Interaction>();
+				newInteraction.CopyFrom(interaction);
+			}
+		}
+
+		/// <summary>
 		/// Copy interaction properties from the given Interaction
 		/// </summary>
 		/// <param name="interactionToUpdate">Interaction to copy properties from</param>
