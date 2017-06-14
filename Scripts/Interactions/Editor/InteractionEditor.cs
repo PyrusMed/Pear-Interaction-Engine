@@ -1,5 +1,6 @@
 ﻿using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.Properties;
+using Pear.InteractionEngine.Properties.Converters;
 using Pear.InteractionEngine.Utils;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,9 @@ namespace Pear.InteractionEngine.Interactions
 		// Serialized event
 		private SerializedProperty _event;
 
+		// Serialized value converter
+		private SerializedProperty _valueConverter;
+
 		// Serialized event controller
 		private SerializedProperty _eventController;
 
@@ -28,10 +32,16 @@ namespace Pear.InteractionEngine.Interactions
 		private SerializedProperty _eventHandler;
 
         // Serialized property type
-        private SerializedProperty _propertyType;
+        private SerializedProperty _eventPropertyType;
 
-        // All events in the scene
-        private List<MonoBehaviour> _events;
+		// Serialized property type
+		private SerializedProperty _eventHandlerPropertyType;
+
+		// All events in the scene
+		private List<MonoBehaviour> _events;
+
+		// All converters in the scene
+		private List<MonoBehaviour> _valueConverters;
 
 		// All event handlers in the scene
 		private List<MonoBehaviour> _eventHandlers;
@@ -39,9 +49,11 @@ namespace Pear.InteractionEngine.Interactions
 		void OnEnable()
 		{
 			_event = serializedObject.FindProperty("Event");
+			_valueConverter = serializedObject.FindProperty("ValueConverter");
 			_eventController = serializedObject.FindProperty("EventController");
 			_eventHandler = serializedObject.FindProperty("EventHandler");
-            _propertyType = serializedObject.FindProperty("PropertyType");
+            _eventPropertyType = serializedObject.FindProperty("EventPropertyType");
+			_eventHandlerPropertyType = serializedObject.FindProperty("EventHandlerPropertyType");
 
 			// Get all of the events in the scene
 			// Events are scripts that implement IGameObjectPropertyEvent
@@ -61,7 +73,10 @@ namespace Pear.InteractionEngine.Interactions
 
 				_events = GetTypesInScene(eventsThatImplementIControllerBehavior);
 			}
-            
+
+			// Get all of the value converters in the scene
+			// Value converters are scripts that implement IPropertyConverter<,>
+			_valueConverters = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IPropertyConverter<,>)));
 
 			// Get all of the event handlers in the scene
 			// Event handlers are scripts that implement IGameObjectPropertyEventHandler
@@ -81,8 +96,15 @@ namespace Pear.InteractionEngine.Interactions
 			// If the user has selected an event,
 			// render the event handler dropdown based on
 			// the property type the event modifies 
-			if(_event.objectReferenceValue != null)
+			if (_event.objectReferenceValue != null)
+			{
 				RenderEventHandlerDropdown();
+
+				// If the property types differ there must be a converter
+				// Let the user pick the right one
+				if (_eventHandler.objectReferenceValue != null && _eventHandlerPropertyType.stringValue != _eventPropertyType.stringValue)
+					RenderValueConverterDropdown();
+			}
 
 			// Save any changes that were made
 			serializedObject.ApplyModifiedProperties();
@@ -122,15 +144,20 @@ namespace Pear.InteractionEngine.Interactions
 
 					// Save the property's type
                     Type propertyType = ReflectionHelpers.GetGenericArgumentTypes(_event.objectReferenceValue.GetType(), typeof(IGameObjectPropertyEvent<>))[0];
-                    _propertyType.stringValue = propertyType.AssemblyQualifiedName;
+                    _eventPropertyType.stringValue = propertyType.AssemblyQualifiedName;
 
 					// Save a reference to the event's controller
 					_eventController.objectReferenceValue = (Controller)_event.objectReferenceValue.GetType().GetProperty("Controller").GetValue(_event.objectReferenceValue, null);
 				}
 
-				// If the event changed make sure we reset the event handler
+				// If the event changed make sure we reset the event handler and converter
 				if (lastEvent != _event.objectReferenceValue)
+				{
 					_eventHandler.objectReferenceValue = null;
+					_eventHandlerPropertyType.stringValue = null;
+
+					_valueConverter.objectReferenceValue = null;
+				}
 			}
 			GUILayout.EndHorizontal();
 		}
@@ -145,11 +172,23 @@ namespace Pear.InteractionEngine.Interactions
 				EditorGUILayout.LabelField("EventHandler", GUILayout.Width(100));
 
 				// The selected Event deals with a specific property type (e.g. bool, string, int, etc..).
-				// The associated EventHandler needs to deal with the same type.
-				// Here we filter our list of EventHandlers down to those that deal with the same type as the Event
-				Type templateArgument = ReflectionHelpers.GetGenericArgumentTypes(_event.objectReferenceValue.GetType(), typeof(IGameObjectPropertyEvent<>))[0];
+				// Get that type
+				Type eventPropertyType = ReflectionHelpers.GetGenericArgumentTypes(_event.objectReferenceValue.GetType(), typeof(IGameObjectPropertyEvent<>))[0];
+
+				// Get a list of value converters that can convert the event property
+				List<Type> usableValueConverterTypes = _valueConverters
+					.Where(vc => ReflectionHelpers.GetGenericArgumentTypes(vc.GetType(), typeof(IPropertyConverter<,>))[0] == eventPropertyType)
+					.GroupBy(vc => ReflectionHelpers.GetGenericArgumentTypes(vc.GetType(), typeof(IPropertyConverter<,>))[1])
+					.Select(grp => grp.Key)
+					.ToList();
+
+				// Here we filter our list of EventHandlers down to those that
+				// Can handle the propertiy's value
 				List<MonoBehaviour> eventHandlersInScene = _eventHandlers
-					.Where(eh => ReflectionHelpers.GetGenericArgumentTypes(eh.GetType(), typeof(IGameObjectPropertyEventHandler<>))[0] == templateArgument)
+					.Where(eh => {
+						Type ehPropertyType = ReflectionHelpers.GetGenericArgumentTypes(eh.GetType(), typeof(IGameObjectPropertyEventHandler<>))[0];
+						return ehPropertyType == eventPropertyType || usableValueConverterTypes.Contains(ehPropertyType);
+					})
 					.ToList();
 
 				// Now that we have our list of EventHandlers, create a list of names that we'll use in our dropdown
@@ -168,7 +207,45 @@ namespace Pear.InteractionEngine.Interactions
 
 				// If the user selects an EventHandler (not the help message) save it on our script
 				if (selectedIndex > 0)
-					_eventHandler.objectReferenceValue = eventHandlersInScene[selectedIndex - 1];
+				{
+					MonoBehaviour eventHandler = eventHandlersInScene[selectedIndex - 1];
+					Type eventHandlerPropertyType = ReflectionHelpers.GetGenericArgumentTypes(eventHandler.GetType(), typeof(IGameObjectPropertyEventHandler<>))[0];
+
+					_eventHandler.objectReferenceValue = eventHandler;
+					_eventHandlerPropertyType.stringValue = eventHandlerPropertyType.AssemblyQualifiedName;
+				}
+			}
+			GUILayout.EndHorizontal();
+		}
+
+		/// <summary>
+		/// Show a dropdown of potential converters
+		/// </summary>
+		private void RenderValueConverterDropdown()
+		{
+			GUILayout.BeginHorizontal();
+			{
+				EditorGUILayout.LabelField("Converter", GUILayout.Width(100));
+
+				// Get the list of converters that can convert from the event into another type
+				List<MonoBehaviour> usableValueConverters = _valueConverters
+					.Where(vc => ReflectionHelpers.GetGenericArgumentTypes(vc.GetType(), typeof(IPropertyConverter<,>))[0].AssemblyQualifiedName == _eventPropertyType.stringValue)
+					.ToList();
+
+				// Get a list of usable converter names
+				List<string> usableValueConverterNames = usableValueConverters
+				.Select(converter => GetNameForDropdown(converter))
+				.ToList();
+
+				// If a converter is already selected choose that
+				int converterDropdownStartIndex = 0;
+				if (_valueConverter.objectReferenceValue != null)
+					converterDropdownStartIndex = usableValueConverters.IndexOf((MonoBehaviour)_valueConverter.objectReferenceValue);
+
+				// Show the dropdown and get the index the user selects
+				int converterDropdownSelectedIndex = EditorGUILayout.Popup(converterDropdownStartIndex, usableValueConverterNames.ToArray());
+
+				_valueConverter.objectReferenceValue = usableValueConverters[converterDropdownSelectedIndex];
 			}
 			GUILayout.EndHorizontal();
 		}

@@ -1,5 +1,6 @@
 ﻿using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.Properties;
+using Pear.InteractionEngine.Properties.Converters;
 using Pear.InteractionEngine.Utils;
 using System;
 using UnityEngine;
@@ -20,6 +21,11 @@ namespace Pear.InteractionEngine.Interactions
 		[SerializeField]
 		private MonoBehaviour Event;
 
+		// Script that converts the property from the event's
+		// type into the EventHandler's type
+		[SerializeField]
+		private MonoBehaviour ValueConverter;
+
 		// Script that modifies a property
 		[SerializeField]
 		private Controller EventController;
@@ -29,7 +35,10 @@ namespace Pear.InteractionEngine.Interactions
 		private MonoBehaviour EventHandler;
 
 		[SerializeField]
-		private string PropertyType;
+		private string EventPropertyType;
+
+		[SerializeField]
+		private string EventHandlerPropertyType;
 
 		// Typed helper that makes the logic in this class easier to understand
 		private IInteractionHelper _interactionHelper;
@@ -37,13 +46,17 @@ namespace Pear.InteractionEngine.Interactions
 		void Start()
 		{
 			if (!IsValid())
+			{
+				Debug.LogError("Could not create interaction for GameObject " + name);
 				return;
+			}
 
 			// Instantiate the property typed instance of our helper class so we don't have to use reflection to do everything
-			Type proeprtyType = Type.GetType(PropertyType);
-			Type interactionHelperType = typeof(InteractionHelper<>);
-			Type instantiableInteractionHelperType = interactionHelperType.MakeGenericType(proeprtyType);
-			_interactionHelper = (IInteractionHelper)Activator.CreateInstance(instantiableInteractionHelperType, Event, EventHandler, gameObject, EventController);
+			Type eventPropertyType = Type.GetType(EventPropertyType);
+			Type eventHandlerPropertyType = Type.GetType(EventHandlerPropertyType);
+			Type interactionHelperType = typeof(InteractionHelper<,>);
+			Type instantiableInteractionHelperType = interactionHelperType.MakeGenericType(eventPropertyType, eventHandlerPropertyType);
+			_interactionHelper = (IInteractionHelper)Activator.CreateInstance(instantiableInteractionHelperType, Event, EventHandler, ValueConverter, gameObject, EventController);
 
 			// Create a new property and register it with Event and EventHandler
 			_interactionHelper.RegisterProperty();
@@ -77,8 +90,10 @@ namespace Pear.InteractionEngine.Interactions
 			}
 
 			Event = copyFrom.Event;
+			ValueConverter = copyFrom.ValueConverter;
 			EventHandler = copyFrom.EventHandler;
-			PropertyType = copyFrom.PropertyType;
+			EventPropertyType = copyFrom.EventPropertyType;
+			EventHandlerPropertyType = copyFrom.EventHandlerPropertyType;
 		}
 
 		/// <summary>
@@ -93,9 +108,31 @@ namespace Pear.InteractionEngine.Interactions
 				return false;
 			}
 
-			if (PropertyType == null)
+			if (EventPropertyType == null || EventHandlerPropertyType == null)
 			{
 				Debug.LogError("Interaction property type not set.");
+				return false;
+			}
+
+			Type eventPropertyType = Type.GetType(EventPropertyType);
+			Type eventHandlerPropertyType = Type.GetType(EventHandlerPropertyType);
+			if(eventPropertyType == null || eventHandlerPropertyType == null)
+			{
+				Debug.LogError(string.Format("Event or handler property type is null. Event '{0}'. EventHandler '{1}'",
+					eventPropertyType == null ? null : eventPropertyType.Name,
+					eventHandlerPropertyType == null ? null : eventHandlerPropertyType.Name));
+				return false;
+			}
+
+			if (EventPropertyType != EventHandlerPropertyType && ValueConverter == null)
+			{
+				Debug.LogError(String.Format("This interaction needs a value converter. '{0}' -> '{1}'", EventPropertyType, EventHandlerPropertyType));
+				return false;
+			}
+
+			if (EventPropertyType == EventHandlerPropertyType && ValueConverter != null)
+			{
+				Debug.LogError(String.Format("This interaction has a converter when it doesn't need one. '{0}' -> '{1}'", EventPropertyType, EventHandlerPropertyType));
 				return false;
 			}
 
@@ -145,49 +182,75 @@ namespace Pear.InteractionEngine.Interactions
 	/// reflection to get things done :/ :).
 	/// </summary>
 	/// <typeparam name="T">Type of property</typeparam>
-	internal class InteractionHelper<T> : IInteractionHelper
+	internal class InteractionHelper<TEvent, TEventHandler> : IInteractionHelper
 	{
 		// The event
-		private IGameObjectPropertyEvent<T> _event;
+		private IGameObjectPropertyEvent<TEvent> _event;
 
 		// The event handler
-		private IGameObjectPropertyEventHandler<T> _eventHandler;
+		private IGameObjectPropertyEventHandler<TEventHandler> _eventHandler;
 
-		// The property 
-		private GameObjectProperty<T> _property;
+		// The event's property 
+		private GameObjectProperty<TEvent> _eventProperty;
+
+		// The event handler's property 
+		private GameObjectProperty<TEventHandler> _eventHandlerProperty;
 
 		// Tracks whether the property is registered
 		private bool _registered = false;
 
-		public InteractionHelper(IGameObjectPropertyEvent<T> ev, IGameObjectPropertyEventHandler<T> evHandler, GameObject go, Controller eventController)
+		public InteractionHelper(IGameObjectPropertyEvent<TEvent> ev,
+			IGameObjectPropertyEventHandler<TEventHandler> evHandler,
+			IPropertyConverter<TEvent, TEventHandler> converter,
+			GameObject go,
+			Controller eventController)
 		{
 			_event = ev;
 			_eventHandler = evHandler;
-			_property = new GameObjectProperty<T>(go, eventController);
+
+			// If there's a converter, convert from the event type
+			// to the event handler's type
+			if(converter != null)
+			{
+				_eventProperty = new GameObjectProperty<TEvent>(go, eventController);
+				_eventHandlerProperty = new GameObjectProperty<TEventHandler>(go, eventController);
+
+				// Convert from the event type to the handler type when the event's value changes
+				_eventProperty.ChangeEvent += (oldValue, newValue) =>
+				{
+					_eventHandlerProperty.Value = converter.Convert(newValue);
+				};
+			}
+			else
+			{
+				_eventProperty = new GameObjectProperty<TEvent>(go, eventController);
+				_eventHandlerProperty = _eventProperty as GameObjectProperty<TEventHandler>;
+			}
+			
 		}
 
 		/// <summary>
-		/// Register the property with the Event and EventHandler
+		/// Register properties with the Event and EventHandler
 		/// </summary>
 		public void RegisterProperty()
 		{
 			if (!_registered)
 			{
-				_eventHandler.RegisterProperty(_property);
-				_event.RegisterProperty(_property);
+				_eventHandler.RegisterProperty(_eventHandlerProperty);
+				_event.RegisterProperty(_eventProperty);
 				_registered = true;
 			}
 		}
 
 		/// <summary>
-		/// Unregister the property with the Event and EventHandler
+		/// Unregister properties with the Event and EventHandler
 		/// </summary>
 		public void UnregisterProperty()
 		{
 			if (_registered)
 			{
-				_event.UnregisterProperty(_property);
-				_eventHandler.UnregisterProperty(_property);
+				_event.UnregisterProperty(_eventProperty);
+				_eventHandler.UnregisterProperty(_eventHandlerProperty);
 				_registered = false;
 			}
 		}
