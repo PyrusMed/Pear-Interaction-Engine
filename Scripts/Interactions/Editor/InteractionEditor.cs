@@ -196,6 +196,9 @@ namespace Pear.InteractionEngine.Interactions
 				List<string> actionsInSceneNames = new List<string>() { helpMessage };
 				actionsInSceneNames.AddRange(eventHandlersInScene.Select(a => GetNameForDropdown(a)));
 
+				// Save the current event handler so we know if we change it
+				UnityEngine.Object lastEventHandler = _eventHandler.objectReferenceValue;
+
 				// Is an EventHandler already selected?
 				// If so, show that in the dropdown
 				int startIndex = 0;
@@ -214,6 +217,9 @@ namespace Pear.InteractionEngine.Interactions
 					_eventHandler.objectReferenceValue = eventHandler;
 					_eventHandlerPropertyType.stringValue = eventHandlerPropertyType.AssemblyQualifiedName;
 				}
+
+				if (lastEventHandler != _eventHandler.objectReferenceValue)
+					_valueConverter.objectReferenceValue = null;
 			}
 			GUILayout.EndHorizontal();
 		}

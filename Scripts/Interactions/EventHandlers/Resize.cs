@@ -8,13 +8,13 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 	/// <summary>
 	/// Resize a game object based on the value of a property
 	/// </summary>
-	public class Resize : MonoBehaviour, IGameObjectPropertyEventHandler<int>
+	public class Resize : MonoBehaviour, IGameObjectPropertyEventHandler<float>
 	{
         [Tooltip("Resize speed")]
         public float ResizeSpeed = 1f;
 
 		// Registered properies
-		private List<GameObjectProperty<int>> _properties = new List<GameObjectProperty<int>>();
+		private List<GameObjectProperty<float>> _properties = new List<GameObjectProperty<float>>();
 
 		/// <summary>
 		/// Loops over each registered property and resizes it's owning game object
@@ -34,7 +34,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 		/// Save the property
 		/// </summary>
 		/// <param name="property"></param>
-		public void RegisterProperty(GameObjectProperty<int> property)
+		public void RegisterProperty(GameObjectProperty<float> property)
 		{
 			_properties.Add(property);
 		}
@@ -43,7 +43,7 @@ namespace Pear.InteractionEngine.Interactions.EventHandlers
 		/// Remove the property from our saved list
 		/// </summary>
 		/// <param name="property"></param>
-		public void UnregisterProperty(GameObjectProperty<int> property)
+		public void UnregisterProperty(GameObjectProperty<float> property)
 		{
 			_properties.Remove(property);
 		}
