@@ -89,17 +89,17 @@ namespace Pear.InteractionEngine.Interactions
 			return false;
 		}
 
-		protected virtual bool ValidElement(GameObject obj)
+		protected virtual bool ValidElement(UIPointer pointer, GameObject obj)
 		{
 			var canvasCheck = obj.GetComponentInParent<Canvas>();
-			return (canvasCheck && canvasCheck.enabled ? true : false);
+			return pointer.IsValidElement(obj) && (canvasCheck && canvasCheck.enabled ? true : false);
 		}
 
 		protected virtual void Hover(UIPointer pointer, List<RaycastResult> results)
 		{
 			if (pointer.pointerEventData.pointerEnter)
 			{
-				if (!ValidElement(pointer.pointerEventData.pointerEnter))
+				if (!ValidElement(pointer, pointer.pointerEventData.pointerEnter))
 				{
 					pointer.pointerEventData.pointerEnter = null;
 					return;
@@ -116,7 +116,7 @@ namespace Pear.InteractionEngine.Interactions
 			{
 				foreach (var result in results)
 				{
-					if (!ValidElement(result.gameObject))
+					if (!ValidElement(pointer, result.gameObject))
 					{
 						continue;
 					}
@@ -183,7 +183,7 @@ namespace Pear.InteractionEngine.Interactions
 			{
 				foreach (var result in results)
 				{
-					if (!ValidElement(result.gameObject))
+					if (!ValidElement(pointer, result.gameObject))
 					{
 						continue;
 					}
@@ -206,7 +206,7 @@ namespace Pear.InteractionEngine.Interactions
 		{
 			if (pointer.pointerEventData.pointerPress)
 			{
-				if (!ValidElement(pointer.pointerEventData.pointerPress))
+				if (!ValidElement(pointer, pointer.pointerEventData.pointerPress))
 				{
 					pointer.pointerEventData.pointerPress = null;
 					return true;
