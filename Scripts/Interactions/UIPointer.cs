@@ -10,6 +10,8 @@ namespace Pear.InteractionEngine.Interactions
 {
 	public class UIPointer : MonoBehaviour
 	{
+		public LayerMask CollisionLayers = 1 << 5; // UI by default
+
 		[Tooltip("A custom transform to use as the origin of the pointer. If no pointer origin transform is provided then the transform the script is attached to is used.")]
 		public Transform pointerOriginTransform = null;
 
@@ -109,6 +111,11 @@ namespace Pear.InteractionEngine.Interactions
 			}
 
 			return eventSystem.transform.GetOrAddComponent<Pear_InputModule>();
+		}
+
+		public virtual bool IsValidElement(GameObject obj)
+		{
+			return CollisionLayers == (CollisionLayers | (1 << obj.layer));
 		}
 
 		protected virtual void ConfigureEventSystem()
