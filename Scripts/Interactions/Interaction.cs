@@ -1,8 +1,11 @@
 ﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.EventListeners;
+using Pear.InteractionEngine.Events;
 using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Properties.Converters;
 using Pear.InteractionEngine.Utils;
 using System;
+using System.Reflection;
 using UnityEngine;
 
 namespace Pear.InteractionEngine.Interactions
@@ -40,10 +43,13 @@ namespace Pear.InteractionEngine.Interactions
 		[SerializeField]
 		private string EventHandlerPropertyType;
 
+		[SerializeField]
+		private ReceiveEventStates ReceiveEventState = ReceiveEventStates.WhenObjectActive;
+
 		// Typed helper that makes the logic in this class easier to understand
 		private IInteractionHelper _interactionHelper;
 
-		void Start()
+		void Awake()
 		{
 			if (!IsValid())
 			{
@@ -59,7 +65,10 @@ namespace Pear.InteractionEngine.Interactions
 			_interactionHelper = (IInteractionHelper)Activator.CreateInstance(instantiableInteractionHelperType, Event, EventHandler, ValueConverter, gameObject, EventController);
 
 			// Create a new property and register it with Event and EventHandler
-			_interactionHelper.RegisterProperty();
+			_interactionHelper.EventingEnabled = true;
+
+			// Define when this interaction should receieve events
+			_interactionHelper.ReceiveEventState = ReceiveEventState;
 		}
 
 		/// <summary>
@@ -69,19 +78,26 @@ namespace Pear.InteractionEngine.Interactions
 		/// <param name="copyTo">Obj to copy to</param>
 		public static void CopyAll(GameObject copyFrom, GameObject copyTo)
 		{
+			// Deactivate this object so we can copy component values without
+			// the component's Awake function being called
+			bool originalActiveState = copyTo.activeSelf;
+			copyTo.SetActive(false);
+
 			// Copy interactions from our placeholder
 			foreach (Interaction interaction in copyFrom.GetComponents<Interaction>())
 			{
 				Interaction newInteraction = copyTo.AddComponent<Interaction>();
 				newInteraction.CopyFrom(interaction);
 			}
+
+			copyTo.SetActive(originalActiveState);
 		}
 
 		/// <summary>
 		/// Copy interaction properties from the given Interaction
 		/// </summary>
 		/// <param name="interactionToUpdate">Interaction to copy properties from</param>
-		public void CopyFrom(Interaction copyFrom)
+		private void CopyFrom(Interaction copyFrom)
 		{
 			if (copyFrom == null || !copyFrom.IsValid())
 			{
@@ -90,8 +106,9 @@ namespace Pear.InteractionEngine.Interactions
 			}
 
 			Event = copyFrom.Event;
-			ValueConverter = copyFrom.ValueConverter;
-			EventHandler = copyFrom.EventHandler;
+			ValueConverter = gameObject.AddComponentFrom(copyFrom.ValueConverter);
+			EventHandler = gameObject.AddComponentFrom(copyFrom.EventHandler);
+			EventController = copyFrom.EventController;
 			EventPropertyType = copyFrom.EventPropertyType;
 			EventHandlerPropertyType = copyFrom.EventHandlerPropertyType;
 		}
@@ -145,7 +162,7 @@ namespace Pear.InteractionEngine.Interactions
 		private void OnEnable()
 		{
 			if (_interactionHelper != null)
-				_interactionHelper.RegisterProperty();
+				_interactionHelper.EventingEnabled = true;
 		}
 
 		/// <summary>
@@ -154,7 +171,7 @@ namespace Pear.InteractionEngine.Interactions
 		private void OnDisable()
 		{
 			if (_interactionHelper != null)
-				_interactionHelper.UnregisterProperty();
+				_interactionHelper.EventingEnabled = false;
 		}
 
 		/// <summary>
@@ -163,7 +180,7 @@ namespace Pear.InteractionEngine.Interactions
 		void OnDestroy()
 		{
 			if (_interactionHelper != null)
-				_interactionHelper.UnregisterProperty();
+				_interactionHelper.EventingEnabled = false;
 		}
 	}
 
@@ -172,8 +189,8 @@ namespace Pear.InteractionEngine.Interactions
 	/// </summary>
 	internal interface IInteractionHelper
 	{
-		void RegisterProperty();
-		void UnregisterProperty();
+		bool EventingEnabled { get; set; }
+		ReceiveEventStates ReceiveEventState { get; set; }
 	}
 
 	/// <summary>
@@ -181,78 +198,75 @@ namespace Pear.InteractionEngine.Interactions
 	/// This makes working with variables much easier. If not for this class we would have to use
 	/// reflection to get things done :/ :).
 	/// </summary>
-	/// <typeparam name="T">Type of property</typeparam>
-	internal class InteractionHelper<TEvent, TEventHandler> : IInteractionHelper
+	/// <typeparam name="TEvent">Type of value the event emits</typeparam>
+	/// <typeparam name="TEventListener">Type of value the listener receives</typeparam>
+	internal class InteractionHelper<TEvent, TEventListener> : IInteractionHelper
 	{
-		// The event
-		private IGameObjectPropertyEvent<TEvent> _event;
+		private EventDispatcher<TEvent, TEventListener> _dispatcher;
 
-		// The event handler
-		private IGameObjectPropertyEventHandler<TEventHandler> _eventHandler;
+		public bool EventingEnabled
+		{
+			get { return _dispatcher.Enabled; }
+			set { _dispatcher.Enabled = value; }
+		}
 
-		// The event's property 
-		private GameObjectProperty<TEvent> _eventProperty;
+		public ReceiveEventStates ReceiveEventState
+		{
+			get { return _dispatcher.ReceiveEventState; }
+			set { _dispatcher.ReceiveEventState = value; }
+		}
 
-		// The event handler's property 
-		private GameObjectProperty<TEventHandler> _eventHandlerProperty;
-
-		// Tracks whether the property is registered
-		private bool _registered = false;
-
-		public InteractionHelper(IGameObjectPropertyEvent<TEvent> ev,
-			IGameObjectPropertyEventHandler<TEventHandler> evHandler,
-			IPropertyConverter<TEvent, TEventHandler> converter,
+		public InteractionHelper(InteractionEngine.Events.IEvent<TEvent> ev,
+			IEventListener<TEventListener> listener,
+			IPropertyConverter<TEvent, TEventListener> converter,
 			GameObject go,
 			Controller eventController)
 		{
-			_event = ev;
-			_eventHandler = evHandler;
 
-			// If there's a converter, convert from the event type
-			// to the event handler's type
-			if(converter != null)
+			ev.Event = ev.Event ?? new Property<TEvent>();
+			_dispatcher = new EventDispatcher<TEvent, TEventListener>(eventController, go, ev, converter, listener);
+		}
+	}
+
+	public enum ReceiveEventStates
+	{
+		WhenObjectActive,
+		Always,
+	}
+
+	public static class InteractionExtensions
+	{
+		public static T GetCopyOf<T>(this Component comp, T other) where T : Component
+		{
+			Type type = comp.GetType();
+			if (type != other.GetType()) return null; // type mis-match
+			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Default | BindingFlags.DeclaredOnly;
+			PropertyInfo[] pinfos = type.GetProperties(flags);
+			foreach (var pinfo in pinfos)
 			{
-				_eventProperty = new GameObjectProperty<TEvent>(go, eventController);
-				_eventHandlerProperty = new GameObjectProperty<TEventHandler>(go, eventController);
-
-				// Convert from the event type to the handler type when the event's value changes
-				_eventProperty.ChangeEvent += (oldValue, newValue) =>
+				if (pinfo.CanWrite)
 				{
-					_eventHandlerProperty.Value = converter.Convert(newValue);
-				};
+					try
+					{
+						pinfo.SetValue(comp, pinfo.GetValue(other, null), null);
+					}
+					catch { } // In case of NotImplementedException being thrown. For some reason specifying that exception didn't seem to catch it, so I didn't catch anything specific.
+				}
 			}
-			else
+			FieldInfo[] finfos = type.GetFields(flags);
+			foreach (var finfo in finfos)
 			{
-				_eventProperty = new GameObjectProperty<TEvent>(go, eventController);
-				_eventHandlerProperty = _eventProperty as GameObjectProperty<TEventHandler>;
+				finfo.SetValue(comp, finfo.GetValue(other));
 			}
-			
+			return comp as T;
 		}
 
-		/// <summary>
-		/// Register properties with the Event and EventHandler
-		/// </summary>
-		public void RegisterProperty()
+		public static T AddComponentFrom<T>(this GameObject go, T from) where T : Component
 		{
-			if (!_registered)
-			{
-				_eventHandler.RegisterProperty(_eventHandlerProperty);
-				_event.RegisterProperty(_eventProperty);
-				_registered = true;
-			}
-		}
+			if (from == null)
+				return null;
 
-		/// <summary>
-		/// Unregister properties with the Event and EventHandler
-		/// </summary>
-		public void UnregisterProperty()
-		{
-			if (_registered)
-			{
-				_event.UnregisterProperty(_eventProperty);
-				_eventHandler.UnregisterProperty(_eventHandlerProperty);
-				_registered = false;
-			}
+			return go.AddComponent(from.GetType()).GetCopyOf(from) as T;
 		}
 	}
 }

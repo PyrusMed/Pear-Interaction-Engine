@@ -10,7 +10,7 @@ namespace Pear.InteractionEngine.Properties
     {
 		// Event that's called when the property changes
         public delegate void OnPropertyChangeEventHandler(T oldValue, T newValue);
-        public event OnPropertyChangeEventHandler ChangeEvent;
+        public event OnPropertyChangeEventHandler ValueChangeEvent;
 
 		/// <summary>
 		///  The value of this property
@@ -25,10 +25,15 @@ namespace Pear.InteractionEngine.Properties
                 _value = value;
 
 				// When the value changes fire an event
-                bool notEqual = !EqualityComparer<T>.Default.Equals(oldValue, _value);
-                if (notEqual && ChangeEvent != null)
-                    ChangeEvent(oldValue, _value);
+                bool notEqual = !AreEqual(oldValue, _value);
+                if (notEqual && ValueChangeEvent != null)
+                    ValueChangeEvent(oldValue, _value);
             }
         }
+
+		public static bool AreEqual(T val1, T val2)
+		{
+			return EqualityComparer<T>.Default.Equals(val1, val2);
+		}
     }
 }

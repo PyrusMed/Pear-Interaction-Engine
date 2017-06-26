@@ -1,5 +1,6 @@
 ﻿using Pear.InteractionEngine.Controllers;
-using Pear.InteractionEngine.Properties;
+using Pear.InteractionEngine.EventListeners;
+using Pear.InteractionEngine.Events;
 using Pear.InteractionEngine.Properties.Converters;
 using Pear.InteractionEngine.Utils;
 using System;
@@ -37,6 +38,8 @@ namespace Pear.InteractionEngine.Interactions
 		// Serialized property type
 		private SerializedProperty _eventHandlerPropertyType;
 
+		private SerializedProperty _receiveEventState;
+
 		// All events in the scene
 		private List<MonoBehaviour> _events;
 
@@ -54,12 +57,13 @@ namespace Pear.InteractionEngine.Interactions
 			_eventHandler = serializedObject.FindProperty("EventHandler");
             _eventPropertyType = serializedObject.FindProperty("EventPropertyType");
 			_eventHandlerPropertyType = serializedObject.FindProperty("EventHandlerPropertyType");
+			_receiveEventState = serializedObject.FindProperty("ReceiveEventState");
 
 			// Get all of the events in the scene
 			// Events are scripts that implement IGameObjectPropertyEvent
 			// and have a Controller (implement IControllerBehavior)
 			{
-				List<Type> eventTypes = ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyEvent<>));
+				List<Type> eventTypes = ReflectionHelpers.GetTypesThatImplementInterface(typeof(IEvent<>));
 
 				// Filter out types that do  not implement IControllerBehavior<T>
 				// and warn the user when a type does not implement that interface
@@ -80,7 +84,7 @@ namespace Pear.InteractionEngine.Interactions
 
 			// Get all of the event handlers in the scene
 			// Event handlers are scripts that implement IGameObjectPropertyEventHandler
-			_eventHandlers = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IGameObjectPropertyEventHandler<>)));
+			_eventHandlers = GetTypesInScene(ReflectionHelpers.GetTypesThatImplementInterface(typeof(IEventListener<>)));
 		}
 
 		/// <summary>
@@ -90,6 +94,8 @@ namespace Pear.InteractionEngine.Interactions
 		{
 			// Make sure all serialized properties are up to date
 			serializedObject.Update();
+
+			RenderRecieveEventStateDropdown();
 
 			RenderEventDropdown();
 
@@ -108,6 +114,19 @@ namespace Pear.InteractionEngine.Interactions
 
 			// Save any changes that were made
 			serializedObject.ApplyModifiedProperties();
+		}
+
+		/// <summary>
+		/// Create a dropdown listing when the object should receive events
+		/// </summary>
+		private void RenderRecieveEventStateDropdown()
+		{
+			GUILayout.BeginHorizontal();
+			{
+				EditorGUILayout.LabelField("Receive:", GUILayout.Width(100));
+				_receiveEventState.enumValueIndex = EditorGUILayout.Popup(_receiveEventState.enumValueIndex, _receiveEventState.enumDisplayNames);
+			}
+			GUILayout.EndHorizontal();
 		}
 
 		/// <summary>
@@ -143,7 +162,7 @@ namespace Pear.InteractionEngine.Interactions
                     _event.objectReferenceValue = _events[selectedIndex - 1];
 
 					// Save the property's type
-                    Type propertyType = ReflectionHelpers.GetGenericArgumentTypes(_event.objectReferenceValue.GetType(), typeof(IGameObjectPropertyEvent<>))[0];
+                    Type propertyType = ReflectionHelpers.GetGenericArgumentTypes(_event.objectReferenceValue.GetType(), typeof(IEvent<>))[0];
                     _eventPropertyType.stringValue = propertyType.AssemblyQualifiedName;
 
 					// Save a reference to the event's controller
@@ -173,7 +192,7 @@ namespace Pear.InteractionEngine.Interactions
 
 				// The selected Event deals with a specific property type (e.g. bool, string, int, etc..).
 				// Get that type
-				Type eventPropertyType = ReflectionHelpers.GetGenericArgumentTypes(_event.objectReferenceValue.GetType(), typeof(IGameObjectPropertyEvent<>))[0];
+				Type eventPropertyType = ReflectionHelpers.GetGenericArgumentTypes(_event.objectReferenceValue.GetType(), typeof(IEvent<>))[0];
 
 				// Get a list of value converters that can convert the event property
 				List<Type> usableValueConverterTypes = _valueConverters
@@ -186,7 +205,7 @@ namespace Pear.InteractionEngine.Interactions
 				// Can handle the propertiy's value
 				List<MonoBehaviour> eventHandlersInScene = _eventHandlers
 					.Where(eh => {
-						Type ehPropertyType = ReflectionHelpers.GetGenericArgumentTypes(eh.GetType(), typeof(IGameObjectPropertyEventHandler<>))[0];
+						Type ehPropertyType = ReflectionHelpers.GetGenericArgumentTypes(eh.GetType(), typeof(IEventListener<>))[0];
 						return ehPropertyType == eventPropertyType || usableValueConverterTypes.Contains(ehPropertyType);
 					})
 					.ToList();
@@ -212,7 +231,7 @@ namespace Pear.InteractionEngine.Interactions
 				if (selectedIndex > 0)
 				{
 					MonoBehaviour eventHandler = eventHandlersInScene[selectedIndex - 1];
-					Type eventHandlerPropertyType = ReflectionHelpers.GetGenericArgumentTypes(eventHandler.GetType(), typeof(IGameObjectPropertyEventHandler<>))[0];
+					Type eventHandlerPropertyType = ReflectionHelpers.GetGenericArgumentTypes(eventHandler.GetType(), typeof(IEventListener<>))[0];
 
 					_eventHandler.objectReferenceValue = eventHandler;
 					_eventHandlerPropertyType.stringValue = eventHandlerPropertyType.AssemblyQualifiedName;
