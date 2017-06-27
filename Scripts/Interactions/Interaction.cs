@@ -49,7 +49,7 @@ namespace Pear.InteractionEngine.Interactions
 		// Typed helper that makes the logic in this class easier to understand
 		private IInteractionHelper _interactionHelper;
 
-		void Awake()
+		void Start()
 		{
 			if (!IsValid())
 			{
@@ -222,8 +222,6 @@ namespace Pear.InteractionEngine.Interactions
 			GameObject go,
 			Controller eventController)
 		{
-
-			ev.Event = ev.Event ?? new Property<TEvent>();
 			_dispatcher = new EventDispatcher<TEvent, TEventListener>(eventController, go, ev, converter, listener);
 		}
 	}

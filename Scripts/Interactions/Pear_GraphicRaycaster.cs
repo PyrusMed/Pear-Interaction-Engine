@@ -11,14 +11,24 @@ namespace Pear.InteractionEngine.Interactions
 	/// https://github.com/thestonefox/VRTK/blob/8eca6ece8838a58422610132048a2900af6c9279/Assets/VRTK/Scripts/Internal/VRTK_UIGraphicRaycaster.cs#L22
 	public class Pear_GraphicRaycaster : GraphicRaycaster
 	{
-		protected Canvas currentCanvas;
-		protected Vector2 lastKnownPosition;
+		// Used to prevent flickering hover on items close to canvas's center
 		protected const float UI_CONTROL_OFFSET = 0.00001f;
+
+		// The current canvas
+		protected Canvas _currentCanvas;
+
+		// Last known raycast hit position
+		protected Vector2 _lastKnownRaycastHitPosition;
 
 		[NonSerialized]
 		// Use a static to prevent list reallocation. We only need one of these globally (single main thread), and only to hold temporary data
 		private static List<RaycastResult> s_RaycastResults = new List<RaycastResult>();
 
+		/// <summary>
+		/// Raycasts into the 3D world based on PointerEventData.worldPosition and PointerEventData.worldNormal
+		/// </summary>
+		/// <param name="eventData">pointer data</param>
+		/// <param name="resultAppendList">list of hit objects</param>
 		public override void Raycast(PointerEventData eventData, List<RaycastResult> resultAppendList)
 		{
 			if (canvas == null)
@@ -33,6 +43,12 @@ namespace Pear.InteractionEngine.Interactions
 		}
 
 		//[Pure]
+		/// <summary>
+		/// Sets the nearest raycast result on the event
+		/// </summary>
+		/// <param name="eventData">pointer event data that will reference the nearest raycast</param>
+		/// <param name="resultAppendList">List updated with results</param>
+		/// <param name="raycastResults">Results to search through</param>
 		protected virtual void SetNearestRaycast(ref PointerEventData eventData, ref List<RaycastResult> resultAppendList, ref List<RaycastResult> raycastResults)
 		{
 			RaycastResult? nearestRaycast = null;
@@ -50,13 +66,18 @@ namespace Pear.InteractionEngine.Interactions
 			if (nearestRaycast.HasValue)
 			{
 				eventData.position = nearestRaycast.Value.screenPosition;
-				eventData.delta = eventData.position - lastKnownPosition;
-				lastKnownPosition = eventData.position;
+				eventData.delta = eventData.position - _lastKnownRaycastHitPosition;
+				_lastKnownRaycastHitPosition = eventData.position;
 				eventData.pointerCurrentRaycast = nearestRaycast.Value;
 			}
 		}
 
 		//[Pure]
+		/// <summary>
+		/// If the ray hit something get the distance to it
+		/// </summary>
+		/// <param name="ray">Ray to check</param>
+		/// <returns>Distance to the nearest hit object</returns>
 		protected virtual float GetHitDistance(Ray ray)
 		{
 			var hitDistance = float.MaxValue;
@@ -89,6 +110,13 @@ namespace Pear.InteractionEngine.Interactions
 		}
 
 		//[Pure]
+		/// <summary>
+		/// Raycast to the canvas
+		/// </summary>
+		/// <param name="canvas">canvas to raycast to</param>
+		/// <param name="eventCamera">the camera</param>
+		/// <param name="ray">the ray to cast</param>
+		/// <param name="results">results from the cast</param>
 		protected virtual void Raycast(Canvas canvas, Camera eventCamera, Ray ray, ref List<RaycastResult> results)
 		{
 			var hitDistance = GetHitDistance(ray);
@@ -145,17 +173,20 @@ namespace Pear.InteractionEngine.Interactions
 			results.Sort((g1, g2) => g2.depth.CompareTo(g1.depth));
 		}
 
+		/// <summary>
+		/// The canvas
+		/// </summary>
 		protected virtual Canvas canvas
 		{
 			get
 			{
-				if (currentCanvas != null)
+				if (_currentCanvas != null)
 				{
-					return currentCanvas;
+					return _currentCanvas;
 				}
 
-				currentCanvas = gameObject.GetComponent<Canvas>();
-				return currentCanvas;
+				_currentCanvas = gameObject.GetComponent<Canvas>();
+				return _currentCanvas;
 			}
 		}
 	}
