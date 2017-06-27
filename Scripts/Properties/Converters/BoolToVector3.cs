@@ -8,43 +8,20 @@ namespace Pear.InteractionEngine.Properties.Converters
 {
 	public class BoolToVector3 : MonoBehaviour, IPropertyConverter<bool, Vector3>
 	{
-		public VectorField[] FieldsToUpdate;
-
-		private bool _updateX;
-		private bool _updateY;
-		private bool _updateZ;
+		public bool SetX = true;
+		public bool SetY = true;
+		public bool SetZ = true;
 
 		public float FieldValue = 1f;
-
-		private void Awake()
-		{
-			Dictionary<VectorField, Action> fieldSetter = new Dictionary<VectorField, Action>()
-			{
-				{ VectorField.X, () => _updateX = true },
-				{ VectorField.Y, () => _updateY = true },
-				{ VectorField.Z, () => _updateZ = true },
-			};
-
-			// Set the appropriate var
-			foreach(VectorField fieldToUpdate in FieldsToUpdate)
-				fieldSetter[fieldToUpdate]();
-		}
 
 		public Vector3 Convert(bool convertFrom)
 		{
 			if (!convertFrom)
 				return Vector3.zero;
 
-			return new Vector3(_updateX ? FieldValue : 0,
-				_updateY ? FieldValue : 0,
-				_updateZ ? FieldValue : 0);
+			return new Vector3(SetX ? FieldValue : 0,
+				SetY ? FieldValue : 0,
+				SetZ ? FieldValue : 0);
 		}
-	}
-
-	public enum VectorField
-	{
-		X,
-		Y,
-		Z,
 	}
 }

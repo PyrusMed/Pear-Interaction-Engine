@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Pear.InteractionEngine.Controllers
 {
+	/// <summary>
+	/// Camera controller that changes active object based on gaze
+	/// </summary>
 	[RequireComponent(typeof(PhysicsRaycast))]
 	public class SimpleCameraController : Controller
 	{
@@ -10,6 +13,7 @@ namespace Pear.InteractionEngine.Controllers
 		{
 			base.Start();
 
+			// Change the active object based on gaze
 			PhysicsRaycast raycast = GetComponent<PhysicsRaycast>();
 			if (raycast != null)
 			{

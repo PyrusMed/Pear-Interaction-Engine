@@ -6,7 +6,7 @@ using Pear.InteractionEngine.Events;
 namespace Pear.InteractionEngine.EventListeners
 {
 	/// <summary>
-	/// Manages what happens when object are hovered over
+	/// Fades an object in when the event is true. Fades the object out otherwise.
 	/// </summary>
 	[Serializable]
 	public class Fade : MonoBehaviour, IEventListener<bool>
@@ -20,6 +20,9 @@ namespace Pear.InteractionEngine.EventListeners
         [Tooltip("Opacity that objects fade to")]
         public float FadeAlpha = 0.3f;
 
+		[Tooltip("Manages fadable objects")]
+		public FadeManager Manager;
+
 		// Does the fading
 		private FadeHelper _fader;
 
@@ -30,6 +33,14 @@ namespace Pear.InteractionEngine.EventListeners
 			_fader.fadeDelay = FadeDelay;
 			_fader.fadeTime = FadeTime;
 			_fader.fadeAplha = FadeAlpha;
+
+			Manager.FadableObjectCountChangedEvent += count =>
+			{
+				if (count <= 0)
+					_fader.FadeIn();
+				else if (!Manager.IsRegistered(gameObject))
+					_fader.FadeOut();
+			};
 		}
 
 		/// <summary>
@@ -39,9 +50,14 @@ namespace Pear.InteractionEngine.EventListeners
 		public void ValueChanged(EventArgs<bool> args)
 		{
 			if (args.NewValue)
+			{
 				_fader.FadeIn();
+				Manager.RegisterFadableObject(gameObject);
+			}
 			else
-				_fader.FadeOut();
+			{
+				Manager.UnregisterFadableObject(gameObject);
+			}
 		}
 	}
 }
