@@ -4,7 +4,7 @@ using Pear.InteractionEngine.Events;
 namespace Pear.InteractionEngine.EventListeners
 {
 	/// <summary>
-	/// Outline objects based on property changes
+	/// Outline objects based on change in event
 	/// </summary>
 	public class Outline : MonoBehaviour, IEventListener<bool>
 	{

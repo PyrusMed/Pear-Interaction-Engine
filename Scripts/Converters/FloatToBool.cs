@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Pear.InteractionEngine.Properties.Converters
+namespace Pear.InteractionEngine.Converters
 {
 	/// <summary>
 	/// Converts a float to a bool

@@ -6,7 +6,7 @@ using Pear.InteractionEngine.Interactions;
 namespace Pear.InteractionEngine.EventListeners
 {
 	/// <summary>
-	/// Resize a game object based on the value of a property
+	/// Resize a game object based on change in event
 	/// </summary>
 	public class Resize : MonoBehaviour, IEventListener<Vector3>
 	{
@@ -27,6 +27,10 @@ namespace Pear.InteractionEngine.EventListeners
 				.localScale += _directions * ResizeSpeed * Time.deltaTime;
 		}
 
+		/// <summary>
+		/// Saves the even't new value as the direction to resize in
+		/// </summary>
+		/// <param name="args">event args</param>
 		public void ValueChanged(EventArgs<Vector3> args)
 		{
 			_directions = args.NewValue;

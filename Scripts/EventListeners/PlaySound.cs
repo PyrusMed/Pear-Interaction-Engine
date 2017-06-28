@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Pear.InteractionEngine.EventListeners
 {
 	/// <summary>
-	/// Plays a sound based on the boolean event value
+	/// Plays a sound based on change in event
 	/// </summary>
 	public class PlaySound : MonoBehaviour, IEventListener<bool> 
 	{

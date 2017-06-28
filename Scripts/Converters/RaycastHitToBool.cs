@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Pear.InteractionEngine.Properties.Converters
+namespace Pear.InteractionEngine.Converters
 {
+	/// <summary>
+	/// Converts from raycast hit to bool.
+	/// True when hit is equal to gameObject. False otherwise.
+	/// </summary>
 	public class RaycastHitToBool : MonoBehaviour, IPropertyConverter<RaycastHit?, bool>
 	{
 		public bool Convert(RaycastHit? convertFrom)

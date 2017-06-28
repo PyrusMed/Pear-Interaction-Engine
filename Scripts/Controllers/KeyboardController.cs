@@ -1,7 +1,4 @@
-﻿using Pear.InteractionEngine.Events;
-using UnityEngine;
-
-namespace Pear.InteractionEngine.Controllers
+﻿namespace Pear.InteractionEngine.Controllers
 {
 	/// <summary>
 	/// Controller for the keyboard

@@ -6,7 +6,7 @@ using Pear.InteractionEngine.Interactions;
 namespace Pear.InteractionEngine.EventListeners
 {
 	/// <summary>
-	/// Move based on the change in property value
+	/// Move based on the change in event
 	/// </summary>
 	public class Move : MonoBehaviour, IEventListener<Vector3>
 	{
@@ -19,6 +19,7 @@ namespace Pear.InteractionEngine.EventListeners
 		// Movement velocity
 		private Vector3 _velocity = Vector3.zero;
 
+		// Anchor to move
 		private Anchor _anchor;
 
 		private void Start()

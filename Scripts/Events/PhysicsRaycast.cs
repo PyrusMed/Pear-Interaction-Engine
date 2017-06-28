@@ -12,7 +12,7 @@ namespace Pear.InteractionEngine.Events
 		[Tooltip("Direction to raycast")]
 		public Vector3 Direction = new Vector3(0, 0, 1);
 
-		// Stores information about the event
+		// Stores the event value that's handled by IEventListener classes
 		public Property<RaycastHit?> Event { get; set; }
 
 		void Update()

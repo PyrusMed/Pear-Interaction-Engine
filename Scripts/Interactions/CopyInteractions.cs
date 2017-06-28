@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Pear.InteractionEngine.Interactions
 {
@@ -18,6 +14,7 @@ namespace Pear.InteractionEngine.Interactions
 		{
 			if (CopyTo != null)
 			{
+				//Copy alkl interactions from the current object to the specified object
 				foreach (GameObject copyTo in CopyTo)
 					Interaction.CopyAll(gameObject, copyTo);
 			}

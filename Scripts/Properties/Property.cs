@@ -31,6 +31,12 @@ namespace Pear.InteractionEngine.Properties
             }
         }
 
+		/// <summary>
+		/// Determines if two values are equal using the equality comparer
+		/// </summary>
+		/// <param name="val1">Value to check</param>
+		/// <param name="val2">Value to check</param>
+		/// <returns>True is values are equal. False otherwise.</returns>
 		public static bool AreEqual(T val1, T val2)
 		{
 			return EqualityComparer<T>.Default.Equals(val1, val2);

@@ -1,15 +1,12 @@
-﻿using Pear.InteractionEngine.Properties;
-using Pear.InteractionEngine.Utils;
-using System.Collections.Generic;
+﻿using Pear.InteractionEngine.Utils;
 using UnityEngine;
 using Pear.InteractionEngine.Events;
-using System;
 using Pear.InteractionEngine.Interactions;
 
 namespace Pear.InteractionEngine.EventListeners
 {
 	/// <summary>
-	/// Rotate a game object based on the value of a property
+	/// Rotate a game object based on change in event value
 	/// </summary>
 	public class Rotate : MonoBehaviour, IEventListener<Vector3>
 	{
@@ -33,7 +30,7 @@ namespace Pear.InteractionEngine.EventListeners
 		/// <summary>
 		/// Updates the velocity based on the event's value
 		/// </summary>
-		/// <param name="args"></param>
+		/// <param name="args">event value</param>
 		public void ValueChanged(EventArgs<Vector3> args)
 		{
 			_volocity = args.NewValue;

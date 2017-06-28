@@ -11,19 +11,18 @@ namespace Pear.InteractionEngine.Interactions
 	/// </summary>
 	public class Pear_InputModule : PointerInputModule
 	{
+		// UIPointers registered by the UIPointer class
 		public List<UIPointer> pointers = new List<UIPointer>();
 
-		public virtual void Initialise()
-		{
-			pointers.Clear();
-		}
-
-		//Needed to allow other regular (non-VR) InputModules in combination with VRTK_EventSystem
+		// Needed to allow other regular (non-VR) InputModules in combination with VRTK_EventSystem
 		public override bool IsModuleSupported()
 		{
 			return false;
 		}
 
+		/// <summary>
+		/// Process each pointer
+		/// </summary>
 		public override void Process()
 		{
 			for (int i = 0; i < pointers.Count; i++)
@@ -33,9 +32,7 @@ namespace Pear.InteractionEngine.Interactions
 				{
 					List<RaycastResult> results = new List<RaycastResult>();
 					if (pointer.IsActive)
-					{
 						results = CheckRaycasts(pointer);
-					}
 
 					//Process events
 					Hover(pointer, results);
@@ -44,8 +41,15 @@ namespace Pear.InteractionEngine.Interactions
 			}
 		}
 
+		/// <summary>
+		/// Gets raycast resutls from the specified pointer
+		/// </summary>
+		/// <param name="pointer">pointer to get results from</param>
+		/// <returns>Raycast results</returns>
 		protected virtual List<RaycastResult> CheckRaycasts(UIPointer pointer)
 		{
+			// Pear_GraphicRaycaster uses worldPosition and worldNormal
+			// to raycast
 			var raycastResult = new RaycastResult();
 			raycastResult.worldPosition = pointer.GetOriginPosition();
 			raycastResult.worldNormal = pointer.GetOriginForward();
@@ -57,6 +61,12 @@ namespace Pear.InteractionEngine.Interactions
 			return raycasts;
 		}
 
+		/// <summary>
+		/// Recursively checks the target's parent tree in search of the source
+		/// </summary>
+		/// <param name="target">target to check</param>
+		/// <param name="source">source to check</param>
+		/// <returns>True if source is in target's parent tree. False otherwise.</returns>
 		protected virtual bool CheckTransformTree(Transform target, Transform source)
 		{
 			if (target == null)
@@ -69,14 +79,25 @@ namespace Pear.InteractionEngine.Interactions
 				return true;
 			}
 
-			return CheckTransformTree(target.transform.parent, source);
+			return CheckTransformTree(target.parent, source);
 		}
 
+		/// <summary>
+		/// Checks whether there was a valid collision
+		/// </summary>
+		/// <param name="pointer">Pointer that raycasted</param>
+		/// <param name="results">Results from raycast</param>
+		/// <returns></returns>
 		protected virtual bool NoValidCollision(UIPointer pointer, List<RaycastResult> results)
 		{
 			return (results.Count == 0 || !CheckTransformTree(results[0].gameObject.transform, pointer.pointerEventData.pointerEnter.transform));
 		}
 
+		/// <summary>
+		/// Determines whether the pointer is hovering over an object
+		/// </summary>
+		/// <param name="pointer">Pointer to check</param>
+		/// <returns>True if pointer is hovering over an object. False otherwise</returns>
 		protected virtual bool IsHovering(UIPointer pointer)
 		{
 			foreach (var hoveredObject in pointer.pointerEventData.hovered)
@@ -89,12 +110,23 @@ namespace Pear.InteractionEngine.Interactions
 			return false;
 		}
 
+		/// <summary>
+		/// Checks whether the GameObject is a valid element
+		/// </summary>
+		/// <param name="pointer">Pointer used during determination</param>
+		/// <param name="obj">Object to check</param>
+		/// <returns>True if object is valid. False otherwise.</returns>
 		protected virtual bool ValidElement(UIPointer pointer, GameObject obj)
 		{
 			var canvasCheck = obj.GetComponentInParent<Canvas>();
 			return pointer.IsValidElement(obj) && (canvasCheck && canvasCheck.enabled ? true : false);
 		}
 
+		/// <summary>
+		/// Attempts to set hover properties if the pointer is hovering over an object
+		/// </summary>
+		/// <param name="pointer">Pointer to update</param>
+		/// <param name="results">Raycast results</param>
 		protected virtual void Hover(UIPointer pointer, List<RaycastResult> results)
 		{
 			if (pointer.pointerEventData.pointerEnter)
@@ -151,11 +183,29 @@ namespace Pear.InteractionEngine.Interactions
 			}
 		}
 
+		/// <summary>
+		/// Clicks the pointer
+		/// </summary>
+		/// <param name="pointer">Pointer to click</param>
+		/// <param name="results">Raycast results</param>
 		protected virtual void Click(UIPointer pointer, List<RaycastResult> results)
 		{
-			ClickOnUp(pointer, results);
+			switch (pointer.clickMethod)
+			{
+				case UIPointer.ClickMethods.ClickOnButtonUp:
+					ClickOnUp(pointer, results);
+					break;
+				case UIPointer.ClickMethods.ClickOnButtonDown:
+					ClickOnDown(pointer, results);
+					break;
+			}
 		}
 
+		/// <summary>
+		/// Clicks the pointer when click stops
+		/// </summary>
+		/// <param name="pointer">Pointer to click</param>
+		/// <param name="results">Raycast results</param>
 		protected virtual void ClickOnUp(UIPointer pointer, List<RaycastResult> results)
 		{
 			pointer.pointerEventData.eligibleForClick = pointer.Click;
@@ -166,6 +216,11 @@ namespace Pear.InteractionEngine.Interactions
 			}
 		}
 
+		/// <summary>
+		/// Clicks the pointer when click starts
+		/// </summary>
+		/// <param name="pointer">Pointer to click</param>
+		/// <param name="results">Raycast results</param>
 		protected virtual void ClickOnDown(UIPointer pointer, List<RaycastResult> results, bool forceClick = false)
 		{
 			pointer.pointerEventData.eligibleForClick = (forceClick ? true : pointer.Click);
@@ -177,6 +232,12 @@ namespace Pear.InteractionEngine.Interactions
 			}
 		}
 
+		/// <summary>
+		/// Determines if the pointer is eligible for a click
+		/// </summary>
+		/// <param name="pointer">Pointer to check</param>
+		/// <param name="results">Raycast results</param>
+		/// <returns>True if pointer is eligible. False otherwise.</returns>
 		protected virtual bool IsEligibleClick(UIPointer pointer, List<RaycastResult> results)
 		{
 			if (pointer.pointerEventData.eligibleForClick)
@@ -202,6 +263,11 @@ namespace Pear.InteractionEngine.Interactions
 			return false;
 		}
 
+		/// <summary>
+		/// Attempts to click the pointer
+		/// </summary>
+		/// <param name="pointer">Pointer to attempt to click</param>
+		/// <returns>True if attempt successfull. False otherwise.</returns>
 		protected virtual bool AttemptClick(UIPointer pointer)
 		{
 			if (pointer.pointerEventData.pointerPress)

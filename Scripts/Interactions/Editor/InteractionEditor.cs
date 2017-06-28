@@ -1,7 +1,7 @@
 ﻿using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.EventListeners;
 using Pear.InteractionEngine.Events;
-using Pear.InteractionEngine.Properties.Converters;
+using Pear.InteractionEngine.Converters;
 using Pear.InteractionEngine.Utils;
 using System;
 using System.Collections.Generic;

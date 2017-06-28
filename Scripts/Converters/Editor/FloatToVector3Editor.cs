@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace Pear.InteractionEngine.Properties.Converters
+namespace Pear.InteractionEngine.Converters
 {
 	/// <summary>
 	/// Allows the user to specify which properties are effected by the conversion
