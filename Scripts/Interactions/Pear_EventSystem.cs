@@ -3,6 +3,7 @@ using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace Pear.InteractionEngine.Interactions
 		protected Pear_InputModule _inputModule;
 
 		// Fields used to copy values
-		private static readonly FieldInfo[] EVENT_SYSTEM_FIELD_INFOS = typeof(EventSystem).GetFields(BindingFlags.Public | BindingFlags.Instance);
+		private static readonly IEnumerable<FieldInfo> EVENT_SYSTEM_FIELD_INFOS = typeof(EventSystem).GetFields(BindingFlags.Public | BindingFlags.Instance);
 		private static readonly PropertyInfo[] EVENT_SYSTEM_PROPERTY_INFOS = typeof(EventSystem).GetProperties(BindingFlags.Public | BindingFlags.Instance).Except(new[] { typeof(EventSystem).GetProperty("enabled") }).ToArray();
 		private static readonly FieldInfo BASE_INPUT_MODULE_EVENT_SYSTEM_FIELD_INFO = typeof(BaseInputModule).GetField("m_EventSystem", BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -48,7 +49,7 @@ namespace Pear.InteractionEngine.Interactions
 			int eventCounter = 0;
 			foreach (MonoBehaviour mono in objectsInScene)
 			{
-				Type eventType = mono.GetType().GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == iEventType);
+				Type eventType = mono.GetType().GetInterfaces().FirstOrDefault(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == iEventType);
 				if (eventType != null)
 				{
 					// Create an instance of Property<T>

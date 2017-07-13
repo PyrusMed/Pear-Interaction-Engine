@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
@@ -34,8 +36,8 @@ namespace Pear.InteractionEngine.Utils
 		{
 			Type type = copyTo.GetType();
 			if (type != copyFrom.GetType()) return null; // type mis-match
-			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Default | BindingFlags.DeclaredOnly;
-			PropertyInfo[] pinfos = type.GetProperties(flags);
+			BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+			IEnumerable<PropertyInfo> pinfos = type.GetProperties(flags);
 			foreach (var pinfo in pinfos)
 			{
 				if (pinfo.CanWrite)
@@ -48,7 +50,7 @@ namespace Pear.InteractionEngine.Utils
 				}
 			}
 
-			FieldInfo[] finfos = type.GetFields(flags);
+			IEnumerable<FieldInfo> finfos = type.GetFields(flags);
 			foreach (var finfo in finfos)
 			{
 				finfo.SetValue(copyTo, finfo.GetValue(copyFrom));
