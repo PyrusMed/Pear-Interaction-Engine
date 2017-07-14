@@ -1,4 +1,5 @@
-﻿using Pear.InteractionEngine.Events;
+﻿using NUnit.Compatibility;
+using Pear.InteractionEngine.Events;
 using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
 using System;
