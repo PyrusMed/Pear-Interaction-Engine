@@ -108,7 +108,7 @@ namespace Pear.InteractionEngine.Interactions
 
 				// If the property types differ there must be a converter
 				// Let the user pick the right one
-				if (_eventHandler.objectReferenceValue != null && _eventHandlerPropertyType.stringValue != _eventPropertyType.stringValue)
+				if (_eventHandler.objectReferenceValue != null)
 					RenderValueConverterDropdown();
 			}
 
@@ -257,20 +257,37 @@ namespace Pear.InteractionEngine.Interactions
 					.Where(vc => ReflectionHelpers.GetGenericArgumentTypes(vc.GetType(), typeof(IPropertyConverter<,>))[0].AssemblyQualifiedName == _eventPropertyType.stringValue)
 					.ToList();
 
+				// If the property types are not the same we need a converter
+				bool needsConverter = _eventPropertyType.stringValue != _eventHandlerPropertyType.stringValue;
+
 				// Get a list of usable converter names
 				List<string> usableValueConverterNames = usableValueConverters
-				.Select(converter => GetNameForDropdown(converter))
-				.ToList();
+					.Select(converter => GetNameForDropdown(converter))
+					.ToList();
+				List<string> dropdownValues = new List<string>();
+				if (!needsConverter)
+					dropdownValues.Add("None");
+				dropdownValues.AddRange(usableValueConverterNames);
 
 				// If a converter is already selected choose that
 				int converterDropdownStartIndex = 0;
 				if (_valueConverter.objectReferenceValue != null)
-					converterDropdownStartIndex = usableValueConverters.IndexOf((MonoBehaviour)_valueConverter.objectReferenceValue);
+					converterDropdownStartIndex = usableValueConverters.IndexOf((MonoBehaviour)_valueConverter.objectReferenceValue) + (!needsConverter ? 1 : 0);
 
 				// Show the dropdown and get the index the user selects
-				int converterDropdownSelectedIndex = EditorGUILayout.Popup(converterDropdownStartIndex, usableValueConverterNames.ToArray());
+				int converterDropdownSelectedIndex = EditorGUILayout.Popup(converterDropdownStartIndex, dropdownValues.ToArray());
 
-				_valueConverter.objectReferenceValue = usableValueConverters[converterDropdownSelectedIndex];
+				if (!needsConverter)
+				{
+					// If "None" was selected set the converter reference to null
+					if (converterDropdownSelectedIndex == 0)
+						_valueConverter.objectReferenceValue = null;
+					else
+						_valueConverter.objectReferenceValue = usableValueConverters[converterDropdownSelectedIndex - 1];
+				}
+				// Otherwise set the converter
+				else
+					_valueConverter.objectReferenceValue = usableValueConverters[converterDropdownSelectedIndex];
 			}
 			GUILayout.EndHorizontal();
 		}

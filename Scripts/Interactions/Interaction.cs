@@ -155,13 +155,7 @@ namespace Pear.InteractionEngine.Interactions
 
 			if (EventPropertyType != EventHandlerPropertyType && ValueConverter == null)
 			{
-				Debug.LogError(String.Format("This interaction needs a value converter. '{0}' -> '{1}'", EventPropertyType, EventHandlerPropertyType));
-				return false;
-			}
-
-			if (EventPropertyType == EventHandlerPropertyType && ValueConverter != null)
-			{
-				Debug.LogError(String.Format("This interaction has a converter when it doesn't need one. '{0}' -> '{1}'", EventPropertyType, EventHandlerPropertyType));
+				Debug.LogError(String.Format("[{0}] This interaction needs a value converter. '{1}' -> '{2}'", name, EventPropertyType, EventHandlerPropertyType));
 				return false;
 			}
 
