@@ -123,6 +123,7 @@ namespace Pear.InteractionEngine.Interactions
 			EventController = copyFrom.EventController;
 			EventPropertyType = copyFrom.EventPropertyType;
 			EventHandlerPropertyType = copyFrom.EventHandlerPropertyType;
+			ReceiveEventState = copyFrom.ReceiveEventState;
 		}
 
 		/// <summary>
