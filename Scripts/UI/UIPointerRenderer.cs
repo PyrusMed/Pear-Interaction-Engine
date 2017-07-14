@@ -26,7 +26,7 @@ namespace Pear.InteractionEngine.UI
 		// Line renderer
 		private LineRenderer _line;
 
-		void Start() {
+		void Awake() {
 			_pointer = GetComponent<UIPointer>();
 			_line = gameObject.AddComponent<LineRenderer>();
 			_line.startWidth = _line.endWidth = LineWidth;
@@ -57,6 +57,16 @@ namespace Pear.InteractionEngine.UI
 					end,
 				});
 			}
+		}
+
+		private void OnEnable()
+		{
+			_line.enabled = true;
+		}
+
+		private void OnDisable()
+		{
+			_line.enabled = false;
 		}
 	}
 }
