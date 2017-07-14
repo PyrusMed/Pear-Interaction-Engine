@@ -16,6 +16,9 @@ namespace Pear.InteractionEngine.EventListeners
 		[Tooltip("Only move in a single direction based on the meximum direciton of the move vector")]
 		public bool SingleDirection = false;
 
+		[Tooltip("True if the direction is relative to the source. World axis used otherwise.")]
+		public bool RelativeToSource = true;
+
 		// Movement velocity
 		private Vector3 _velocity = Vector3.zero;
 
@@ -32,7 +35,7 @@ namespace Pear.InteractionEngine.EventListeners
 		/// </summary>
 		private void Update()
 		{
-			_anchor.transform.position += transform.TransformVector(_velocity) * MoveSpeed * Time.deltaTime;
+			_anchor.transform.position += _velocity * MoveSpeed * Time.deltaTime;
 		}
 
 		/// <summary>
@@ -42,6 +45,7 @@ namespace Pear.InteractionEngine.EventListeners
 		public void ValueChanged(EventArgs<Vector3> args)
 		{
 			_velocity = SingleDirection ? GetMaximumDirection(args.NewValue) : args.NewValue;
+			_velocity = RelativeToSource ? args.Source.transform.TransformVector(_velocity) : _velocity;
 		}
 
 		/// <summary>

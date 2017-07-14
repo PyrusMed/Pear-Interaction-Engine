@@ -13,8 +13,11 @@ namespace Pear.InteractionEngine.EventListeners
         [Tooltip("Rotation speed")]
         public float RotateSpeed = 10f;
 
+		[Tooltip("Rotate relative to the controller")]
+		public bool RelativeToSource = true;
+
 		// Velocity vector
-		private Vector3 _volocity = Vector3.zero; 
+		private Vector3 _velocity = Vector3.zero; 
 
 		/// <summary>
 		/// Rotates the game object with the given velocity
@@ -24,7 +27,7 @@ namespace Pear.InteractionEngine.EventListeners
 			transform.GetOrAddComponent<ObjectWithAnchor>()
 				.AnchorElement
 				.transform
-				.Rotate(_volocity * RotateSpeed * Time.deltaTime, Space.World);
+				.Rotate(_velocity * RotateSpeed * Time.deltaTime, Space.World);
 		}
 
 		/// <summary>
@@ -33,7 +36,7 @@ namespace Pear.InteractionEngine.EventListeners
 		/// <param name="args">event value</param>
 		public void ValueChanged(EventArgs<Vector3> args)
 		{
-			_volocity = args.NewValue;
+			_velocity = RelativeToSource ? args.Source.transform.TransformVector(args.NewValue) : args.NewValue;
 		}
 	}
 }
