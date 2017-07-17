@@ -40,7 +40,7 @@ namespace Pear.InteractionEngine.Interactions
 		/// <summary>
 		/// Make sure each object that implements IEvent has the event object set
 		/// </summary>
-		private void InitializeEvents()
+		public static void InitializeEvents()
 		{
 			// Loop over every object
 			// If it's an event, set it's event property
@@ -60,8 +60,10 @@ namespace Pear.InteractionEngine.Interactions
 
 					// Set it on the script
 					PropertyInfo eventProperty = eventType.GetProperty("Event");
-					eventProperty.SetValue(mono, eventPropertyValue, null);
-					eventCounter++;
+					if (eventProperty.GetValue(mono, null) == null) {
+						eventProperty.SetValue(mono, eventPropertyValue, null);
+						eventCounter++;
+					}
 				}
 			}
 		}
