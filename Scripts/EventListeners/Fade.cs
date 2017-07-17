@@ -35,18 +35,24 @@ namespace Pear.InteractionEngine.EventListeners
 			_fader.fadeTime = FadeTime;
 			_fader.fadeAplha = FadeAlpha;
 
-			
 			// Fade this object based on the manager's state
-			Manager.FadableObjectCountChangedEvent += count =>
-			{
-				// If there are no items in the manager or if this object is in the manager
-				// make sure it's faded in
-				if (count <= 0 || Manager.IsRegistered(gameObject))
-					_fader.FadeIn();
-				// Otherwise, fade this object out
-				else
-					_fader.FadeOut();
-			};
+			Manager.FadableObjectCountChangedEvent += FadeCountChanged;
+		}
+
+		private void OnDestroy()
+		{
+			Manager.FadableObjectCountChangedEvent -= FadeCountChanged;
+		}
+
+		private void FadeCountChanged(int count)
+		{
+			// If there are no items in the manager or if this object is in the manager
+			// make sure it's faded in
+			if (count <= 0 || Manager.IsRegistered(gameObject))
+				_fader.FadeIn();
+			// Otherwise, fade this object out
+			else
+				_fader.FadeOut();
 		}
 
 		/// <summary>
