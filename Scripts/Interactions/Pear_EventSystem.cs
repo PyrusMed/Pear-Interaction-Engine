@@ -1,5 +1,4 @@
-﻿using NUnit.Compatibility;
-using Pear.InteractionEngine.Events;
+﻿using Pear.InteractionEngine.Events;
 using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
 using System;
@@ -50,7 +49,7 @@ namespace Pear.InteractionEngine.Interactions
 			int eventCounter = 0;
 			foreach (MonoBehaviour mono in objectsInScene)
 			{
-				Type eventType = mono.GetType().GetInterfaces().FirstOrDefault(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == iEventType);
+				Type eventType = mono.GetType().GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == iEventType);
 				if (eventType != null)
 				{
 					// Create an instance of Property<T>
