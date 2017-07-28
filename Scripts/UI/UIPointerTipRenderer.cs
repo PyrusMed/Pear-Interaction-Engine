@@ -21,7 +21,8 @@ public class UIPointerTipRenderer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Pointer.IsActive && Pointer.HoveredElement != null)
+		if (Pointer.IsActive && Pointer.HoveredElement != null &&
+			Vector3.Distance(Pointer.pointerEventData.pointerCurrentRaycast.worldPosition, Pointer.GetOriginPosition()) > 0.1f)
 		{
 			transform.position = Pointer.pointerEventData.pointerCurrentRaycast.worldPosition;
 			transform.LookAt(Pointer.GetOriginPosition());
