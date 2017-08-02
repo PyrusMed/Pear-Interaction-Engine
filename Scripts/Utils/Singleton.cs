@@ -37,7 +37,7 @@ namespace Pear.InteractionEngine.Utils
                         {
                             Debug.LogError("[Singleton] Something went really wrong " +
                                 " - there should never be more than 1 singleton!" +
-                                " Reopening the scene might fix it.");
+                                " Reopening the scene might fix it. Name of obj:" + _instance.name);
                             return _instance;
                         }
 
