@@ -25,6 +25,9 @@ namespace Pear.InteractionEngine.EventListeners
 		// The currently selected object
 		private Selectable _selected;
 
+		// Fired when selection changes
+		public Action<Selectable> SelectedChangedEvent;
+
 		/// <summary>
 		/// Select the given object
 		/// </summary>
@@ -36,6 +39,9 @@ namespace Pear.InteractionEngine.EventListeners
 			{
 				_selected = selectable;
 				_selected.Select();
+
+				if (SelectedChangedEvent != null)
+					SelectedChangedEvent(_selected);
 			}
 
 			_canMove = false;

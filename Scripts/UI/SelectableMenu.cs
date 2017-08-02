@@ -22,7 +22,20 @@ namespace Pear.InteractionEngine.UI
 		public Vector3 RotationOffset;
 
 		[Tooltip("The slider selector")]
-		public SelectableNavigation SliderSelector;
+		public SelectableNavigation SliderNavigation;
+
+		// The controller we're currently open around
+		private Controller _activeController;
+
+		private void Awake()
+		{
+			// When selection changes set the active objects
+			SliderNavigation.SelectedChangedEvent += (selected) =>
+			{
+				if (_activeController != null)
+					_activeController.SetActive(gameObject, selected.gameObject);
+			};
+		}
 
 		/// <summary>
 		/// Place the menu around the given controller
@@ -34,6 +47,7 @@ namespace Pear.InteractionEngine.UI
 
 			gameObject.SetActive(true);
 
+			_activeController = controller;
 			controller.SetActive(gameObject);
 
 			// Anchor to the given controller
@@ -44,7 +58,7 @@ namespace Pear.InteractionEngine.UI
 			transform.localEulerAngles = RotationOffset;
 
 			// Select the default element
-			SliderSelector.Select(controller, DefaultSelected);
+			SliderNavigation.Select(controller, DefaultSelected);
 		}
 
 		/// <summary>
@@ -55,6 +69,7 @@ namespace Pear.InteractionEngine.UI
 		{
 			Debug.Log("Closing density menu");
 
+			_activeController = null;
 			controller.SetActive(ModelLoader.Instance.LoadedModel);
 
 			gameObject.SetActive(false);
