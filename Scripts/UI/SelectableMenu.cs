@@ -34,7 +34,7 @@ namespace Pear.InteractionEngine.UI
 
 			gameObject.SetActive(true);
 
-			controller.ActiveObject = gameObject;
+			controller.SetActive(gameObject);
 
 			// Anchor to the given controller
 			transform.SetParent(controller.transform, false);
@@ -55,7 +55,7 @@ namespace Pear.InteractionEngine.UI
 		{
 			Debug.Log("Closing density menu");
 
-			controller.ActiveObject = ModelLoader.Instance.LoadedModel;
+			controller.SetActive(ModelLoader.Instance.LoadedModel);
 
 			gameObject.SetActive(false);
 		}

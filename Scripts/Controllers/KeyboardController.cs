@@ -15,9 +15,9 @@
 			// Set the keyboard controller's active object to whatever the given controller's active object is
 			if(CameraController != null)
 			{
-				CameraController.ActiveObjectChangedEvent += (oldActiveObject, newActiveObject) =>
+				CameraController.ActiveObjectsChangedEvent += (oldActiveObjects, newActiveObjects) =>
 				{
-					ActiveObject = newActiveObject;
+					ActiveObjects = newActiveObjects;
 				};
 			}
 		}

@@ -20,9 +20,9 @@ namespace Pear.InteractionEngine.Controllers
 				raycast.Event.ValueChangeEvent += (oldValue, newValue) =>
 				{
 					if (newValue != null)
-						ActiveObject = newValue.Value.transform.gameObject;
+						SetActive(newValue.Value.transform.gameObject);
 					else
-						ActiveObject = null;
+						ActiveObjects = null;
 				};
 			}
 		}

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,7 +11,6 @@ namespace Pear.InteractionEngine.Controllers
 	/// </summary>
 	public class Controller : MonoBehaviour
     {
-
         /// <summary>
         /// Location of this controller
         /// </summary>
@@ -21,29 +22,19 @@ namespace Pear.InteractionEngine.Controllers
 		public delegate void InUseChangedHandler(bool inUse);
 		public event InUseChangedHandler InUseChangedEvent;
 
-		// Event handling for when the active object changes
-		public delegate void ActiveObjectChangedHandler(GameObject oldActiveObject, GameObject newActiveObject);
-		public event ActiveObjectChangedHandler ActiveObjectChangedEvent;
+		// Event handling for when the active objects change
+		public delegate void ActiveObjectsChangedHandler(GameObject[] oldActiveObjects, GameObject[] newActiveObjects);
+		public event ActiveObjectsChangedHandler ActiveObjectsChangedEvent;
 
 		/// <summary>
-		/// This controllers active object
+		/// This controllers active objects
 		/// </summary>
 		[SerializeField]
-		private GameObject _activeObject;
-		public GameObject ActiveObject
+		private List<GameObject> _activeObjects = new List<GameObject>();
+		public GameObject[] ActiveObjects
 		{
-			get { return _activeObject; }
-			set
-			{
-				// If the active object changes, update it and fire the event handler
-				if(_activeObject != value)
-				{
-					GameObject oldActiveObject = _activeObject;
-					_activeObject = value;
-					if (ActiveObjectChangedEvent != null)
-						ActiveObjectChangedEvent(oldActiveObject, _activeObject);
-				}
-			}
+			get { return _activeObjects.ToArray(); }
+			set { SetActive(value); }
 		}
 
         /// <summary>
@@ -74,7 +65,24 @@ namespace Pear.InteractionEngine.Controllers
         {
             ControllerManager.Instance.RegisterController(this);
         }
-    }
+
+		/// <summary>
+		/// Sets a new set of active objects. Overwrites the existing list.
+		/// Fires the changed event.
+		/// </summary>
+		/// <param name="newActiveObjects">The new active objects</param>
+		public void SetActive(params GameObject[] newActiveObjects)
+		{
+			GameObject[] oldActiveObjects = ActiveObjects;
+
+			_activeObjects.Clear();
+			if (newActiveObjects != null)
+				_activeObjects.AddRange(newActiveObjects);
+
+			if (ActiveObjectsChangedEvent != null)
+				ActiveObjectsChangedEvent(oldActiveObjects, ActiveObjects);
+		}
+	}
 
     [Serializable]
     public class ControllerEvent : UnityEvent<Controller> { }
