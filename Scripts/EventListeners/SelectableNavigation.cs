@@ -31,20 +31,19 @@ namespace Pear.InteractionEngine.EventListeners
 		/// <summary>
 		/// Select the given object
 		/// </summary>
-		/// <param name="controller"></param>
 		/// <param name="selectable"></param>
-		public void Select(Controller controller, Selectable selectable)
+		public void Select(Selectable selectable)
 		{
-			if (selectable != _selected && selectable != null)
+			if (selectable != null)
 			{
-				_selected = selectable;
-				_selected.Select();
+				selectable.Select();
 
 				if (SelectedChangedEvent != null)
-					SelectedChangedEvent(_selected);
+					SelectedChangedEvent(selectable);
+
+				_selected = selectable;
 			}
 
-			_canMove = false;
 			StartCoroutine(WaitToMove(MoveDelay));
 		}
 
@@ -54,14 +53,20 @@ namespace Pear.InteractionEngine.EventListeners
 		/// <param name="args"></param>
 		public void ValueChanged(EventArgs<Vector2> args)
 		{
-			if (_canMove && Mathf.Abs(args.NewValue.x) > MoveThreshold)
-			{
-				if (_selected != null)
-				{
-					Selectable next = args.NewValue.x > 0 ? _selected.FindSelectableOnRight() : _selected.FindSelectableOnLeft();
-					Select(args.Source, next);
-				}
-			}
+			if (!_canMove || _selected == null)
+				return;
+
+			Selectable next = null;
+			float absX = Mathf.Abs(args.NewValue.x);
+			float absY = Mathf.Abs(args.NewValue.y);
+
+			if (absX > absY && absX > MoveThreshold)
+				next = args.NewValue.x > 0 ? _selected.FindSelectableOnRight() : _selected.FindSelectableOnLeft();
+			else if (absY > absX && absY > MoveThreshold)
+				next = args.NewValue.y > 0 ? _selected.FindSelectableOnUp() : _selected.FindSelectableOnDown();
+
+			if (next != null)
+				Select(next);
 		}
 
 		/// <summary>
@@ -70,6 +75,7 @@ namespace Pear.InteractionEngine.EventListeners
 		/// <param name="seconds">Number of seconds to wait</param>
 		private IEnumerator WaitToMove(float seconds)
 		{
+			_canMove = false;
 			yield return new WaitForSeconds(seconds);
 			_canMove = true;
 		}

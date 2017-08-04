@@ -43,8 +43,6 @@ namespace Pear.InteractionEngine.UI
 		/// <param name="go"></param>
 		public void OpenAround(Controller controller)
 		{
-			Debug.Log("Opening density menu above " + controller.name);
-
 			gameObject.SetActive(true);
 
 			_activeController = controller;
@@ -58,7 +56,7 @@ namespace Pear.InteractionEngine.UI
 			transform.localEulerAngles = RotationOffset;
 
 			// Select the default element
-			SliderNavigation.Select(controller, DefaultSelected);
+			SliderNavigation.Select(DefaultSelected);
 		}
 
 		/// <summary>
