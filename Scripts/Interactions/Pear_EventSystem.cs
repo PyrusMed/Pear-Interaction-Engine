@@ -1,5 +1,4 @@
-﻿using NUnit.Compatibility;
-using Pear.InteractionEngine.Events;
+﻿using Pear.InteractionEngine.Events;
 using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
 using System;
@@ -40,7 +39,7 @@ namespace Pear.InteractionEngine.Interactions
 		/// <summary>
 		/// Make sure each object that implements IEvent has the event object set
 		/// </summary>
-		private void InitializeEvents()
+		public static void InitializeEvents()
 		{
 			// Loop over every object
 			// If it's an event, set it's event property
@@ -50,7 +49,15 @@ namespace Pear.InteractionEngine.Interactions
 			int eventCounter = 0;
 			foreach (MonoBehaviour mono in objectsInScene)
 			{
-				Type eventType = mono.GetType().GetInterfaces().FirstOrDefault(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == iEventType);
+				Type eventType = mono.GetType().GetInterfaces().FirstOrDefault(i =>
+				{
+#if WINDOWS_UWP
+					bool isGenericType = i.GetTypeInfo().IsGenericType;
+#else
+					bool isGenericType = i.IsGenericType;
+#endif
+					return isGenericType && i.GetGenericTypeDefinition() == iEventType;
+				});
 				if (eventType != null)
 				{
 					// Create an instance of Property<T>
