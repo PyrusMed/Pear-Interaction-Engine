@@ -67,8 +67,10 @@ namespace Pear.InteractionEngine.Interactions
 
 					// Set it on the script
 					PropertyInfo eventProperty = eventType.GetProperty("Event");
-					eventProperty.SetValue(mono, eventPropertyValue, null);
-					eventCounter++;
+					if (eventProperty.GetValue(mono, null) == null) {
+						eventProperty.SetValue(mono, eventPropertyValue, null);
+						eventCounter++;
+					}
 				}
 			}
 		}

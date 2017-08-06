@@ -310,7 +310,7 @@ namespace Pear.InteractionEngine.Interactions
 			foreach (Type scriptType in monobehaviors)
 			{
 				// Search the scene for objects of the given type
-				UnityEngine.Object[] objectsInScene = FindObjectsOfType(scriptType);
+				UnityEngine.Object[] objectsInScene = Resources.FindObjectsOfTypeAll(scriptType);
 
 				// Did we find any objects of the given type?
 				if (objectsInScene != null)

@@ -5,6 +5,7 @@ using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Converters;
 using System;
 using UnityEngine;
+using System.Linq;
 
 namespace Pear.InteractionEngine.Interactions
 {
@@ -90,15 +91,14 @@ namespace Pear.InteractionEngine.Interactions
 		}
 
 		/// <summary>
-		/// When the controller's active object changes update the listener
+		/// When the controller's active objects change update the listener
 		/// </summary>
-		/// <param name="oldActiveObject">controller's old active object</param>
-		/// <param name="newActiveObject">controller's new active object</param>
-		private void OnControllerActiveObjectChanged(GameObject oldActiveObject, GameObject newActiveObject)
+		/// <param name="newActiveObjects">controller's new active object</param>
+		private void OnControllerActiveObjectChanged(GameObject[] oldActiveObjects, GameObject[] newActiveObjects)
 		{
 			// If the listener is the old active object
 			// make sure it receives the default, or inital, value as it's new value
-			if(_listenerGameObject == oldActiveObject)
+			if(oldActiveObjects.Contains(_listenerGameObject))
 			{
 				Dispatch(
 					oldValue: _event.Event.Value,
@@ -106,7 +106,7 @@ namespace Pear.InteractionEngine.Interactions
 			}
 			// Otherwise, if it's the new active object,
 			// make sure it's updated with the latest event value
-			else if (_listenerGameObject == newActiveObject)
+			else if (newActiveObjects.Contains(_listenerGameObject))
 			{
 				Dispatch(
 					oldValue: DefaultEventValue,
@@ -122,7 +122,7 @@ namespace Pear.InteractionEngine.Interactions
 		/// <param name="newValue">New event value</param>
 		private void OnEventValueChanged(TEvent oldValue, TEvent newValue)
 		{
-			if(AlwaysReceiveEvents || ReceiveEventsWhenObjectActive && _controller.ActiveObject == _listenerGameObject)
+			if(AlwaysReceiveEvents || ReceiveEventsWhenObjectActive && _controller.ActiveObjects.Contains(_listenerGameObject))
 			{
 				Dispatch(
 					oldValue: oldValue,
@@ -161,7 +161,7 @@ namespace Pear.InteractionEngine.Interactions
 			// If the listener is only receiving event values when the object is active
 			// we need to listen for when the object becomes active on the controller
 			if (ReceiveEventsWhenObjectActive)
-				_controller.ActiveObjectChangedEvent += OnControllerActiveObjectChanged;
+				_controller.ActiveObjectsChangedEvent += OnControllerActiveObjectChanged;
 
 			// Listen for event value changes
 			_event.Event.ValueChangeEvent += OnEventValueChanged;
@@ -173,7 +173,7 @@ namespace Pear.InteractionEngine.Interactions
 		private void DetachEvents()
 		{
 			if (ReceiveEventsWhenObjectActive)
-				_controller.ActiveObjectChangedEvent -= OnControllerActiveObjectChanged;
+				_controller.ActiveObjectsChangedEvent -= OnControllerActiveObjectChanged;
 
 			_event.Event.ValueChangeEvent -= OnEventValueChanged;
 		}
