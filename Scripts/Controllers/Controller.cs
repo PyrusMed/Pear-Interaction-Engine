@@ -16,6 +16,12 @@ namespace Pear.InteractionEngine.Controllers
         /// </summary>
         public ControllerLocation Location;
 
+		[Tooltip("Fired when game object awakes")]
+		public ControllerEvent OnAwake = new ControllerEvent();
+
+		[Tooltip("Fired when game object starts")]
+		public ControllerEvent OnStart = new ControllerEvent();
+
 		/// <summary>
 		/// Event handling for when the controller's InUse state changes
 		/// </summary>
@@ -56,14 +62,21 @@ namespace Pear.InteractionEngine.Controllers
             }
         }
 
+		protected virtual void Awake()
+		{
+			OnAwake.Invoke(this);
+		}
+
         /// <summary>
         /// Registers this controller when the component starts
 		/// Note:
 		///		We do this on start so handlers can setup in their Awake functions
         /// </summary>
-        public virtual void Start()
+        protected virtual void Start()
         {
             ControllerManager.Instance.RegisterController(this);
+
+			OnStart.Invoke(this);
         }
 
 		/// <summary>

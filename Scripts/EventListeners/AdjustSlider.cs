@@ -21,7 +21,6 @@ namespace Pear.InteractionEngine.EventListeners
 		public void ValueChanged(EventArgs<float> args)
 		{
 			_velocity = args.NewValue * Speed;
-			Debug.Log("Setting velocity: " + _velocity);
 		}
 
 		private void Update()

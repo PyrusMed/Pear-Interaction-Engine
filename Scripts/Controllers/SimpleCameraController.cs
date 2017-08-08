@@ -9,7 +9,7 @@ namespace Pear.InteractionEngine.Controllers
 	[RequireComponent(typeof(PhysicsRaycast))]
 	public class SimpleCameraController : Controller
 	{
-		public override void Start()
+		protected override void Start()
 		{
 			base.Start();
 

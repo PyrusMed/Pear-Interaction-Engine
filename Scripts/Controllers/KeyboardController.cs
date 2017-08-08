@@ -8,7 +8,7 @@
 		// Camera controller
 		public Controller CameraController;
 
-		public override void Start()
+		protected override void Start()
 		{
 			base.Start();
 
