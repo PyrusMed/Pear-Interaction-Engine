@@ -95,6 +95,24 @@ namespace Pear.InteractionEngine.Controllers
 			if (ActiveObjectsChangedEvent != null)
 				ActiveObjectsChangedEvent(oldActiveObjects, ActiveObjects);
 		}
+
+		/// <summary>
+		/// Removes the given objects from the set of active objects
+		/// </summary>
+		/// <param name="activeObjectsToRemove">objects to remove from the active object set</param>
+		public void RemoveActives(params GameObject[] activeObjectsToRemove)
+		{
+			if(activeObjectsToRemove != null)
+			{
+				GameObject[] oldActiveObjects = ActiveObjects;
+
+				foreach (GameObject activeObjectToRemove in activeObjectsToRemove)
+					_activeObjects.Remove(activeObjectToRemove);
+
+				if (ActiveObjectsChangedEvent != null)
+					ActiveObjectsChangedEvent(oldActiveObjects, ActiveObjects);
+			}
+		}
 	}
 
     [Serializable]
