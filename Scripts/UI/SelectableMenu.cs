@@ -1,6 +1,7 @@
 ﻿using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.EventListeners;
 using Pear.Models;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,6 +25,12 @@ namespace Pear.InteractionEngine.UI
 		[Tooltip("The slider selector")]
 		public SelectableNavigation SliderNavigation;
 
+		[Tooltip("Called when the menu opens")]
+		public ControllerEvent OnOpen = new ControllerEvent();
+
+		[Tooltip("Called when the menu closes")]
+		public ControllerEvent OnClose = new ControllerEvent();
+
 		// The controller we're currently open around
 		private Controller _activeController;
 
@@ -41,36 +48,32 @@ namespace Pear.InteractionEngine.UI
 		/// Place the menu around the given controller
 		/// </summary>
 		/// <param name="go"></param>
-		public void OpenAround(Controller controller)
+		public void Open(Controller controller)
 		{
 			gameObject.SetActive(true);
 
 			_activeController = controller;
 			controller.SetActive(gameObject);
 
-			// Anchor to the given controller
-			transform.SetParent(controller.transform, false);
-
-			// Place the menu above the controller
-			transform.localPosition = PositionOffset;
-			transform.localEulerAngles = RotationOffset;
-
 			// Select the default element
 			SliderNavigation.Select(DefaultSelected);
+
+			OnOpen.Invoke(_activeController);
 		}
 
 		/// <summary>
 		/// Close the menu
 		/// </summary>
 		/// <param name="controller"></param>
-		public void Close(Controller controller)
+		public void Close()
 		{
-			Debug.Log("Closing density menu");
-
-			_activeController = null;
-			controller.SetActive(ModelLoader.Instance.LoadedModel);
-
+			Debug.Log("Closing selectable menu: " + name);
 			gameObject.SetActive(false);
+
+			if(_activeController != null)
+				_activeController.RemoveActives(gameObject);
+
+			OnClose.Invoke(_activeController);
 		}
 	}
 }
