@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 namespace Pear.InteractionEngine.EventListeners
 {
@@ -20,7 +21,7 @@ namespace Pear.InteractionEngine.EventListeners
         float MaxAlpha()
         {
             float maxAlpha = 0.0f;
-            Renderer[] rendererObjects = GetComponentsInChildren<Renderer>();
+            Renderer[] rendererObjects = GetRenderers();
             foreach (Renderer item in rendererObjects)
             {
                 if (item.enabled)
@@ -40,8 +41,8 @@ namespace Pear.InteractionEngine.EventListeners
             bool fadingOut = (fadingOutTime < 0.0f);
             float fadingOutSpeed = 1.0f / fadingOutTime;
 
-            // grab all child objects
-            Renderer[] rendererObjects = GetComponentsInChildren<Renderer>();
+			// grab all child objects
+			Renderer[] rendererObjects = GetRenderers();
             if (colors == null)
             {
                 //create a cache of colors if necessary
@@ -130,5 +131,14 @@ namespace Pear.InteractionEngine.EventListeners
             StopAllCoroutines();
             StartCoroutine("FadeSequence", -newFadeTime);
         }
+
+		/// <summary>
+		/// Get renderers that have the color property
+		/// </summary>
+		/// <returns>Renderers that have the color property</returns>
+		private Renderer[] GetRenderers()
+		{
+			return GetComponentsInChildren<Renderer>().Where(r => r.material.HasProperty("_Color")).ToArray();
+		}
     }
 }
