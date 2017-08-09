@@ -97,6 +97,17 @@ namespace Pear.InteractionEngine.Controllers
 		}
 
 		/// <summary>
+		/// Add to the list of actives
+		/// </summary>
+		/// <param name="objsToAdd">Objects to add</param>
+		public void AddActives(params GameObject[] objsToAdd)
+		{
+			List<GameObject> actives = ActiveObjects.ToList();
+			actives.AddRange(objsToAdd);
+			SetActive(actives.Distinct().ToArray());
+		}
+
+		/// <summary>
 		/// Removes the given objects from the set of active objects
 		/// </summary>
 		/// <param name="activeObjectsToRemove">objects to remove from the active object set</param>
