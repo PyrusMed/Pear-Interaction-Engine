@@ -5,6 +5,7 @@ using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.Events;
 using System;
 using UnityEngine.UI;
+using Pear.InteractionEngine.UI;
 
 namespace Pear.InteractionEngine.EventListeners
 {
@@ -23,19 +24,20 @@ namespace Pear.InteractionEngine.EventListeners
 		private bool _canMove = true;
 
 		// The currently selected object
-		private Selectable _selected;
+		private SelectableMenuItem _selected;
 
 		// Fired when selection changes
-		public Action<Selectable> SelectedChangedEvent;
+		public Action<SelectableMenuItem> SelectedChangedEvent;
 
 		/// <summary>
 		/// Select the given object
 		/// </summary>
 		/// <param name="selectable"></param>
-		public void Select(Selectable selectable)
+		public void Select(SelectableMenuItem selectable)
 		{
 			if (selectable != null)
 			{
+				Debug.Log("Selecting: " + selectable.name);
 				selectable.Select();
 
 				if (SelectedChangedEvent != null)
@@ -56,14 +58,14 @@ namespace Pear.InteractionEngine.EventListeners
 			if (!_canMove || _selected == null)
 				return;
 
-			Selectable next = null;
+			SelectableMenuItem next = null;
 			float absX = Mathf.Abs(args.NewValue.x);
 			float absY = Mathf.Abs(args.NewValue.y);
 
 			if (absX > absY && absX > MoveThreshold)
-				next = args.NewValue.x > 0 ? _selected.FindSelectableOnRight() : _selected.FindSelectableOnLeft();
+				next = args.NewValue.x > 0 ? _selected.OnRight : _selected.OnLeft;
 			else if (absY > absX && absY > MoveThreshold)
-				next = args.NewValue.y > 0 ? _selected.FindSelectableOnUp() : _selected.FindSelectableOnDown();
+				next = args.NewValue.y > 0 ? _selected.OnUp : _selected.OnDown;
 
 			if (next != null)
 				Select(next);

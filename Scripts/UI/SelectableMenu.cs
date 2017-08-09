@@ -14,7 +14,7 @@ namespace Pear.InteractionEngine.UI
 	public class SelectableMenu : MonoBehaviour
 	{
 		[Tooltip("The default selected object")]
-		public Selectable DefaultSelected;
+		public SelectableMenuItem DefaultSelected;
 
 		[Tooltip("Offset from the controller")]
 		public Vector3 PositionOffset;
