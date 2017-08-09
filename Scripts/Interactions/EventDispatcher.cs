@@ -138,6 +138,9 @@ namespace Pear.InteractionEngine.Interactions
 		/// <param name="newValue">New event value</param>
 		public void Dispatch(TEvent oldValue, TEvent newValue)
 		{
+			if (_listenerGameObject == null)
+				return;
+
 			TEventListener oldValueForListener = _convertFunc(oldValue);
 			TEventListener newValueForListener = _convertFunc(newValue);
 			if (!Property<TEventListener>.AreEqual(oldValueForListener, newValueForListener))
