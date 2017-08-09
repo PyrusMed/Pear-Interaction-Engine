@@ -67,7 +67,7 @@ namespace Pear.InteractionEngine.EventListeners
 			else if (absY > absX && absY > MoveThreshold)
 				next = args.NewValue.y > 0 ? _selected.OnUp : _selected.OnDown;
 
-			if (next != null)
+			if (next != null && next.enabled)
 				Select(next);
 		}
 
