@@ -10,13 +10,23 @@ namespace Pear.InteractionEngine.Interactions
 		[Tooltip("Objects that interactions will be copied to")]
 		public GameObject[] CopyTo;
 
+		[Tooltip("Objects that the interactions will be copied from")]
+		public GameObject[] CopyFrom;
+
 		private void Awake()
 		{
 			if (CopyTo != null)
 			{
-				//Copy alkl interactions from the current object to the specified object
+				// Copy all interactions from the current object to the specified object
 				foreach (GameObject copyTo in CopyTo)
 					Interaction.CopyAll(gameObject, copyTo);
+			}
+
+			if(CopyFrom != null)
+			{
+				// Copy all interactions from the specified objects to this game object
+				foreach (GameObject copyFrom in CopyFrom)
+					Interaction.CopyAll(copyFrom, gameObject);
 			}
 		}
 	}
