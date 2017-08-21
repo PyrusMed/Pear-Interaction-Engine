@@ -13,6 +13,9 @@ namespace Pear.InteractionEngine.EventListeners
         [Tooltip("Resize speed")]
         public float ResizeSpeed = 1f;
 
+		[Tooltip("Should we resize the same amount in each direction?")]
+		public bool Uniform = true;
+
 		// The directions to resize in
 		private Vector3 _directions;
 
@@ -33,7 +36,11 @@ namespace Pear.InteractionEngine.EventListeners
 		/// <param name="args">event args</param>
 		public void ValueChanged(EventArgs<Vector3> args)
 		{
-			_directions = args.NewValue;
+			// If we're scalling the amount in each direction use the vector's magnitude
+			if (Uniform)
+				_directions = Vector3.one * args.NewValue.magnitude;
+			else
+				_directions = args.NewValue;
 		}
 	}
 }
