@@ -11,11 +11,13 @@ namespace Pear.InteractionEngine.Interactions
 		/// <summary>
 		/// Used to move and manipulate this object
 		/// </summary>
-		[HideInInspector]
         public Anchor AnchorElement;
 
         void Awake()
         {
+			if (AnchorElement != null)
+				return;
+
             // Create the anchor element
             GameObject anchor = new GameObject("Anchor");
             AnchorElement = anchor.AddComponent<Anchor>();
