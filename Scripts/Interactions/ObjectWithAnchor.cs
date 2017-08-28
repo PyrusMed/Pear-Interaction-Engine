@@ -15,7 +15,7 @@ namespace Pear.InteractionEngine.Interactions
 
         void Awake()
         {
-			if (AnchorElement != null)
+			if (AnchorElement != null && AnchorElement.transform == transform.parent)
 				return;
 
             // Create the anchor element
