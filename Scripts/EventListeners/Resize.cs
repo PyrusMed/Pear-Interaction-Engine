@@ -38,9 +38,17 @@ namespace Pear.InteractionEngine.EventListeners
 		{
 			// If we're scalling the amount in each direction use the vector's magnitude
 			if (Uniform)
+			{
 				_directions = Vector3.one * args.NewValue.magnitude;
+
+				// If the direction is negative mult by -1
+				if (args.NewValue.x + args.NewValue.y + args.NewValue.z < 0)
+					_directions *= -1;
+			}
 			else
+			{
 				_directions = args.NewValue;
+			}
 		}
 	}
 }
