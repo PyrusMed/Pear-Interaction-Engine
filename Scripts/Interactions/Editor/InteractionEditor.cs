@@ -20,6 +20,9 @@ namespace Pear.InteractionEngine.Interactions
 	[CanEditMultipleObjects]
 	public class InteractionEditor : Editor
 	{
+		// Serialized debug
+		private SerializedProperty _debug;
+
 		// Serialized event
 		private SerializedProperty _event;
 
@@ -51,6 +54,7 @@ namespace Pear.InteractionEngine.Interactions
 
 		void OnEnable()
 		{
+			_debug = serializedObject.FindProperty("_debug");
 			_event = serializedObject.FindProperty("Event");
 			_valueConverter = serializedObject.FindProperty("ValueConverter");
 			_eventController = serializedObject.FindProperty("EventController");
@@ -95,6 +99,8 @@ namespace Pear.InteractionEngine.Interactions
 			// Make sure all serialized properties are up to date
 			serializedObject.Update();
 
+			RenderDebugToggle();
+
 			RenderRecieveEventStateDropdown();
 
 			RenderEventDropdown();
@@ -114,6 +120,19 @@ namespace Pear.InteractionEngine.Interactions
 
 			// Save any changes that were made
 			serializedObject.ApplyModifiedProperties();
+		}
+
+		/// <summary>
+		/// Allows the user to show debug information about the interaction
+		/// </summary>
+		private void RenderDebugToggle()
+		{
+			GUILayout.BeginHorizontal();
+			{
+				EditorGUILayout.LabelField("Debug:", GUILayout.Width(100));
+				_debug.boolValue = EditorGUILayout.Toggle(_debug.boolValue);
+			}
+			GUILayout.EndHorizontal();
 		}
 
 		/// <summary>
@@ -179,6 +198,9 @@ namespace Pear.InteractionEngine.Interactions
 				}
 			}
 			GUILayout.EndHorizontal();
+
+			if (_debug.boolValue)
+				EditorGUILayout.ObjectField(_event);
 		}
 
 		/// <summary>
@@ -241,6 +263,9 @@ namespace Pear.InteractionEngine.Interactions
 					_valueConverter.objectReferenceValue = null;
 			}
 			GUILayout.EndHorizontal();
+
+			if (_debug.boolValue)
+				EditorGUILayout.ObjectField(_eventHandler);
 		}
 
 		/// <summary>
@@ -290,6 +315,9 @@ namespace Pear.InteractionEngine.Interactions
 					_valueConverter.objectReferenceValue = usableValueConverters[converterDropdownSelectedIndex];
 			}
 			GUILayout.EndHorizontal();
+
+			if (_debug.boolValue)
+				EditorGUILayout.ObjectField(_valueConverter);
 		}
 
 		/// <summary>

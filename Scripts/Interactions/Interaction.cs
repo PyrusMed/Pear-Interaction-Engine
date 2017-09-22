@@ -23,6 +23,10 @@ namespace Pear.InteractionEngine.Interactions
 			Always,
 		}
 
+		// Whether or not to show debug info about this interaction
+		[SerializeField]
+		private bool _debug;
+
 		// Fires the event
 		[SerializeField]
 		private MonoBehaviour Event;
