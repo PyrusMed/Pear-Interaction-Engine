@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -57,6 +58,17 @@ namespace Pear.InteractionEngine.Utils
 			}
 
 			return copyTo as T;
+		}
+
+		/// <summary>
+		/// Gets all scripts 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="component"></param>
+		/// <returns></returns>
+		public static T[] GetScripts<T>(this Component component) where T : class {
+			Component[] components = component.GetComponents(typeof(T));
+			return components.Select(c => (T)(object)c).ToArray();
 		}
 	}
 }
