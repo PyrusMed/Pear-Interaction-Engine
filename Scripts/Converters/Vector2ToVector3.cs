@@ -16,7 +16,7 @@ namespace Pear.InteractionEngine.Converters
 		public float XMultiplier = 1;
 
 		[Tooltip("Where should the Y value be set")]
-		public VectorFields SetYOn = VectorFields.X;
+		public VectorFields SetYOn = VectorFields.Y;
 
 		[Tooltip("Multiplied on the Y value when it's set")]
 		public float YMultiplier = 1;

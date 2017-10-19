@@ -1,4 +1,7 @@
-﻿using Pear.InteractionEngine.Events;
+﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Converters;
+using Pear.InteractionEngine.EventListeners;
+using Pear.InteractionEngine.Events;
 using Pear.InteractionEngine.Properties;
 using Pear.InteractionEngine.Utils;
 using System;
@@ -73,7 +76,165 @@ namespace Pear.InteractionEngine.Interactions
 					}
 				}
 			}
+
+			Debug.Log(string.Format("[Pear Event System] Initialized {0} events", eventCounter));
 		}
+
+		/*
+		public class NamedEventDispatcher<TEvent, TEventListener>
+		{
+			// Initial event value
+			public TEvent DefaultEventValue = default(TEvent);
+
+			private List<EventInfo> _events;
+
+			private Dictionary<GameObject, List<EventListenerInfo>> _gameObjToListenersMap = new Dictionary<GameObject, List<EventListenerInfo>>();
+
+			private List<EventListenerInfo> _alwaysReceiveEvents = new List<EventListenerInfo>();
+
+			public void Add(IEvent<TEvent> namedEvent, Controller controller, IPropertyConverter<TEvent, TEventListener> converter)
+			{
+				Func<TEvent, TEventListener> convertFunc = eventVal => { return (TEventListener)(eventVal as object); };
+				if (converter != null)
+					convertFunc = converter.Convert;
+
+				EventInfo info = new EventInfo
+				{
+					Event = namedEvent,
+					Controller = controller,
+					Converter = convertFunc,
+				};
+
+				_events.Add(info);
+
+				namedEvent.Event.ValueChangeEvent += (TEvent oldValue, TEvent newValue) =>
+				{
+					EventValueChanged(oldValue, newValue, info);
+				};
+			}
+
+			public void Add(IEventListener<TEventListener> listener, GameObject owner, ReceiveEventStates receiveEventState)
+			{
+				List<EventListenerInfo> listeners;
+				if(!_gameObjToListenersMap.TryGetValue(owner, out listeners))
+				{
+					listeners = new List<EventListenerInfo>();
+					_gameObjToListenersMap[owner] = listeners;
+				}
+
+				listeners.Add(new EventListenerInfo
+				{
+					Listener = listener,
+					Owner = owner,
+					ReceiveEventState = receiveEventState,
+				}); 
+			}
+
+			private void EventValueChanged(TEvent oldValue, TEvent newValue, EventInfo eventInfo)
+			{
+				// Get a list of all listeners that need to hear about this event
+				List<EventListenerInfo> listeners = new List<EventListenerInfo>();
+				listeners.AddRange(_alwaysReceiveEvents);
+
+				foreach (GameObject activeObject in eventInfo.Controller.ActiveObjects)
+				{
+					listeners.AddRange(_gameObjToListenersMap[activeObject]);
+				}
+
+				TEventListener oldValueForListener = eventInfo.Converter(oldValue);
+				TEventListener newValueForListener = eventInfo.Converter(newValue);
+				foreach (EventListenerInfo listenerInfo in listeners)
+				{
+					Dispatch(eventInfo.Controller, oldValueForListener, newValueForListener, listenerInfo);
+				}
+			}
+
+			public void OnControllerActiveObjectsChanged(GameObject[] oldActiveObjects, GameObject[] newActiveObjects)
+			{
+				foreach(GameObject oldActiveObject in oldActiveObjects)
+				{
+					List<EventListenerInfo> listeners;
+					if(_gameObjToListenersMap.TryGetValue(oldActiveObject, out listeners))
+					{
+						foreach(EventInfo eventInfo in _events)
+						{
+							TEventListener oldValueForListener = eventInfo.Converter(eventInfo.);
+							TEventListener newValueForListener = convertFunc(newValue);
+							foreach (EventListenerInfo listenerInfo in listeners)
+							{
+								Dispatch(controller, oldValueForListener, newValueForListener, listenerInfo);
+							}
+						}
+					}
+				}
+
+				// If the listener is the old active object
+				// make sure it receives the default, or inital, value as it's new value
+				if (oldActiveObjects.Contains(_listenerGameObject))
+				{
+					Dispatch(
+						oldValue: _event.Event.Value,
+						newValue: DefaultEventValue);
+				}
+				// Otherwise, if it's the new active object,
+				// make sure it's updated with the latest event value
+				else if (newActiveObjects.Contains(_listenerGameObject))
+				{
+					Dispatch(
+						oldValue: DefaultEventValue,
+						newValue: _event.Event.Value);
+				}
+			})
+
+			private void Dispatch(Controller controller, TEventListener oldValue, TEventListener newValue, EventListenerInfo listenerInfo)
+			{
+				if (listenerInfo.Owner == null)
+					return;
+
+				MonoBehaviour mono = listenerInfo.Listener as MonoBehaviour;
+				if (mono && !mono.enabled)
+					return;
+
+				if (!Property<TEventListener>.AreEqual(oldValue, newValue))
+				{
+					EventArgs<TEventListener> eventArgs = new EventArgs<TEventListener>()
+					{
+						Source = controller,
+						OldValue = oldValue,
+						NewValue = newValue,
+					};
+
+					listenerInfo.Listener.ValueChanged(eventArgs);
+				}
+			}
+
+			private class EventListenerInfo
+			{
+				public IEventListener<TEventListener> Listener;
+				public GameObject Owner;
+				public ReceiveEventStates ReceiveEventState;
+			}
+
+			private class EventInfo
+			{
+				public IEvent<TEvent> Event;
+				public Controller Controller;
+				public Func<TEvent, TEventListener> Converter;
+			}
+		}
+
+		public static void LinkNamedEventsAndNamedEventHandlers()
+		{
+			// Get all named events
+			NamedEvent[] namedEvents = Resources.FindObjectsOfTypeAll<NamedEvent>();
+			if (!namedEvent.IsValid())
+			{
+				Debug.LogError("Invalid named event on object " + namedEvent.name);
+				return;
+			}
+
+			NamedEventListener[] namedEventHandler = Resources.FindObjectsOfTypeAll<NamedEventListener>();
+		}*/
 
 		protected override void OnEnable()
 		{
