@@ -1,9 +1,6 @@
 ﻿using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.EventListeners;
-using Pear.Models;
-using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Pear.InteractionEngine.UI
 {
