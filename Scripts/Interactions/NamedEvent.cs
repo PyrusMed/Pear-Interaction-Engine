@@ -2,6 +2,7 @@
 using Pear.InteractionEngine.Converters;
 using Pear.InteractionEngine.EventListeners;
 using Pear.InteractionEngine.Events;
+using Pear.InteractionEngine.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -111,6 +112,7 @@ namespace Pear.InteractionEngine.Interactions
 			private IEvent<TEvent> _event;
 			private Controller _controller;
 			private Func<TEvent, TEventListener> _converter;
+			private Property<TEventListener> _convertedValueProperty;
 
 			private bool _enabled = false;
 			public bool Enabled
@@ -122,9 +124,9 @@ namespace Pear.InteractionEngine.Interactions
 					if (value != _enabled)
 					{
 						if (value)
-							_event.Event.ValueChangeEvent += OnValueChanged;
+							_convertedValueProperty.ValueChangeEvent += OnValueChanged;
 						else
-							_event.Event.ValueChangeEvent -= OnValueChanged;
+							_convertedValueProperty.ValueChangeEvent -= OnValueChanged;
 					}
 
 					_enabled = value;
@@ -141,18 +143,20 @@ namespace Pear.InteractionEngine.Interactions
 					_converter = converter.Convert;
 				else
 					_converter = eventVal => { return (TEventListener)(eventVal as object); };
+
+				// Whenever the event's value changes, convert that value into the event listener's value type
+				// This will ensure we only fire events when the event listener's value type changes
+				_convertedValueProperty = new Property<TEventListener>();
+				_event.Event.ValueChangeEvent += (oldVal, newVal) => _convertedValueProperty.Value = _converter(newVal);
 			}
 
-			public void OnValueChanged(TEvent oldValue, TEvent newValue)
+			public void OnValueChanged(TEventListener oldValue, TEventListener newValue)
 			{
-				TEventListener oldValueForListener = _converter(oldValue);
-				TEventListener newValueForListener = _converter(newValue);
-
 				EventArgs<TEventListener> eventArgs = new EventArgs<TEventListener>()
 				{
 					Source = _controller,
-					OldValue = oldValueForListener,
-					NewValue = newValueForListener,
+					OldValue = oldValue,
+					NewValue = newValue,
 				};
 
 				EventToEventListenerDispatcher<TEventListener>.DispatchToListeners(_eventName, eventArgs);
