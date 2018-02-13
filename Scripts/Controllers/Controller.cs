@@ -29,8 +29,9 @@ namespace Pear.InteractionEngine.Controllers
 		public event InUseChangedHandler InUseChangedEvent;
 
 		// Event handling for when the active objects change
-		public delegate void ActiveObjectsChangedHandler(GameObject[] oldActiveObjects, GameObject[] newActiveObjects);
-		public event ActiveObjectsChangedHandler ActiveObjectsChangedEvent;
+		public delegate void ActiveObjectsChangeHandler(GameObject[] oldActiveObjects, GameObject[] newActiveObjects);
+		public event ActiveObjectsChangeHandler PreActiveObjectsChangedEvent;
+		public event ActiveObjectsChangeHandler PostActiveObjectsChangedEvent;
 
 		/// <summary>
 		/// This controllers active objects
@@ -83,17 +84,33 @@ namespace Pear.InteractionEngine.Controllers
 		/// Sets a new set of active objects. Overwrites the existing list.
 		/// Fires the changed event.
 		/// </summary>
-		/// <param name="newActiveObjects">The new active objects</param>
-		public void SetActive(params GameObject[] newActiveObjects)
+		/// <param name="activeObjectsToSet">The new active objects</param>
+		public void SetActive(params GameObject[] activeObjectsToSet)
 		{
-			GameObject[] oldActiveObjects = ActiveObjects;
+			List<GameObject> newActiveObjects = new List<GameObject>();
+			if (activeObjectsToSet != null)
+				newActiveObjects.AddRange(activeObjectsToSet);
 
-			_activeObjects.Clear();
-			if (newActiveObjects != null)
-				_activeObjects.AddRange(newActiveObjects);
+			List<GameObject> oldActiveObjects = new List<GameObject>();
+			foreach (GameObject activeObject in _activeObjects)
+			{
+				if (!newActiveObjects.Contains(activeObject))
+					oldActiveObjects.Add(activeObject);
+			}
 
-			if (ActiveObjectsChangedEvent != null)
-				ActiveObjectsChangedEvent(oldActiveObjects, ActiveObjects);
+			// If nothing changed return
+			if (oldActiveObjects.Count == 0 && newActiveObjects.Count == _activeObjects.Count)
+				return;
+
+			GameObject[] oldActiveObjectsArray = oldActiveObjects.ToArray();
+
+			if (PreActiveObjectsChangedEvent != null)
+				PreActiveObjectsChangedEvent(oldActiveObjectsArray, newActiveObjects.ToArray());
+
+			_activeObjects = newActiveObjects;
+
+			if (PostActiveObjectsChangedEvent != null)
+				PostActiveObjectsChangedEvent(oldActiveObjectsArray, ActiveObjects);
 		}
 
 		/// <summary>
@@ -115,13 +132,13 @@ namespace Pear.InteractionEngine.Controllers
 		{
 			if(activeObjectsToRemove != null)
 			{
-				GameObject[] oldActiveObjects = ActiveObjects;
-
+				// Remove the object from our list of actives
+				// then set the new list active
+				List<GameObject> newActiveObjects = new List<GameObject>(_activeObjects);
 				foreach (GameObject activeObjectToRemove in activeObjectsToRemove)
-					_activeObjects.Remove(activeObjectToRemove);
+					newActiveObjects.Remove(activeObjectToRemove);
 
-				if (ActiveObjectsChangedEvent != null)
-					ActiveObjectsChangedEvent(oldActiveObjects, ActiveObjects);
+				SetActive(newActiveObjects.ToArray());
 			}
 		}
 	}

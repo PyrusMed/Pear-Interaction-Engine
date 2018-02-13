@@ -16,7 +16,7 @@ namespace Pear.InteractionEngine.Controllers
 			// Set the keyboard controller's active object to whatever the given controller's active object is
 			if(CameraController != null)
 			{
-				CameraController.ActiveObjectsChangedEvent += (oldActiveObjects, newActiveObjects) =>
+				CameraController.PostActiveObjectsChangedEvent += (oldActiveObjects, newActiveObjects) =>
 				{
 					ActiveObjects = newActiveObjects;
 				};

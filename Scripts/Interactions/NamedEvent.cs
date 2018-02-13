@@ -6,6 +6,7 @@ using Pear.InteractionEngine.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Pear.InteractionEngine.Interactions

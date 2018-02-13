@@ -21,12 +21,15 @@ namespace Pear.InteractionEngine.Events
 			{
 				// If we hit something update the event property
 				RaycastHit hitInfo;
-				Vector3 relativeDirection = Controller.transform.TransformVector(Direction);
-				if (Physics.Raycast(Camera.main.transform.position, relativeDirection, out hitInfo, 1000))
+				if (Physics.Raycast(transform.position, transform.forward, out hitInfo, 1000))
+				{
 					Event.Value = hitInfo;
+				}
 				// Otherwise, set the event property to null
 				else
+				{
 					Event.Value = null;
+				}
 			}
         }
 	}

@@ -16,15 +16,35 @@ namespace Pear.InteractionEngine.Utils
 		/// Gets or add a component. Usage example:
 		/// BoxCollider boxCollider = transform.GetOrAddComponent<BoxCollider>();
 		/// </summary>
-		public static T GetOrAddComponent<T>(this Component child) where T : Component
+		public static T GetOrAddComponent<T>(this Component child, Action<T> onAdd = null) where T : Component
         {
 			T result = child.GetComponent<T>();
 			if (result == null)
 			{
-				result = child.gameObject.AddComponent<T>();
+				result = child.gameObject.AddComponentWithInit<T>(onAdd);
 			}
 			return result;
         }
+
+		public static T AddComponentWithInit<T>(this GameObject child, Action<T> onAdd) where T : Component
+		{
+			if(onAdd == null)
+			{
+				return child.AddComponent<T>();
+			}
+
+			bool oldState = child.activeInHierarchy;
+			child.SetActive(false);
+
+			T comp = child.AddComponent<T>();
+
+			if (onAdd != null)
+				onAdd(comp);
+
+			child.SetActive(oldState);
+
+			return comp;
+		}
 
 		/// <summary>
 		/// Copies values from one component to another

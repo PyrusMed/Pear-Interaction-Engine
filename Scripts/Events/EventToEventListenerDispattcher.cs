@@ -31,19 +31,16 @@ namespace Pear.InteractionEngine.Interactions
 			}
 		}
 
-		public static void DispatchToListeners(string eventName, EventArgs<TEventListener> args)
+		public static void DispatchToListeners(string eventName, EventArgs<TEventListener> args, GameObject[] forceSendingToGameObjects = null)
 		{
+			GameObject[] targetGameObjects = forceSendingToGameObjects != null ? forceSendingToGameObjects : args.Source.ActiveObjects;
 			EventListenerCollection listeners;
 			if (_eventNameToListeners.TryGetValue(eventName, out listeners))
 			{
-				foreach (IEventListener<TEventListener> listener in listeners.GetListeners(args.Source.ActiveObjects))
+				foreach (IEventListener<TEventListener> listener in listeners.GetListeners(targetGameObjects))
 				{
 					listener.ValueChanged(args);
 				}
-			}
-			else
-			{
-
 			}
 		}
 

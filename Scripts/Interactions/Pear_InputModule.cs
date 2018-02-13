@@ -2,6 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Pear.InteractionEngine.Interactions.Pointers;
 
 namespace Pear.InteractionEngine.Interactions
 {
