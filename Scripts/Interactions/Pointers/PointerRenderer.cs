@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Pear.InteractionEngine.UI
+namespace Pear.InteractionEngine.Interactions.Pointers
 {
 	/// <summary>
 	/// Renderer for the UI pointer
 	/// </summary>
-	[RequireComponent(typeof(UIPointer))]
-	public class UIPointerRenderer : MonoBehaviour
+	public class PointerRenderer : MonoBehaviour
 	{
+		[Tooltip("The BasePointer that this renderer is based on")]
+		public BasePointer Pointer;
+
 		[Tooltip("Width of the line")]
 		public float LineWidth = 0.005f;
 
@@ -20,36 +22,34 @@ namespace Pear.InteractionEngine.UI
 		[Tooltip("The colour to change the pointer materials when the pointer is not colliding with anything or with an invalid object. Set to `Color.clear` to bypass changing material colour on invalid collision.")]
 		public Color invalidCollisionColor = Color.red;
 
-		// Pointer
-		private UIPointer _pointer;
-
 		// Line renderer
 		private LineRenderer _line;
 
-		void Awake() {
-			_pointer = GetComponent<UIPointer>();
+		void Start() {
+			// Setup the line
 			_line = gameObject.AddComponent<LineRenderer>();
 			_line.startWidth = _line.endWidth = LineWidth;
-
 			_line.material.color = invalidCollisionColor;
-			_pointer.HoverChangedEvent += (oldHovered, newHovered) =>
+
+			// Listen for pointer events
+			Pointer.HoverChangedEvent += (oldHovered, newHovered) =>
 			{
 				_line.material.color = newHovered != null ? validCollisionColor : invalidCollisionColor;
 			};
 
-			_pointer.IsActiveChangedEvent += isActive => _line.enabled = isActive;
+			Pointer.IsActiveChangedEvent += isActive => _line.enabled = isActive;
 		}
 
 		/// <summary>
 		/// Updates the pointer line
 		/// </summary>
 		void Update() {
-			if (_pointer.IsActive)
+			if (Pointer.IsActive)
 			{
-				Vector3 start = _pointer.GetOriginPosition();
-				Vector3 end = _pointer.HoveredElement != null ?
-					_pointer.pointerEventData.pointerCurrentRaycast.worldPosition :
-					start + _pointer.GetOriginForward() * 10;
+				Vector3 start = Pointer.GetOriginPosition();
+				Vector3 end = Pointer.HoveredElement != null ?
+					Pointer.RaycastResult.worldPosition :
+					start + Pointer.GetOriginForward() * 10;
 
 				_line.SetPositions(new Vector3[]
 				{
@@ -61,7 +61,8 @@ namespace Pear.InteractionEngine.UI
 
 		private void OnEnable()
 		{
-			_line.enabled = true;
+			if(_line != null)
+				_line.enabled = true;
 		}
 
 		private void OnDisable()
