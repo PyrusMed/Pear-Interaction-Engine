@@ -63,6 +63,9 @@ namespace Pear.InteractionEngine.EventListeners
 				{
 					foreach(Material material in renderer.materials)
 					{
+						if (!material.HasProperty("_EmissionColor"))
+							continue;
+
 						material.EnableKeyword("_EMISSION");
 
 						float emission = Mathf.PingPong(timeElapsed, 1 / PulsesPerSecond) * EmissionStrength;
@@ -91,6 +94,9 @@ namespace Pear.InteractionEngine.EventListeners
 			{
 				foreach (Material material in renderer.sharedMaterials)
 				{
+					if (!material.HasProperty("_EmissionColor"))
+						continue;
+
 					material.SetColor("_EmissionColor", material.color);
 					material.DisableKeyword("_EMISSION");
 				}

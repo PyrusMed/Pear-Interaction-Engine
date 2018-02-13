@@ -34,8 +34,8 @@ namespace Pear.InteractionEngine.Interactions
 				return;
 			}
 
-			if(EventListener.gameObject != gameObject)
-				EventListener = gameObject.AddComponentFrom(EventListener);
+			if (EventListener.gameObject != gameObject)
+				CopyEventListener(EventListener);
 
 			Type eventListnerPropertyType = Type.GetType(EventListenerPropertyType);
 			Type eventListenerDispatcherType = typeof(EventListenerDispatcher<>);
@@ -79,7 +79,7 @@ namespace Pear.InteractionEngine.Interactions
 			}
 
 			EventName = copyFrom.EventName;
-			EventListener = gameObject.AddComponentFrom(copyFrom.EventListener);
+			CopyEventListener(copyFrom.EventListener);
 			EventListenerPropertyType = copyFrom.EventListenerPropertyType;
 			ReceiveEventState = copyFrom.ReceiveEventState;
 		}
@@ -92,6 +92,14 @@ namespace Pear.InteractionEngine.Interactions
 		private void OnDisable()
 		{
 			_eventListenerDispatcher.Enabled = false;
+		}
+
+		private void CopyEventListener(MonoBehaviour eventListener)
+		{
+			// If the event listener is a singleton we just want to point to it
+			// if it is NOT a singleton duplicate the script
+			bool isEventListenerSingleton = eventListener.DerivesFromGeneric(typeof(Singleton<>));
+			EventListener = isEventListenerSingleton ? eventListener : gameObject.AddComponentFrom(eventListener);
 		}
 
 		/// <summary>

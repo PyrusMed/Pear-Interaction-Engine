@@ -8,7 +8,7 @@ namespace Pear.InteractionEngine.EventListeners
 {
 	public class Outline : MonoBehaviour, IEventListener<RaycastHit?>
 	{
-		private const string LOG_TAG = "[HoverOutline]";
+		private const string LOG_TAG = "[Outline]";
 
 		// The value of the outline width when the outline is not showing
 		private const float NoOutlineValue = 0f;
@@ -32,7 +32,7 @@ namespace Pear.InteractionEngine.EventListeners
 				if (_outlineMaterial == null)
 					CreateOutlineMaterial();
 
-				if(_outlineMaterial != null && ShowOutline != value)
+				if(_outlineMaterial != null)
 				{
 					float outlineValue = value ? HoveredOutlineValue : NoOutlineValue;
 					_outlineMaterial.SetFloat("_Outline", outlineValue);

@@ -7,7 +7,7 @@ using Pear.InteractionEngine.Utils;
 
 namespace Pear.InteractionEngine.EventListeners
 {
-	public class HoverManager : MonoBehaviour, IEventListener<RaycastHit?>
+	public class HoverManager : Singleton<HoverManager>, IEventListener<RaycastHit?>
 	{
 		private const string LOG_TAG = "[HoverManager]";
 
@@ -21,6 +21,32 @@ namespace Pear.InteractionEngine.EventListeners
 		[Tooltip("Pulses per second")]
 		[Range(1f, 100f)]
 		public float PulsesPerSecond = 1;
+
+		/// <summary>
+		/// The hovered object, if any
+		/// </summary>
+		public GameObject HoveredObject
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
+		/// Tells whether an object is being hovered over
+		/// </summary>
+		public bool IsHoveringOverObject { get { return HoveredObject != null; } }
+
+		private void Start()
+		{
+			// When a new object is selected
+			// make sure we stop showing the hover effect
+			SelectionManager.Instance.SelectEvent += selectedObject => UpdateHoverEffect(selectedObject, showEffect: false);
+
+			// When an object is deselected 
+			// make sure we start showing the hover effect
+			// on the hovered object
+			SelectionManager.Instance.DeselectEvent += deselectedObject => UpdateHoverEffect(HoveredObject, showEffect: true);
+		}
 
 		public void ValueChanged(EventArgs<RaycastHit?> args)
 		{
@@ -37,9 +63,9 @@ namespace Pear.InteractionEngine.EventListeners
 			{
 				GameObject objectToRemoveHoverFrom = args.OldValue.Value.transform.gameObject;
 
-				UpdateHoverOutline(objectToRemoveHoverFrom, showOutline: false);
+				UpdateHoverEffect(objectToRemoveHoverFrom, showEffect: false);
 
-				args.Source.RemoveActives(objectToRemoveHoverFrom);
+				HoveredObject = null;
 			}
 
 			// If there's a new hit update the active object
@@ -47,27 +73,40 @@ namespace Pear.InteractionEngine.EventListeners
 			{
 				GameObject objectToHover = args.NewValue.Value.transform.gameObject;
 
-				UpdateHoverOutline(objectToHover, showOutline: true);
+				UpdateHoverEffect(objectToHover, showEffect: !SelectionManager.Instance.HasSelectedObject);
 
-				args.Source.SetActive(objectToHover);
+				HoveredObject = objectToHover;
 			}
 		}
 
+		/// <summary>
+		/// Checks whether the given object can be hovered over
+		/// </summary>
+		/// <param name="hit">The raycast hit</param>
+		/// <returns>True if object can be hovered over. False otherwise</returns>
 		private bool IsValid(RaycastHit? hit)
 		{
 			return hit.HasValue &&
 				InteractableLayers == (InteractableLayers | (1 << hit.Value.transform.gameObject.layer));
 		}
 
-		private void UpdateHoverOutline(GameObject obj, bool showOutline)
+		/// <summary>
+		/// Updates the hover effect on the given object
+		/// </summary>
+		/// <param name="objToUpdate">The obj to update</param>
+		/// <param name="showEffect">Should we show the effect or hide it?</param>
+		private void UpdateHoverEffect(GameObject objToUpdate, bool showEffect)
 		{
-			EmissionHighlight hoverOutline = obj.transform.GetOrAddComponent<EmissionHighlight>(onAdd: newHoverOutline =>
+			if (objToUpdate == null)
+				return;
+
+			EmissionHighlight hoverHighlight = objToUpdate.transform.GetOrAddComponent<EmissionHighlight>(onAdd: newHoverHighlight =>
 			{
-				newHoverOutline.EmissionStrength = EmissionStrength;
-				newHoverOutline.PulsesPerSecond = PulsesPerSecond;
+				newHoverHighlight.EmissionStrength = EmissionStrength;
+				newHoverHighlight.PulsesPerSecond = PulsesPerSecond;
 			});
 
-			hoverOutline.Highlight = showOutline;
+			hoverHighlight.Highlight = showEffect;
 		}
 	}
 }
