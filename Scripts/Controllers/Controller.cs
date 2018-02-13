@@ -44,6 +44,11 @@ namespace Pear.InteractionEngine.Controllers
 			set { SetActive(value); }
 		}
 
+		/// <summary>
+		/// Tells whether this controller has active objects
+		/// </summary>
+		public bool HasActiveObjects { get { return _activeObjects.Count > 0; } }
+
         /// <summary>
         /// Tracks the in use state of this controller
         /// </summary>
