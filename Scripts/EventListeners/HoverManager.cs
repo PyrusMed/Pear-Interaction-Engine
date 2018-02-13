@@ -49,7 +49,7 @@ namespace Pear.InteractionEngine.EventListeners
 
 				UpdateHoverOutline(objectToHover, showOutline: true);
 
-				args.Source.AddActives(objectToHover);
+				args.Source.SetActive(objectToHover);
 			}
 		}
 
