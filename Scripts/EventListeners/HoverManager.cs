@@ -7,9 +7,12 @@ using Pear.InteractionEngine.Utils;
 
 namespace Pear.InteractionEngine.EventListeners
 {
-	public class HoverManager : Singleton<HoverManager>, IEventListener<RaycastHit?>
+	public class HoverManager : MonoBehaviour, IEventListener<RaycastHit?>
 	{
 		private const string LOG_TAG = "[HoverManager]";
+
+		[Tooltip("Manages selection")]
+		public SelectionManager SelectionManager;
 
 		[Tooltip("The layer to interact with")]
 		public LayerMask InteractableLayers;
@@ -40,12 +43,12 @@ namespace Pear.InteractionEngine.EventListeners
 		{
 			// When a new object is selected
 			// make sure we stop showing the hover effect
-			SelectionManager.Instance.SelectEvent += selectedObject => UpdateHoverEffect(selectedObject, showEffect: false);
+			SelectionManager.SelectEvent += selectedObject => UpdateHoverEffect(selectedObject, showEffect: false);
 
 			// When an object is deselected 
 			// make sure we start showing the hover effect
 			// on the hovered object
-			SelectionManager.Instance.DeselectEvent += deselectedObject => UpdateHoverEffect(HoveredObject, showEffect: true);
+			SelectionManager.DeselectEvent += deselectedObject => UpdateHoverEffect(HoveredObject, showEffect: CanHover(HoveredObject));
 		}
 
 		public void ValueChanged(EventArgs<RaycastHit?> args)
@@ -73,7 +76,7 @@ namespace Pear.InteractionEngine.EventListeners
 			{
 				GameObject objectToHover = args.NewValue.Value.transform.gameObject;
 
-				UpdateHoverEffect(objectToHover, showEffect: !SelectionManager.Instance.HasSelectedObject);
+				UpdateHoverEffect(objectToHover, showEffect: CanHover(objectToHover));
 
 				HoveredObject = objectToHover;
 			}
@@ -88,6 +91,16 @@ namespace Pear.InteractionEngine.EventListeners
 		{
 			return hit.HasValue &&
 				InteractableLayers == (InteractableLayers | (1 << hit.Value.transform.gameObject.layer));
+		}
+
+		/// <summary>
+		/// Tells whether we can hover over this object
+		/// </summary>
+		/// <param name="objToCheck">Object to check</param>
+		/// <returns>True if we can hover. False otherwise.</returns>
+		private bool CanHover(GameObject objToCheck)
+		{
+			return !SelectionManager.IsSelected(objToCheck) && (SelectionManager.MultipleSelection || !SelectionManager.HasSelectedObject);
 		}
 
 		/// <summary>

@@ -8,7 +8,7 @@ namespace Pear.InteractionEngine.EventListeners
 {
 	public class EmissionHighlight : MonoBehaviour, IEventListener<bool>
 	{
-		private const string LOG_TAG = "[HoverOutline]";
+		private const string LOG_TAG = "[EmissionHighlight]";
 
 		[Tooltip("The emmission strength")]
 		[Range(1f, 100f)]
@@ -17,9 +17,6 @@ namespace Pear.InteractionEngine.EventListeners
 		[Tooltip("Pulses per second")]
 		[Range(1f, 100f)]
 		public float PulsesPerSecond = 1;
-
-		[Tooltip("Highlight on start")]
-		public bool HighlightOnStart = false;
 
 		// Key for pulse routine
 		private Coroutine _pulseRoutine;
@@ -41,11 +38,6 @@ namespace Pear.InteractionEngine.EventListeners
 			}
 		}
 
-		private void Start()
-		{
-			Highlight = HighlightOnStart;
-		}
-
 		public void ValueChanged(EventArgs<bool> args)
 		{
 			Highlight = args.NewValue;
@@ -53,7 +45,7 @@ namespace Pear.InteractionEngine.EventListeners
 
 		private IEnumerator Pulse()
 		{
-			Debug.Log(String.Format("{0} starting pulse on {1}", LOG_TAG, name));
+			//Debug.Log(String.Format("{0} starting pulse on {1}", LOG_TAG, name));
 
 			float timeElapsed = 0;
 			while (true)
@@ -82,7 +74,7 @@ namespace Pear.InteractionEngine.EventListeners
 
 		private void EndPulse()
 		{
-			Debug.Log(String.Format("{0} ending pulse on {1}", LOG_TAG, name));
+			//Debug.Log(String.Format("{0} ending pulse on {1}", LOG_TAG, name));
 
 			if (_pulseRoutine != null)
 				StopCoroutine(_pulseRoutine);
@@ -92,7 +84,7 @@ namespace Pear.InteractionEngine.EventListeners
 			// Add the outline material to each renderer
 			foreach (Renderer renderer in GetComponentsInChildren<Renderer>())
 			{
-				foreach (Material material in renderer.sharedMaterials)
+				foreach (Material material in renderer.materials)
 				{
 					if (!material.HasProperty("_EmissionColor"))
 						continue;

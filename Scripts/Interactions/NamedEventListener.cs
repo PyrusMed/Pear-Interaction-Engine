@@ -16,6 +16,9 @@ namespace Pear.InteractionEngine.Interactions
 		// Reacts to the event
 		public MonoBehaviour EventListener;
 
+		// Should the event listener script be duplicated
+		public bool DuplicateEventListener = true;
+
 		// Used for serialization, this variable stores
 		// the type of property (e.g. float, bool, ect)
 		// that the event listener fires
@@ -96,10 +99,7 @@ namespace Pear.InteractionEngine.Interactions
 
 		private void CopyEventListener(MonoBehaviour eventListener)
 		{
-			// If the event listener is a singleton we just want to point to it
-			// if it is NOT a singleton duplicate the script
-			bool isEventListenerSingleton = eventListener.DerivesFromGeneric(typeof(Singleton<>));
-			EventListener = isEventListenerSingleton ? eventListener : gameObject.AddComponentFrom(eventListener);
+			EventListener = DuplicateEventListener ? gameObject.AddComponentFrom(eventListener) : eventListener;
 		}
 
 		/// <summary>

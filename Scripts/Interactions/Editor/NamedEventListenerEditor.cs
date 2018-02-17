@@ -25,6 +25,9 @@ namespace Pear.InteractionEngine.EventListeners
 		// Serialized event listener
 		private SerializedProperty _eventListener;
 
+		// Serialized duplicate event listener
+		private SerializedProperty _duplicateEventListener;
+
 		// Serialized property type
 		private SerializedProperty _eventListenerPropertyType;
 
@@ -40,6 +43,7 @@ namespace Pear.InteractionEngine.EventListeners
 		{
 			_eventName = serializedObject.FindProperty("EventName");
 			_eventListener = serializedObject.FindProperty("EventListener");
+			_duplicateEventListener = serializedObject.FindProperty("DuplicateEventListener");
 			_eventListenerPropertyType = serializedObject.FindProperty("EventListenerPropertyType");
 			_receiveEventState = serializedObject.FindProperty("ReceiveEventState");
 			_eventMap = FindObjectOfType<EventMap>();
@@ -66,8 +70,11 @@ namespace Pear.InteractionEngine.EventListeners
 
 			RenderEventNameDropdown();
 
-			if(!string.IsNullOrEmpty(_eventListenerPropertyType.stringValue))
+			if (!string.IsNullOrEmpty(_eventListenerPropertyType.stringValue))
+			{
 				RenderEventListenerDropdown();
+				RenderEventListenerCheckbox();
+			}
 
 			// Save any changes that were made
 			serializedObject.ApplyModifiedProperties();
@@ -167,6 +174,19 @@ namespace Pear.InteractionEngine.EventListeners
 				{
 					_eventListener.objectReferenceValue = usableListeners[selectedIndex - 1];
 				}
+			}
+			GUILayout.EndHorizontal();
+		}
+
+		/// <summary>
+		/// Show the duplicate event listener script checkbox
+		/// </summary>
+		private void RenderEventListenerCheckbox()
+		{
+			GUILayout.BeginHorizontal();
+			{
+				EditorGUILayout.LabelField("Duplicate Script:", GUILayout.Width(100));
+				_duplicateEventListener.boolValue = EditorGUILayout.Toggle(_duplicateEventListener.boolValue);
 			}
 			GUILayout.EndHorizontal();
 		}
