@@ -13,31 +13,40 @@ namespace Pear.InteractionEngine.EventListeners
 		// The value of the outline width when the outline is not showing
 		private const float NoOutlineValue = 0f;
 
+		// The name of the material
+		private const string MaterialName = "__outlineMat__";
+
 		[Tooltip("Outline material")]
 		public Material OutlineMaterialTemplate;
 
-		[Tooltip("The value of the outline width when the outline is showing")]
-		public float HoveredOutlineValue = 0.2f;
-
-		// The instance of the template
-		private Material _outlineMaterial;
-
 		// If true the outline will show
 		// Will not show otherwise
+		private static int counter = 0;
+		private bool _showOutline = false;
 		public bool ShowOutline
 		{
-			get { return _outlineMaterial != null && _outlineMaterial.GetFloat("_Outline") > 0; }
+			get { return _showOutline; }
 			set
 			{
-				if (_outlineMaterial == null)
-					CreateOutlineMaterial();
+				// If nothing changed return
+				if (_showOutline == value)
+					return;
 
-				if(_outlineMaterial != null)
-				{
-					float outlineValue = value ? HoveredOutlineValue : NoOutlineValue;
-					_outlineMaterial.SetFloat("_Outline", outlineValue);
-				}
+				// Always remove any existing outline (brute force)
+				RemoveOutline();
+
+				// If we're showing the outline add it
+				if (value)
+					AddOutline();
+
+				// Update the internal value
+				_showOutline = value;
 			}
+		}
+
+		private void Awake()
+		{
+			
 		}
 
 		public void ValueChanged(EventArgs<RaycastHit?> args)
@@ -45,31 +54,33 @@ namespace Pear.InteractionEngine.EventListeners
 			ShowOutline = args.NewValue.HasValue;
 		}
 
-		/// <summary>
-		/// If this object has renderers on itself or in at least one of it's children
-		/// create a new outline material and add it to each renderer
-		/// </summary>
-		private void CreateOutlineMaterial()
+		private void AddOutline()
 		{
-			// If this object has renderers Get them
+			//Debug.Log(String.Format("{0} adding outline to {1}", LOG_TAG, name));
+
 			Renderer[] renderers = GetComponentsInChildren<Renderer>();
-
-			// If there are no renderers we can't add the material
-			if (renderers == null || renderers.Length == 0)
-			{
-				Debug.LogError(String.Format("{0} unable to create outline material for {1}. No renderers", LOG_TAG, name));
-				return;
-			}
-
-			// Create an instance of the outline material
-			_outlineMaterial = Instantiate(OutlineMaterialTemplate);
-
-			// Add the outline material to each renderer
 			foreach (Renderer renderer in renderers)
 			{
-				List<Material> materials = new List<Material>(renderer.materials);
-				materials.Add(_outlineMaterial);
-				renderer.materials = materials.ToArray();
+				Material outlineMaterial = Instantiate(OutlineMaterialTemplate);
+				outlineMaterial.name = MaterialName;
+
+				List<Material> materials = new List<Material>(renderer.sharedMaterials);
+				materials.Add(outlineMaterial);
+				renderer.sharedMaterials = materials.ToArray();
+			}
+		}
+
+		private void RemoveOutline()
+		{
+			//Debug.Log(String.Format("{0} removing outline from {1}", LOG_TAG, name));
+
+			Renderer[] renderers = GetComponentsInChildren<Renderer>();
+			foreach (Renderer renderer in renderers)
+			{
+				// Remove any outline materials
+				List<Material> newMaterials = new List<Material>(renderer.sharedMaterials);
+				newMaterials.RemoveAll(material => material.name.Contains(MaterialName));
+				renderer.sharedMaterials = newMaterials.ToArray();
 			}
 		}
 	}
