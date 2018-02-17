@@ -11,10 +11,12 @@ namespace Pear.InteractionEngine.Controllers
 	/// </summary>
 	public class Controller : MonoBehaviour
     {
-        /// <summary>
-        /// Location of this controller
-        /// </summary>
-        public ControllerLocation Location;
+		private const string LOG_TAG = "[Controller]";
+
+		/// <summary>
+		/// Location of this controller
+		/// </summary>
+		public ControllerLocation Location;
 
 		[Tooltip("Fired when game object awakes")]
 		public ControllerEvent OnAwake = new ControllerEvent();
@@ -47,7 +49,7 @@ namespace Pear.InteractionEngine.Controllers
 		/// <summary>
 		/// Tells whether this controller has active objects
 		/// </summary>
-		public bool HasActiveObjects { get { return _activeObjects.Count > 0; } }
+		public bool HasActiveObjects { get { return _activeObjects.Any(); } }
 
         /// <summary>
         /// Tracks the in use state of this controller
@@ -92,30 +94,27 @@ namespace Pear.InteractionEngine.Controllers
 		/// <param name="activeObjectsToSet">The new active objects</param>
 		public void SetActive(params GameObject[] activeObjectsToSet)
 		{
-			List<GameObject> newActiveObjects = new List<GameObject>();
-			if (activeObjectsToSet != null)
-				newActiveObjects.AddRange(activeObjectsToSet);
-
-			List<GameObject> oldActiveObjects = new List<GameObject>();
-			foreach (GameObject activeObject in _activeObjects)
-			{
-				if (!newActiveObjects.Contains(activeObject))
-					oldActiveObjects.Add(activeObject);
-			}
-
-			// If nothing changed return
-			if (oldActiveObjects.Count == 0 && newActiveObjects.Count == _activeObjects.Count)
+			if (activeObjectsToSet == null)
 				return;
 
-			GameObject[] oldActiveObjectsArray = oldActiveObjects.ToArray();
+			// Update our lists to reflect what was actually added and removed
+			GameObject[] removedActives = _activeObjects.Where(active => !activeObjectsToSet.Any(toSet => toSet == active)).ToArray();
+			GameObject[] newActives = activeObjectsToSet.Where(toSet => !_activeObjects.Any(active => toSet == active)).ToArray();
+
+			Debug.Log(String.Format("{0}.{1} adding ({2}) removing ({3}) actives: ({4})", LOG_TAG,
+				name,
+				string.Join(",", newActives.Select(na => na.name).ToArray()),
+				string.Join(",", removedActives.Select(rm => rm.name).ToArray()),
+				string.Join(",", activeObjectsToSet.Select(set => set.name).ToArray())
+			));
 
 			if (PreActiveObjectsChangedEvent != null)
-				PreActiveObjectsChangedEvent(oldActiveObjectsArray, newActiveObjects.ToArray());
+				PreActiveObjectsChangedEvent(removedActives, newActives);
 
-			_activeObjects = newActiveObjects;
+			_activeObjects = new List<GameObject>(activeObjectsToSet);
 
 			if (PostActiveObjectsChangedEvent != null)
-				PostActiveObjectsChangedEvent(oldActiveObjectsArray, ActiveObjects);
+				PostActiveObjectsChangedEvent(removedActives, newActives);
 		}
 
 		/// <summary>
@@ -124,27 +123,18 @@ namespace Pear.InteractionEngine.Controllers
 		/// <param name="objsToAdd">Objects to add</param>
 		public void AddActives(params GameObject[] objsToAdd)
 		{
-			List<GameObject> actives = ActiveObjects.ToList();
-			actives.AddRange(objsToAdd);
-			SetActive(actives.Distinct().ToArray());
+			List<GameObject> newActives = new List<GameObject>(_activeObjects);
+			newActives.AddRange(objsToAdd);
+
+			SetActive(newActives.Distinct().ToArray());
 		}
 
 		/// <summary>
 		/// Removes the given objects from the set of active objects
 		/// </summary>
-		/// <param name="activeObjectsToRemove">objects to remove from the active object set</param>
-		public void RemoveActives(params GameObject[] activeObjectsToRemove)
+		public void RemoveActives(params GameObject[] objsToRemove)
 		{
-			if(activeObjectsToRemove != null)
-			{
-				// Remove the object from our list of actives
-				// then set the new list active
-				List<GameObject> newActiveObjects = new List<GameObject>(_activeObjects);
-				foreach (GameObject activeObjectToRemove in activeObjectsToRemove)
-					newActiveObjects.Remove(activeObjectToRemove);
-
-				SetActive(newActiveObjects.ToArray());
-			}
+			SetActive(_activeObjects.Where(active => !objsToRemove.Contains(active)).ToArray());
 		}
 	}
 
