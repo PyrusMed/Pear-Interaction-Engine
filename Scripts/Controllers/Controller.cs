@@ -101,12 +101,12 @@ namespace Pear.InteractionEngine.Controllers
 			GameObject[] removedActives = _activeObjects.Where(active => !activeObjectsToSet.Any(toSet => toSet == active)).ToArray();
 			GameObject[] newActives = activeObjectsToSet.Where(toSet => !_activeObjects.Any(active => toSet == active)).ToArray();
 
-			Debug.Log(String.Format("{0}.{1} adding ({2}) removing ({3}) actives: ({4})", LOG_TAG,
+			/*Debug.Log(String.Format("{0}.{1} adding ({2}) removing ({3}) actives: ({4})", LOG_TAG,
 				name,
 				string.Join(",", newActives.Select(na => na.name).ToArray()),
 				string.Join(",", removedActives.Select(rm => rm.name).ToArray()),
 				string.Join(",", activeObjectsToSet.Select(set => set.name).ToArray())
-			));
+			));*/
 
 			if (PreActiveObjectsChangedEvent != null)
 				PreActiveObjectsChangedEvent(removedActives, newActives);

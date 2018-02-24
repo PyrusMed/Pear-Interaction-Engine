@@ -25,6 +25,9 @@ namespace Pear.InteractionEngine.EventListeners
 		[Tooltip("Can multiple objects be selected at once?")]
 		public bool MultipleSelection = false;
 
+		[Tooltip("Determines whether selected objects will be added to the controllers active elements")]
+		public bool AddSelectedToContollerActives = true;
+
 		// Selection events
 		public event Action<GameObject> DeselectEvent;
 		public event Action<GameObject> SelectEvent;
@@ -33,6 +36,7 @@ namespace Pear.InteractionEngine.EventListeners
 		/// The currently selected object
 		/// </summary>
 		private List<SelectedInfo> _selectedObjects = new List<SelectedInfo>();
+		public GameObject[] SelectedObjects { get { return _selectedObjects.Select(selected => selected.SelectedObject).ToArray(); } }
 
 		/// <summary>
 		/// Tells whether there is a selected object
@@ -63,6 +67,50 @@ namespace Pear.InteractionEngine.EventListeners
 		}
 
 		/// <summary>
+		/// Allows calling scripts to deselect objects
+		/// </summary>
+		/// <param name="objToDeselect"></param>
+		public void Deselect(GameObject objToDeselect)
+		{
+			SelectedInfo deselectInfo = _selectedObjects.Find(selectedInfo => selectedInfo.SelectedObject == objToDeselect);
+			if (deselectInfo != null)
+				Deselect(deselectInfo);
+		}
+
+		/// <summary>
+		/// Deselect the given object
+		/// </summary>
+		private void Deselect(SelectedInfo deselectionInfo)
+		{
+			// Remove old selection, if any
+			if (deselectionInfo != null)
+			{
+				//Debug.Log(String.Format("{0} deselecting {1}", LOG_TAG, deselectionInfo.SelectedObject.name));
+
+				_selectedObjects.Remove(deselectionInfo);
+
+				UpdateOutline(deselectionInfo.SelectedObject, showOutline: false);
+
+				if(AddSelectedToContollerActives)
+					deselectionInfo.Source.RemoveActives(deselectionInfo.SelectedObject);
+
+				if (DeselectEvent != null)
+					DeselectEvent(deselectionInfo.SelectedObject);
+			}
+		}
+
+		/// <summary>
+		/// Deselect all selected items
+		/// </summary>
+		private void DeselectAll()
+		{
+			SelectedInfo[] selectedItems = _selectedObjects.ToArray();
+			foreach (SelectedInfo selected in selectedItems)
+				Deselect(selected);
+		}
+
+
+		/// <summary>
 		/// Select the object
 		/// </summary>
 		/// <param name="objectToSelect">Object to select</param>
@@ -82,41 +130,13 @@ namespace Pear.InteractionEngine.EventListeners
 			});
 
 			UpdateOutline(objectToSelect, showOutline: true);
-			source.AddActives(objectToSelect);
+
+			if(AddSelectedToContollerActives)
+				source.AddActives(objectToSelect);
 
 			if (SelectEvent != null)
 				SelectEvent(objectToSelect);
-		}
-
-		/// <summary>
-		/// Deselect all selected items
-		/// </summary>
-		private void DeselectAll()
-		{
-			SelectedInfo[] selectedItems = _selectedObjects.ToArray();
-			foreach (SelectedInfo selected in selectedItems)
-				Deselect(selected);
-		}
-
-		/// <summary>
-		/// Deselect the given object
-		/// </summary>
-		private void Deselect(SelectedInfo deselectionInfo)
-		{
-			// Remove old selection, if any
-			if (deselectionInfo != null)
-			{
-				//Debug.Log(String.Format("{0} deselecting {1}", LOG_TAG, deselectionInfo.SelectedObject.name));
-
-				_selectedObjects.Remove(deselectionInfo);
-
-				UpdateOutline(deselectionInfo.SelectedObject, showOutline: false);
-				deselectionInfo.Source.RemoveActives(deselectionInfo.SelectedObject);
-
-				if (DeselectEvent != null)
-					DeselectEvent(deselectionInfo.SelectedObject);
-			}
-		}
+		}		
 
 		/// <summary>
 		/// Update the outline around the give object
