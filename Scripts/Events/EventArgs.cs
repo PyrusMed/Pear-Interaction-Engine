@@ -1,4 +1,6 @@
 ﻿using Pear.InteractionEngine.Controllers;
+using System;
+using UnityEngine.Events;
 
 namespace Pear.InteractionEngine.Events
 {
@@ -23,4 +25,7 @@ namespace Pear.InteractionEngine.Events
 		/// </summary>
 		public T NewValue;
 	}
+
+	[Serializable]
+	public class EventArgsUnityEvent<T> : UnityEvent<EventArgs<T>> { }
 }

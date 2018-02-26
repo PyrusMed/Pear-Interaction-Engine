@@ -1,4 +1,6 @@
-﻿using Pear.InteractionEngine.Events;
+﻿using Pear.InteractionEngine.Controllers;
+using Pear.InteractionEngine.Events;
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,17 +12,20 @@ namespace Pear.InteractionEngine.EventListeners
 	public class BoolEventListener : MonoBehaviour, IEventListener<bool>
 	{
 		[Tooltip("Fired when the value changes from false to true")]
-		public UnityEvent TrueEvent;
+		public BoolEventArgsUnityEvent TrueEvent;
 
 		[Tooltip("Fired when the value changes from true to false")]
-		public UnityEvent FalseEvent; 
+		public BoolEventArgsUnityEvent FalseEvent;
 
 		public void ValueChanged(EventArgs<bool> args)
 		{
 			if (args.NewValue)
-				TrueEvent.Invoke();
+				TrueEvent.Invoke(args);
 			else
-				FalseEvent.Invoke();
+				FalseEvent.Invoke(args);
 		}
 	}
+
+	[Serializable]
+	public class BoolEventArgsUnityEvent : EventArgsUnityEvent<bool> { }
 }

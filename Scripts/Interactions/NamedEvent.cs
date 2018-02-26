@@ -149,6 +149,8 @@ namespace Pear.InteractionEngine.Interactions
 				// This will ensure we only fire events when the event listener's value type changes
 				_convertedValueProperty = new Property<TEventListener>();
 				_event.Event.ValueChangeEvent += (oldVal, newVal) => _convertedValueProperty.Value = _converter(newVal);
+
+				controller.PostActiveObjectsChangedEvent += OnControllerActivesChanged;
 			}
 
 			public void OnValueChanged(TEventListener oldValue, TEventListener newValue)
@@ -161,6 +163,28 @@ namespace Pear.InteractionEngine.Interactions
 				};
 
 				EventToEventListenerDispatcher<TEventListener>.DispatchToListeners(_eventName, eventArgs);
+			}
+
+			/// <summary>
+			/// When controllers are removed make sure the default value is set
+			/// </summary>
+			/// <param name="oldActives">removed actives</param>
+			/// <param name="newActives">new actives</param>
+			public void OnControllerActivesChanged(GameObject[] oldActives, GameObject[] newActives)
+			{
+				if (oldActives.Length == 0)
+					return;
+
+				EventArgs<TEventListener> eventArgs = new EventArgs<TEventListener>()
+				{
+					Source = _controller,
+					OldValue = _convertedValueProperty.Value,
+					NewValue = default(TEventListener),
+				};
+
+				// When actives are removed make sure the default value is set on them
+				if(!Property<TEventListener>.AreEqual(eventArgs.OldValue, eventArgs.NewValue))
+					EventToEventListenerDispatcher<TEventListener>.DispatchToListeners(_eventName, eventArgs, oldActives);
 			}
 		}
 	}

@@ -7,7 +7,7 @@ using Pear.InteractionEngine.Utils;
 
 namespace Pear.InteractionEngine.EventListeners
 {
-	public class HoverManager : MonoBehaviour, IEventListener<RaycastHit?>
+	public class HoverManager : MonoBehaviour, IEventListener<GameObject>
 	{
 		private const string LOG_TAG = "[HoverManager]";
 
@@ -25,6 +25,9 @@ namespace Pear.InteractionEngine.EventListeners
 		[Range(1f, 100f)]
 		public float PulsesPerSecond = 1;
 
+		[Tooltip("Add the item to actives when hovered over")]
+		public bool AddToActivesOnHover = false;
+
 		/// <summary>
 		/// The hovered object, if any
 		/// </summary>
@@ -41,22 +44,27 @@ namespace Pear.InteractionEngine.EventListeners
 
 		private void Start()
 		{
-			// When a new object is selected
-			// make sure we stop showing the hover effect
-			SelectionManager.SelectEvent += selectedObject => UpdateHoverEffect(selectedObject, showEffect: false);
+			// The selection manager and hover manager probably shouldn't be dependent on eachother
+			// Not enough time to fix, and I could be wrong. Let's see how things evolve
+			if (SelectionManager != null)
+			{
+				// When a new object is selected
+				// make sure we stop showing the hover effect
+				SelectionManager.SelectEvent += selectedObject => UpdateHoverEffect(selectedObject, showEffect: false);
 
-			// When an object is deselected 
-			// make sure we start showing the hover effect
-			// on the hovered object
-			SelectionManager.DeselectEvent += deselectedObject => UpdateHoverEffect(HoveredObject, showEffect: CanHover(HoveredObject));
+				// When an object is deselected 
+				// make sure we start showing the hover effect
+				// on the hovered object
+				SelectionManager.DeselectEvent += deselectedObject => UpdateHoverEffect(HoveredObject, showEffect: CanHover(HoveredObject));
+			}
 		}
 
-		public void ValueChanged(EventArgs<RaycastHit?> args)
+		public void ValueChanged(EventArgs<GameObject> args)
 		{
 			// If we're dealing with the same gameobject, return
-			if(args.NewValue.HasValue &&
-				args.OldValue.HasValue &&
-				args.NewValue.Value.transform.gameObject == args.OldValue.Value.transform.gameObject)
+			if(args.NewValue != null &&
+				args.OldValue != null &&
+				args.NewValue == args.OldValue)
 			{
 				return;
 			}
@@ -64,33 +72,39 @@ namespace Pear.InteractionEngine.EventListeners
 			// If there's an old hit remove it
 			if (IsValid(args.OldValue))
 			{
-				GameObject objectToRemoveHoverFrom = args.OldValue.Value.transform.gameObject;
+				GameObject objectToRemoveHoverFrom = args.OldValue;
 
 				UpdateHoverEffect(objectToRemoveHoverFrom, showEffect: false);
 
 				HoveredObject = null;
+
+				if (AddToActivesOnHover)
+					args.Source.RemoveActives(objectToRemoveHoverFrom);
 			}
 
 			// If there's a new hit update the active object
 			if (IsValid(args.NewValue))
 			{
-				GameObject objectToHover = args.NewValue.Value.transform.gameObject;
+				GameObject objectToHover = args.NewValue;
 
 				UpdateHoverEffect(objectToHover, showEffect: CanHover(objectToHover));
 
 				HoveredObject = objectToHover;
+
+				if (AddToActivesOnHover)
+					args.Source.AddActives(objectToHover);
 			}
 		}
 
 		/// <summary>
 		/// Checks whether the given object can be hovered over
 		/// </summary>
-		/// <param name="hit">The raycast hit</param>
+		/// <param name="hit">The game object that was hit</param>
 		/// <returns>True if object can be hovered over. False otherwise</returns>
-		private bool IsValid(RaycastHit? hit)
+		private bool IsValid(GameObject hit)
 		{
-			return hit.HasValue &&
-				InteractableLayers == (InteractableLayers | (1 << hit.Value.transform.gameObject.layer));
+			return hit != null &&
+				InteractableLayers == (InteractableLayers | (1 << hit.layer));
 		}
 
 		/// <summary>
@@ -100,7 +114,8 @@ namespace Pear.InteractionEngine.EventListeners
 		/// <returns>True if we can hover. False otherwise.</returns>
 		private bool CanHover(GameObject objToCheck)
 		{
-			return !SelectionManager.IsSelected(objToCheck) && (SelectionManager.MultipleSelection || !SelectionManager.HasSelectedObject);
+			return SelectionManager == null ||
+				(!SelectionManager.IsSelected(objToCheck) && (SelectionManager.MultipleSelection || !SelectionManager.HasSelectedObject));
 		}
 
 		/// <summary>

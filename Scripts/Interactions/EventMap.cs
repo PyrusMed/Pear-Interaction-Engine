@@ -34,6 +34,8 @@ namespace Pear.InteractionEngine.Interactions
 					return typeof(bool);
 				case EventHandlerTypes.Float:
 					return typeof(float);
+				case EventHandlerTypes.GameObject:
+					return typeof(GameObject);
 				case EventHandlerTypes.Int:
 					return typeof(int);
 				case EventHandlerTypes.RaycastHitNullable:
@@ -67,5 +69,6 @@ namespace Pear.InteractionEngine.Interactions
 		Vector2,
 		Vector3,
 		Vector4,
+		GameObject,
 	}
 }

@@ -31,13 +31,14 @@ namespace Pear.InteractionEngine.Interactions
 			}
 		}
 
-		public static void DispatchToListeners(string eventName, EventArgs<TEventListener> args, GameObject[] forceSendingToGameObjects = null)
+		public static void DispatchToListeners(string eventName, EventArgs<TEventListener> args, GameObject[] actives = null)
 		{
-			GameObject[] targetGameObjects = forceSendingToGameObjects != null ? forceSendingToGameObjects : args.Source.ActiveObjects;
+			bool getListenersForActivesOnly = actives != null;
+			GameObject[] targetGameObjects = getListenersForActivesOnly ? actives : args.Source.ActiveObjects;
 			EventListenerCollection listeners;
 			if (_eventNameToListeners.TryGetValue(eventName, out listeners))
 			{
-				foreach (IEventListener<TEventListener> listener in listeners.GetListeners(targetGameObjects))
+				foreach (IEventListener<TEventListener> listener in listeners.GetListeners(targetGameObjects, activesOnly: getListenersForActivesOnly))
 				{
 					listener.ValueChanged(args);
 				}
@@ -93,10 +94,12 @@ namespace Pear.InteractionEngine.Interactions
 				}
 			}
 
-			public IEventListener<TEventListener>[] GetListeners(GameObject[] activeObjs)
+			public IEventListener<TEventListener>[] GetListeners(GameObject[] activeObjs, bool activesOnly)
 			{
 				List<EventListenerInfo> allListeners = new List<EventListenerInfo>();
-				allListeners.AddRange(_alwaysReceiveEvents);
+
+				if(!activesOnly)
+					allListeners.AddRange(_alwaysReceiveEvents);
 
 				foreach (GameObject obj in activeObjs)
 				{
