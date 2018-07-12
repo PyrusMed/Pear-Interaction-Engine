@@ -52,6 +52,7 @@ namespace Pear.InteractionEngine.Interactions
 					materials.Add(Instantiate(material));
 				}
 				meshRenderer.materials = materials.ToArray();
+                meshRenderer.enabled = false;
 
 				// Duplicate the mesh
 				MeshFilter meshFilter = meshContainer.AddComponent<MeshFilter>();
