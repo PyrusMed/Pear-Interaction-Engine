@@ -13,11 +13,14 @@ namespace Pear.InteractionEngine.EventListeners
 		[Tooltip("Move speed")]
 		public float MoveSpeed = 1f;
 
-		[Tooltip("Only move in a single direction based on the meximum direciton of the move vector")]
+		[Tooltip("Only move in a single direction based on the maximum direciton of the move vector")]
 		public bool SingleDirection = false;
 
 		[Tooltip("True if the direction is relative to the source. World axis used otherwise.")]
 		public bool RelativeToSource = true;
+
+        [Tooltip("Relative to camera")]
+        public bool RelativeToCamera = true;
 
 		// Movement velocity
 		private Vector3 _velocity = Vector3.zero;
@@ -35,7 +38,8 @@ namespace Pear.InteractionEngine.EventListeners
 		/// </summary>
 		private void Update()
 		{
-			_anchor.transform.position += _velocity * MoveSpeed * Time.deltaTime;
+            Vector3 velocity = RelativeToCamera ? Camera.main.transform.TransformDirection(_velocity) : _velocity;
+            _anchor.transform.Translate(velocity * MoveSpeed * Time.deltaTime);
 		}
 
 		/// <summary>
