@@ -45,7 +45,7 @@ namespace Pear.InteractionEngine.EventListeners
 
             objectToResizeTransform.localScale += _directions * maxResizeAmount;
 
-            if (InPlace )
+            if (InPlace)
             {
                 Vector3 cameraCurrentLocalOffset = transform.InverseTransformPoint(Camera.main.transform.position);
                 Vector3 offsetCorrection = transform.TransformPoint(cameraCurrentLocalOffset) - transform.TransformPoint(cameraOriginalLocalOffset);
