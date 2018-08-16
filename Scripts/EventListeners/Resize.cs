@@ -10,24 +10,47 @@ namespace Pear.InteractionEngine.EventListeners
 	/// </summary>
 	public class Resize : MonoBehaviour, IEventListener<Vector3>
 	{
-        [Tooltip("Resize speed")]
-        public float ResizeSpeed = 1f;
+        [Tooltip("Resize percentage per second")]
+        public float ResizePercentPerSecond = 10f;
 
 		[Tooltip("Should we resize the same amount in each direction?")]
 		public bool Uniform = true;
 
+        [Tooltip("If true, this object will remain in it's relative position to the camera while zooming")]
+        public bool InPlace;
+
 		// The directions to resize in
-		private Vector3 _directions;
+		private Vector3 _directions = Vector3.zero;
 
 		/// <summary>
 		/// Loops over each registered property and resizes it's owning game object
 		/// </summary>
 		void Update()
 		{
-			transform.GetOrAddComponent<ObjectWithAnchor>()
+            if(_directions == Vector3.zero)
+            {
+                return;
+            }
+
+			Transform objectToResizeTransform = transform.GetOrAddComponent<ObjectWithAnchor>()
 				.AnchorElement
-				.transform
-				.localScale += _directions * ResizeSpeed * Time.deltaTime;
+				.transform;
+
+			float currentSize = objectToResizeTransform.localScale.x;
+			float maxResizeAmount = (ResizePercentPerSecond * currentSize / 100) * Time.deltaTime;
+
+            // Get the relative position of the camera
+            // In case we zoom in place
+            Vector3 cameraOriginalLocalOffset = transform.InverseTransformPoint(Camera.main.transform.position);
+
+            objectToResizeTransform.localScale += _directions * maxResizeAmount;
+
+            if (InPlace )
+            {
+                Vector3 cameraCurrentLocalOffset = transform.InverseTransformPoint(Camera.main.transform.position);
+                Vector3 offsetCorrection = transform.TransformPoint(cameraCurrentLocalOffset) - transform.TransformPoint(cameraOriginalLocalOffset);
+                objectToResizeTransform.position += offsetCorrection;
+            }
 		}
 
 		/// <summary>
@@ -49,6 +72,6 @@ namespace Pear.InteractionEngine.EventListeners
 			{
 				_directions = args.NewValue;
 			}
-		}
+        }
 	}
 }
