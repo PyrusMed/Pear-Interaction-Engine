@@ -1,5 +1,8 @@
-﻿using Pear.InteractionEngine.EventListeners;
+﻿//#define PIE_DEBUG       // uncomment to show debug logs
+
+using Pear.InteractionEngine.EventListeners;
 using Pear.InteractionEngine.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +11,8 @@ namespace Pear.InteractionEngine.Interactions
 {
 	public static class EventToEventListenerDispatcher<TEventListener>
 	{
+		public const string LOG_TAG = "[EventToEventListenerDispatcher]";
+
 		private static Dictionary<string, EventListenerCollection> _eventNameToListeners = new Dictionary<string, EventListenerCollection>();
 
 		public static void AddListener(string eventName, IEventListener<TEventListener> listener, GameObject owner, ReceiveEventStates receiveEventState)
@@ -17,7 +22,15 @@ namespace Pear.InteractionEngine.Interactions
 			{
 				listeners = new EventListenerCollection();
 				_eventNameToListeners[eventName] = listeners;
+
+#if PIE_DEBUG
+				Debug.Log(String.Format("{0} Creating new array of listeners for event '{1}'", LOG_TAG, eventName));
+#endif
 			}
+
+#if PIE_DEBUG
+			Debug.Log(String.Format("{0} Adding '{1}' to the event '{2}'", LOG_TAG, owner.name, eventName));
+#endif
 
 			listeners.Add(listener, owner, receiveEventState);
 		}
@@ -27,22 +40,36 @@ namespace Pear.InteractionEngine.Interactions
 			EventListenerCollection listeners;
 			if (!_eventNameToListeners.TryGetValue(eventName, out listeners))
 			{
+#if PIE_DEBUG
+				Debug.Log(String.Format("{0} Removing '{1}' from event '{2}'", LOG_TAG, owner.name, eventName));
+#endif
+
 				listeners.Remove(listener, owner);
+			}
+			else
+			{
+#if PIE_DEBUG
+				Debug.Log(String.Format("{0} Failed to remove '{1}'. Not listeners exist for event '{2}'", LOG_TAG, owner.name, eventName));
+#endif
 			}
 		}
 
-		public static void DispatchToListeners(string eventName, EventArgs<TEventListener> args, GameObject[] actives = null)
+		public static int DispatchToListeners(string eventName, EventArgs<TEventListener> args, GameObject[] actives = null)
 		{
 			bool getListenersForActivesOnly = actives != null;
 			GameObject[] targetGameObjects = getListenersForActivesOnly ? actives : args.Source.ActiveObjects;
 			EventListenerCollection listeners;
 			if (_eventNameToListeners.TryGetValue(eventName, out listeners))
 			{
-				foreach (IEventListener<TEventListener> listener in listeners.GetListeners(targetGameObjects, activesOnly: getListenersForActivesOnly))
+				IEventListener<TEventListener>[] gameObjectListeners = listeners.GetListeners(targetGameObjects, activesOnly: getListenersForActivesOnly);
+				foreach (IEventListener<TEventListener> listener in gameObjectListeners)
 				{
 					listener.ValueChanged(args);
 				}
+				return gameObjectListeners.Length;
 			}
+
+			return 0;
 		}
 
 		private class EventListenerCollection

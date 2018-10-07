@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Pear.InteractionEngine.Properties
 {
@@ -8,9 +10,13 @@ namespace Pear.InteractionEngine.Properties
 	/// <typeparam name="T"></typeparam>
 	public class Property<T>
     {
+		public const string LOG_TAG = "[Property<T>]";
+
 		// Event that's called when the property changes
         public delegate void OnPropertyChangeEventHandler(T oldValue, T newValue);
         public event OnPropertyChangeEventHandler ValueChangeEvent;
+
+		public bool ShowLogs = false;
 
 		/// <summary>
 		///  The value of this property
@@ -26,8 +32,24 @@ namespace Pear.InteractionEngine.Properties
 
 				// When the value changes fire an event
                 bool notEqual = !AreEqual(oldValue, _value);
-                if (notEqual && ValueChangeEvent != null)
-                    ValueChangeEvent(oldValue, _value);
+                if (notEqual)
+				{
+					if(ShowLogs)
+						Debug.Log(String.Format("{0} Property value changed from '{1}' -> '{2}'", LOG_TAG, oldValue, _value));
+
+					if (ValueChangeEvent != null)
+					{
+						if(ShowLogs)
+							Debug.Log(String.Format("{0} Letting listeners know about propety value change", LOG_TAG));
+
+						ValueChangeEvent(oldValue, _value);
+					}
+					else
+					{
+						if (ShowLogs)
+							Debug.Log(String.Format("{0} There are no listeners listening to this property", LOG_TAG));
+					}
+				}
             }
         }
 

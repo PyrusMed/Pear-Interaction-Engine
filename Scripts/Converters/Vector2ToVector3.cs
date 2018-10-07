@@ -21,6 +21,8 @@ namespace Pear.InteractionEngine.Converters
 		[Tooltip("Multiplied on the Y value when it's set")]
 		public float YMultiplier = 1;
 
+		public bool DebugLogs = false;
+
 		public Vector3 Convert(Vector2 convertFrom)
 		{
 			float x = 0;
@@ -36,6 +38,9 @@ namespace Pear.InteractionEngine.Converters
 
 			setActions[SetXOn](convertFrom.x * XMultiplier);
 			setActions[SetYOn](convertFrom.y * YMultiplier);
+
+			if (DebugLogs)
+				Debug.Log(String.Format("[Vector2ToVector3] Converted {0} to {1}", convertFrom, new Vector3(x, y, z)));
 
 			return new Vector3(x, y, z);
 		}

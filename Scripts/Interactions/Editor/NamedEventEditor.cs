@@ -1,4 +1,6 @@
-﻿using Pear.InteractionEngine.Controllers;
+﻿//#define PIE_DEBUG       // uncomment to show debug logs
+
+using Pear.InteractionEngine.Controllers;
 using Pear.InteractionEngine.EventListeners;
 using Pear.InteractionEngine.Events;
 using Pear.InteractionEngine.Converters;
@@ -36,6 +38,9 @@ namespace Pear.InteractionEngine.Events
 		// Serialized property type
 		protected SerializedProperty _eventHandlerPropertyType;
 
+		// Serialized property type
+		protected SerializedProperty _showDebugLogs;
+
 		// All events in the scene
 		protected List<MonoBehaviour> _events;
 
@@ -52,6 +57,8 @@ namespace Pear.InteractionEngine.Events
 			_eventController = serializedObject.FindProperty("EventController");
 			_eventPropertyType = serializedObject.FindProperty("EventPropertyType");
 			_eventHandlerPropertyType = serializedObject.FindProperty("EventHandlerPropertyType");
+			_showDebugLogs = serializedObject.FindProperty("ShowDebugLogs");
+
 			_eventMap = FindObjectOfType<EventMap>();
 
 			if (_eventMap == null)
@@ -91,6 +98,12 @@ namespace Pear.InteractionEngine.Events
 			// Make sure all serialized properties are up to date
 			serializedObject.Update();
 
+#if PIE_DEBUG
+			RenderDebugLogsCheckbox();
+#else
+			_showDebugLogs.boolValue = false;
+#endif
+
 			RenderEventNameDropdown();
 
 			if (!string.IsNullOrEmpty(_eventName.stringValue))
@@ -108,6 +121,16 @@ namespace Pear.InteractionEngine.Events
 
 			// Save any changes that were made
 			serializedObject.ApplyModifiedProperties();
+		}
+
+		private void RenderDebugLogsCheckbox()
+		{
+			GUILayout.BeginHorizontal();
+			{
+				EditorGUILayout.LabelField("Show debug logs:", GUILayout.Width(100));
+				_showDebugLogs.boolValue = EditorGUILayout.Toggle(_showDebugLogs.boolValue);
+			}
+			GUILayout.EndHorizontal();
 		}
 
 		private void RenderEventNameDropdown()

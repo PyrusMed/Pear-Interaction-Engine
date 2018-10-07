@@ -13,6 +13,8 @@ namespace Pear.InteractionEngine.Interactions
 {
 	public class NamedEvent : MonoBehaviour
 	{
+		private const string LOG_TAG = "[NamedEvent]";
+
 		// Name of the event
 		public string EventName;
 
@@ -36,6 +38,9 @@ namespace Pear.InteractionEngine.Interactions
 		// that the event listener fires
 		public string EventHandlerPropertyType;
 
+		// True if we should show debug logs
+		public bool ShowDebugLogs = false;
+
 		private IEventDispatcher _eventDispatcher;
 
 		public Type EventType { get { return Type.GetType(EventPropertyType); } }
@@ -44,31 +49,44 @@ namespace Pear.InteractionEngine.Interactions
 
 		void Start()
 		{
-			if(!IsValid())
+			if (!IsValid())
 			{
 				Debug.LogError("Named event is invalid for object " + name);
 				return;
 			}
 
+			if (ShowDebugLogs)
+				Debug.Log(String.Format("{0} {1} creating named event {1}", LOG_TAG, name, EventName));
+
 			Type eventPropertyType = Type.GetType(EventPropertyType);
 			Type eventHandlerPropertyType = Type.GetType(EventHandlerPropertyType);
 			Type eventDispatcherType = typeof(EventDispatcher<,>);
 			Type instantiableEventDispatcherType = eventDispatcherType.MakeGenericType(eventPropertyType, eventHandlerPropertyType);
-			_eventDispatcher = (IEventDispatcher)Activator.CreateInstance(instantiableEventDispatcherType, EventName, Event, EventController, ValueConverter);
+			_eventDispatcher = (IEventDispatcher)Activator.CreateInstance(instantiableEventDispatcherType, EventName, Event, EventController, ValueConverter, ShowDebugLogs);
 
 			_eventDispatcher.Enabled = true;
 		}
 
 		private void OnEnable()
 		{
-			if(_eventDispatcher != null)
+			if (_eventDispatcher != null)
+			{
+				if (ShowDebugLogs)
+					Debug.Log(String.Format("{0} {1} enabled", LOG_TAG, name));
+
 				_eventDispatcher.Enabled = true;
+			}
 		}
 
 		private void OnDisable()
 		{
 			if (_eventDispatcher != null)
+			{
+				if (ShowDebugLogs)
+					Debug.Log(String.Format("{0} {1} disabled", LOG_TAG, name));
+
 				_eventDispatcher.Enabled = false;
+			}
 		}
 
 		private bool IsValid()
@@ -109,11 +127,14 @@ namespace Pear.InteractionEngine.Interactions
 
 		public class EventDispatcher<TEvent, TEventListener> : IEventDispatcher
 		{
+			private const string ED_LOG_TAG = "[EventDispatcher]";
+
 			private string _eventName;
 			private IEvent<TEvent> _event;
 			private Controller _controller;
 			private Func<TEvent, TEventListener> _converter;
 			private Property<TEventListener> _convertedValueProperty;
+			private bool _showDebugLogs = false;
 
 			private bool _enabled = false;
 			public bool Enabled
@@ -125,20 +146,31 @@ namespace Pear.InteractionEngine.Interactions
 					if (value != _enabled)
 					{
 						if (value)
-							_convertedValueProperty.ValueChangeEvent += OnValueChanged;
+						{
+							if (_showDebugLogs)
+								Debug.Log(String.Format("{0} {1} attaching converted value change listener", ED_LOG_TAG, _eventName));
+
+							_convertedValueProperty.ValueChangeEvent += OnEventListenerValueChanged;
+						}
 						else
-							_convertedValueProperty.ValueChangeEvent -= OnValueChanged;
+						{
+							if (_showDebugLogs)
+								Debug.Log(String.Format("{0} {1} detaching converted value change listener", ED_LOG_TAG, _eventName));
+							_convertedValueProperty.ValueChangeEvent -= OnEventListenerValueChanged;
+
+						}
 					}
 
 					_enabled = value;
 				}
 			}
 
-			public EventDispatcher(string eventName, IEvent<TEvent> ev, Controller controller, IPropertyConverter<TEvent, TEventListener> converter)
+			public EventDispatcher(string eventName, IEvent<TEvent> ev, Controller controller, IPropertyConverter<TEvent, TEventListener> converter, bool showDebugLogs)
 			{
 				_eventName = eventName;
 				_event = ev;
 				_controller = controller;
+				_showDebugLogs = showDebugLogs;
 
 				if (converter != null)
 					_converter = converter.Convert;
@@ -148,12 +180,26 @@ namespace Pear.InteractionEngine.Interactions
 				// Whenever the event's value changes, convert that value into the event listener's value type
 				// This will ensure we only fire events when the event listener's value type changes
 				_convertedValueProperty = new Property<TEventListener>();
-				_event.Event.ValueChangeEvent += (oldVal, newVal) => _convertedValueProperty.Value = _converter(newVal);
+				_event.Event.ValueChangeEvent += OnEventValueChanged;
+
+				_event.Event.ShowLogs = _showDebugLogs;
+				_convertedValueProperty.ShowLogs = _showDebugLogs;
 
 				controller.PostActiveObjectsChangedEvent += OnControllerActivesChanged;
 			}
 
-			public void OnValueChanged(TEventListener oldValue, TEventListener newValue)
+			private void OnEventValueChanged(TEvent oldValue, TEvent newValue)
+			{
+				if(_showDebugLogs)
+					Debug.Log(String.Format("{0} {1} event value changed. Old: {2}, New: {3}", ED_LOG_TAG, _eventName, oldValue, newValue));
+
+				_convertedValueProperty.Value = _converter(newValue);
+
+				if (_showDebugLogs)
+					Debug.Log(String.Format("{0} {1} Conversion: Event '{2}' -> EventListener {3}", ED_LOG_TAG, _eventName, newValue, _convertedValueProperty.Value));
+			}
+
+			private void OnEventListenerValueChanged(TEventListener oldValue, TEventListener newValue)
 			{
 				EventArgs<TEventListener> eventArgs = new EventArgs<TEventListener>()
 				{
@@ -162,7 +208,13 @@ namespace Pear.InteractionEngine.Interactions
 					NewValue = newValue,
 				};
 
-				EventToEventListenerDispatcher<TEventListener>.DispatchToListeners(_eventName, eventArgs);
+				if (_showDebugLogs)
+					Debug.Log(String.Format("{0} {1} event listener value changed. Old: {2}, New: {3}", ED_LOG_TAG, _eventName, oldValue, newValue));
+
+				int numListeners = EventToEventListenerDispatcher<TEventListener>.DispatchToListeners(_eventName, eventArgs);
+
+				if (_showDebugLogs)
+					Debug.Log(String.Format("{0} {1} dispatched to {2} listeners", ED_LOG_TAG, _eventName, numListeners));
 			}
 
 			/// <summary>
